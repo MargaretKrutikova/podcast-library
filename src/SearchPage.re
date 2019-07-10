@@ -8,19 +8,42 @@ type state = {
 [@react.component]
 let make = () => {
   let dispatch = AppCore.useDispatch();
-  let state =
-    AppCore.useSelector(model =>
-      {searchResult: model.searchResult, searchTerm: model.searchTerm}
-    );
+  let state = AppCore.useSelector(model => model);
 
   let handleSearchChange = e =>
     dispatch(EnteredSearchTerm(ReactEvent.Form.target(e)##value));
 
+  let contentTypeValue =
+    switch (state.contentType) {
+    | Podcast => "podcast"
+    | Episode => "episode"
+    };
+  Js.log(contentTypeValue);
   <div>
     <h1> {str("Search content")} </h1>
     <input value={state.searchTerm} onChange=handleSearchChange />
+    <div>
+      <label>
+        <input
+          type_="radio"
+          name="contentType"
+          checked={state.contentType == Podcast}
+          onChange={_ => dispatch(SetContentType(Podcast))}
+        />
+        {str("Podcast")}
+      </label>
+      <label>
+        <input
+          type_="radio"
+          name="contentType"
+          checked={state.contentType == Episode}
+          onChange={_ => dispatch(SetContentType(Episode))}
+        />
+        {str("Episode")}
+      </label>
+    </div>
     <button onClick={_ => dispatch(RequestedSearch)}>
-      {str("Click")}
+      {str("Search")}
     </button>
     <div>
       {switch (state.searchResult) {
@@ -39,6 +62,17 @@ let make = () => {
                <div key={episode.id}>
                  {str(episode.title)}
                  <p> {str(episode.description)} </p>
+                 <p>
+                   {str(
+                      "Published: "
+                      ++ (
+                        episode.pubDateMs
+                        |> float_of_int
+                        |> Js.Date.fromFloat
+                        |> Js.Date.toLocaleDateString
+                      ),
+                    )}
+                 </p>
                </div>
              }
            )

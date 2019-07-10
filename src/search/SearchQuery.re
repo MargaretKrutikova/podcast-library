@@ -31,13 +31,13 @@ module EpisodeQuery = {
 };
 
 type contentQuery =
-  | Podcast
-  | Episode(EpisodeQuery.t);
+  | PodcastQuery
+  | EpisodeQuery(EpisodeQuery.t);
 
 let contentToParams = contentQuery => {
   switch (contentQuery) {
-  | Podcast => [|("type", "podcast")|]
-  | Episode(query) =>
+  | PodcastQuery => [|("type", "podcast")|]
+  | EpisodeQuery(query) =>
     EpisodeQuery.toParams(query) |> UrlBuilder.Params.add("type", "episode")
   };
 };

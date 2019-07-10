@@ -1,7 +1,6 @@
 type t =
   | Episode
-  | Podcast
-  | Unknown;
+  | Podcast;
 
 let episodeApiType = "episode";
 let podcastApiType = "podcast";
@@ -10,7 +9,7 @@ let fromApiType = str =>
   switch (str) {
   | s when s == episodeApiType => Episode
   | s when s == podcastApiType => Podcast
-  | _ => Unknown
+  | _ => Podcast
   };
 
 let decode = json => json |> Json.Decode.string |> fromApiType;
