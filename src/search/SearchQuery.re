@@ -94,6 +94,7 @@ let dateToMsString = date => Js.Float.toString @@ Js.Date.getTime(date);
 let toParams = query => {
   UrlBuilder.Params.(
     [||]
+    |> add("safe_mode", "1")  // Exclude content with explicit language
     |> add("q", query.searchTerm)
     |> add("sort_by_date", sortToParam(query.sort))
     |> add("language", query.language)
