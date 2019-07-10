@@ -1,41 +1,49 @@
+let str = ReasonReact.string;
+
+type state = {
+  searchTerm: string,
+  searchResult: AppModel.searchResult,
+};
+
 [@react.component]
 let make = () => {
-  let (results, setResults) = React.useState(() => None);
+  let dispatch = AppCore.useDispatch();
+  let state =
+    AppCore.useSelector(model =>
+      {searchResult: model.searchResult, searchTerm: model.searchTerm}
+    );
 
-  React.useEffect0(() => {
-    let query = {
-      ...SearchQuery.defaultValue(),
-      searchTerm: "javascript",
-      searchFields: Some([|Author|]),
-    };
-    Js.Promise.(
-      ListenNotesApi.search(query)
-      |> then_(result =>
-           switch (result) {
-           | Belt.Result.Ok(searchResult) =>
-             setResults(_ => Some(searchResult)) |> resolve
-           | Belt.Result.Error () => resolve()
-           }
-         )
-    )
-    |> ignore;
-
-    None;
-  });
-
-  Js.log(results);
+  let handleSearchChange = e =>
+    dispatch(EnteredSearchTerm(ReactEvent.Form.target(e)##value));
 
   <div>
-    <button> {ReasonReact.string("Click")} </button>
+    <h1> {str("Search content")} </h1>
+    <input value={state.searchTerm} onChange=handleSearchChange />
+    <button onClick={_ => dispatch(RequestedSearch)}>
+      {str("Click")}
+    </button>
     <div>
-      {switch (results) {
-       | None => <span> {ReasonReact.string("Nothing yet")} </span>
-       | Some(res) =>
+      {switch (state.searchResult) {
+       | NotAsked => <span> {str("Nothing yet")} </span>
+       | Loading(_) => <span> {str("Loading")} </span>
+       | Success(res) =>
          res.results
-         ->Belt.Array.map(podcast =>
-             <div key={podcast.id}> {ReasonReact.string(podcast.title)} </div>
+         ->Belt.Array.map(result =>
+             switch (result) {
+             | Podcast(podcast) =>
+               <div key={podcast.id}>
+                 {str(podcast.title)}
+                 <p> {str(podcast.description)} </p>
+               </div>
+             | Episode(episode) =>
+               <div key={episode.id}>
+                 {str(episode.title)}
+                 <p> {str(episode.description)} </p>
+               </div>
+             }
            )
          |> ReasonReact.array
+       | Error => <div> {str("Error")} </div>
        }}
     </div>
   </div>;

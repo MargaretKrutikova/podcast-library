@@ -117,14 +117,24 @@ let toParams = query => {
   );
 };
 
-let defaultValue = (): t => {
-  searchTerm: "",
-  sort: Relevance,
-  language: "English", // TODO: variant
-  searchFields: None,
+let create =
+    (
+      ~searchTerm,
+      ~sort=Relevance,
+      ~language="English", // TODO: fetch languages
+      ~searchFields=None,
+      ~genreIds=None,
+      ~offset=0,
+      ~content,
+      (),
+    ) => {
+  searchTerm,
+  sort,
+  language,
+  searchFields,
   publishedAfterDate: None,
   publishedBeforeDate: None,
-  genreIds: None,
-  offset: 0,
-  content: Podcast,
+  genreIds,
+  offset,
+  content,
 };

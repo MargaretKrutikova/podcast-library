@@ -23,6 +23,7 @@ let search =
        })
     |> catch(error => {
          let error = error |> promiseErrorToJsObj;
+         Js.log(error);
          Belt.Result.Error(error##response) |> resolve;
        })
   );
