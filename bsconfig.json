@@ -15,6 +15,11 @@
   ],
   "suffix": ".bs.js",
   "namespace": true,
-  "bs-dependencies": ["reason-react", "@glennsl/bs-json", "bs-axios"],
+  "bs-dependencies": [
+    "reason-react",
+    "@glennsl/bs-json",
+    "bs-axios",
+    "reason-react-elmish"
+  ],
   "refmt": 3
 }
