@@ -1,3 +1,5 @@
+open BsReactstrap;
+
 let str = ReasonReact.string;
 
 type state = {
@@ -13,35 +15,47 @@ let make = () => {
   let handleSearchChange = e =>
     dispatch(EnteredSearchTerm(ReactEvent.Form.target(e)##value));
 
-  let contentTypeValue =
-    switch (state.contentType) {
-    | Podcast => "podcast"
-    | Episode => "episode"
-    };
-  Js.log(contentTypeValue);
   <div>
-    <h1> {str("Search content")} </h1>
-    <input value={state.searchTerm} onChange=handleSearchChange />
-    <div>
-      <label>
-        <input
-          type_="radio"
-          name="contentType"
-          checked={state.contentType == Podcast}
-          onChange={_ => dispatch(SetContentType(Podcast))}
+    <Form
+      className="cr-search-form"
+      onSubmit={e => ReactEvent.Form.preventDefault(e)}>
+      <h1> {str("Search content")} </h1>
+      <FormGroup>
+        <Input
+          _type="search"
+          className="cr-search-form__input"
+          placeholder="Search..."
+          value={state.searchTerm}
+          onChange=handleSearchChange
         />
-        {str("Podcast")}
-      </label>
-      <label>
-        <input
-          type_="radio"
-          name="contentType"
-          checked={state.contentType == Episode}
-          onChange={_ => dispatch(SetContentType(Episode))}
-        />
-        {str("Episode")}
-      </label>
-    </div>
+      </FormGroup>
+      <FormGroup tag="fieldset">
+        <FormGroup check=true>
+          <Label check=true>
+            <input
+              type_="radio"
+              name="contentType"
+              className="form-check-input"
+              checked={state.contentType == Podcast}
+              onChange={_ => dispatch(SetContentType(Podcast))}
+            />
+            {str("Podcast")}
+          </Label>
+        </FormGroup>
+        <FormGroup check=true>
+          <Label check=true>
+            <input
+              type_="radio"
+              name="contentType"
+              className="form-check-input"
+              checked={state.contentType == Episode}
+              onChange={_ => dispatch(SetContentType(Episode))}
+            />
+            {str("Episode")}
+          </Label>
+        </FormGroup>
+      </FormGroup>
+    </Form>
     <button onClick={_ => dispatch(RequestedSearch)}>
       {str("Search")}
     </button>

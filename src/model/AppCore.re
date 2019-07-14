@@ -1,4 +1,4 @@
-include Elmish.Make({
+include ReasonReactElmish.Elmish.Make({
   type model = AppModel.model;
   type message = AppModel.message;
 
