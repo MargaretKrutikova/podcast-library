@@ -19,7 +19,8 @@
     "reason-react",
     "@glennsl/bs-json",
     "bs-axios",
-    "reason-react-elmish"
+    "reason-react-elmish",
+    "@ahrefs/bs-reactstrap"
   ],
   "refmt": 3
 }
