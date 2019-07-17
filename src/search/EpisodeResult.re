@@ -12,6 +12,7 @@ type t = {
   pubDateMs: int,
   podcastId: string,
   genreIds: array(int),
+  podcastTitle: string,
   podcastListennotesUrl: string,
 };
 
@@ -27,6 +28,7 @@ let decode = (json): t => {
     title: json |> field("title_original", string),
     publisher: json |> field("publisher_original", string),
     image: json |> field("image", string),
+    podcastTitle: json |> field("podcast_title_original", string),
     thumbnail: json |> field("thumbnail", string),
     itunesId: json |> field("itunes_id", int),
     pubDateMs: json |> field("pub_date_ms", int),
