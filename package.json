@@ -8,7 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "webpack": "webpack -w",
     "webpack:production": "NODE_ENV=production webpack",
-    "server": "webpack-dev-server"
+    "server": "webpack-dev-server",
+    "introspection": "./node_modules/graphql_ppx/sendIntrospectionQuery.js http://localhost:8080/v1/graphql"
   },
   "keywords": [
     "BuckleScript"
@@ -28,6 +29,7 @@
     "style-loader": "^0.23.1"
   },
   "devDependencies": {
+    "graphql_ppx": "^0.2.8",
     "bs-platform": "^5.0.6",
     "html-webpack-plugin": "^3.2.0",
     "webpack": "^4.0.1",
