@@ -23,14 +23,7 @@ let make = () => {
        | Success(res) =>
          res.results
          ->Belt.Array.map(episode =>
-             <EpisodeView
-               title={episode.title}
-               description={episode.description}
-               key={episode.listennotesId}
-               podcastTitle={episode.podcastTitle}
-               pubDate={episode.pubDate}
-               listennotesId={episode.listennotesId}
-             />
+             <EpisodeView key={episode.listennotesId} episode />
            )
          |> ReasonReact.array
        | Error => <div> {str("Error")} </div>

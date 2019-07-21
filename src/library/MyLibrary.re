@@ -59,6 +59,9 @@ module GetMyLibraryPartial = [%graphql
   |}
 ];
 
+type myLibraryPartial = {episodes: array(myPartialEpisode)};
+type myLibraryFull = {episodes: array(myEpisode)};
+
 module GetMyLibraryFull = [%graphql
   {|
   query($user_id: String!) {

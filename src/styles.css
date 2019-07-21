@@ -8,7 +8,10 @@
 .search-result-card--saved {
   padding-top: 10px;
 }
-
+.search-result-save-button {
+  margin-left: auto;
+  display: block;
+}
 .search-result-saved-badge {
   position: absolute;
   top: 10px;

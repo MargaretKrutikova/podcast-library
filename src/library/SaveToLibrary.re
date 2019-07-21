@@ -61,5 +61,9 @@ let saveEpisode =
     ~tags=data.tags,
     ~userId="margaretkru",
     (),
-  );
+  )
+  |> Graphql.sendQuery
+  |> Js.Promise.then_(response =>
+       response##insert_episodes |> Js.Promise.resolve
+     );
 };

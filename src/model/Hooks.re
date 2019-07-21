@@ -32,17 +32,12 @@ let useSearchQuery = () => {
 };
 
 let isSavedEpisode = (model: AppModel.model, listennotesId) => {
-  switch (model.myLibrary) {
-  | Empty => false
-  | Partial(library) =>
-    Belt.Array.some(library.episodes, ep =>
-      ep.episode.listennotesId == listennotesId
-    )
-  | Full(library) =>
-    Belt.Array.some(library.episodes, ep =>
-      ep.episode.listennotesId == listennotesId
-    )
-  };
+  Belt.Array.some(model.myLibrary.episodes, ep =>
+    switch (ep) {
+    | Partial({episode}) => episode.listennotesId == listennotesId
+    | Full({episode}) => episode.listennotesId == listennotesId
+    }
+  );
 };
 
 let useIsSavedEpisode = listennotesId => {
