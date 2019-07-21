@@ -86,7 +86,7 @@ let getPartial = () => {
 };
 
 let getFull = () => {
-  GetMyLibraryFull.make(~user_id="margaretkruaedf", ())
+  GetMyLibraryFull.make(~user_id="margaretkru", ())
   |> Graphql.sendQuery
   |> Js.Promise.then_(result => result##my_episodes |> Js.Promise.resolve);
 };

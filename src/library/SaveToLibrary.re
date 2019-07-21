@@ -2,37 +2,39 @@ module SaveEpisode = [%graphql
   {|
     mutation(
       $title: String!,
-      $pub_date_ms: Int!,
-      $podcast_title: String!,
-      $podcast_listennotes_id: String!,
-      $listennotes_id: String!,
-      $length_sec: Int!,
-      $itunes_id: String!,
-      $genre_ids: String!,
+      $pubDate: String!,
+      $podcastTitle: String!,
+      $podcastItunesId: String!,
+      $podcastListennotesId: String!,
+      $listennotesId: String!,
+      $lengthSec: Int!,
+      $itunesId: String,
+      $genreIds: String!,
       $description: String!,
       $status: String!,
-      $user_id: String!,
+      $userId: String!,
       $tags: String!
    ) {
      insert_episodes(
        objects: [{
           title: $title,
-          pub_date_ms: $pub_date_ms,
-          podcast_title: $podcast_title,
-          podcast_listennotes_id: $podcast_listennotes_id,
-          listennotes_id: $listennotes_id,
-          length_sec: $length_sec,
-          itunes_id: $itunes_id,
+          pubDate: $pubDate,
+          podcastTitle: $podcastTitle,
+          podcastListennotesId: $podcastListennotesId,
+          podcastItunesId: $podcastItunesId,
+          listennotesId: $listennotesId,
+          lengthSec: $lengthSec,
+          itunesId: $itunesId,
           description: $description
-          genre_ids: $genre_ids,
-          my_episodes: {
-            data: { tags: $tags, status: $status, user_id: $user_id },
+          genreIds: $genreIds,
+          myEpisodes: {
+            data: { tags: $tags, status: $status, userId: $userId },
             on_conflict: { constraint: my_episodes_pkey, update_columns: [] }
           }
        }],
        on_conflict: {
           constraint: episodes_listennotes_id_key,
-          update_columns: [title, description, itunes_id, pub_date_ms]
+          update_columns: [title, description, itunesId, pubDate]
        }) {
         returning {
           id
@@ -46,17 +48,18 @@ let saveEpisode =
     (episode: EpisodeSearch.episode, data: MyLibrary.saveEpisodeData) => {
   SaveEpisode.make(
     ~title=episode.title,
-    ~pub_date_ms=0,
-    ~podcast_title=episode.podcastTitle,
-    ~podcast_listennotes_id=episode.podcastListennotesId,
-    ~listennotes_id=episode.listennotesId,
-    ~length_sec=episode.lengthSec,
-    ~itunes_id=string_of_int(episode.podcastItunesId),
+    ~pubDate=episode.pubDate,
+    ~podcastTitle=episode.podcastTitle,
+    ~podcastListennotesId=episode.podcastListennotesId,
+    ~listennotesId=episode.listennotesId,
+    ~lengthSec=episode.lengthSec,
+    //~itunesId=string_of_int(episode.podcastItunesId),
     ~description=episode.description,
-    ~status="NOT_LISTENED",
-    ~genre_ids="",
+    ~status=MyLibrary.statusEncoder(data.status),
+    ~genreIds=Js.Array.joinWith(", ", episode.genreIds),
+    ~podcastItunesId=string_of_int(episode.podcastItunesId),
     ~tags=data.tags,
-    ~user_id="margaretkru",
+    ~userId="margaretkru",
     (),
   );
 };
