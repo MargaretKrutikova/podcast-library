@@ -6,12 +6,14 @@ type myLibrary =
   | Loaded(MyLibrary.library);
 
 type message =
-  | FetchLibraryIds
+  | /** library */
+    FetchLibraryIds
   | GotLibraryIds(array(string))
   | FetchLibrary
   | GotLibrary(MyLibrary.library)
   | SavedEpisode(EpisodeSearch.episode)
-  | RequestedSearch
+  | /** search */
+    RequestedSearch
   | EnteredSearchTerm(string)
   | SetContentType(ContentType.t)
   | GotSearchResult(EpisodeSearch.searchResult)

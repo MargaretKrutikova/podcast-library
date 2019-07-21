@@ -26,6 +26,8 @@ type episode = {
   listennotesId: string,
   lengthSec: int,
   description: string,
+  podcastItunesId: string,
+  itunesId: option(string),
 };
 
 type myEpisode = {
@@ -64,11 +66,13 @@ module GetMyLibrary = [%graphql
   {|
   query($user_id: String!) {
     my_episodes (where: {userId: {_eq: $user_id}}) @bsRecord  {
-      episodeId @bsDecoder(fn: "uuidToString")
+      episodeId
       status @bsDecoder(fn: "statusDecoder")
       tags
       episode @bsRecord{
+        podcastItunesId
         listennotesId
+        itunesId
         title
         description
         pubDate

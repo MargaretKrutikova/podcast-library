@@ -2029,31 +2029,11 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "id",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "uuid",
-                  "ofType": null
-                }
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
               "name": "itunesId",
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
               },
               "description": null
             },
@@ -2833,16 +2813,6 @@
               "description": null
             },
             {
-              "name": "id",
-              "defaultValue": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "uuid_comparison_exp",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
               "name": "itunesId",
               "defaultValue": null,
               "type": {
@@ -3003,16 +2973,6 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "id",
-              "defaultValue": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "uuid",
                 "ofType": null
               },
               "description": null
@@ -3756,16 +3716,6 @@
               "description": null
             },
             {
-              "name": "id",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
               "name": "itunesId",
               "defaultValue": null,
               "type": {
@@ -3886,12 +3836,6 @@
             {
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "id",
-              "description": "column name"
-            },
-            {
-              "isDeprecated": false,
-              "deprecationReason": null,
               "name": "itunesId",
               "description": "column name"
             },
@@ -3959,16 +3903,6 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "id",
-              "defaultValue": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "uuid",
                 "ofType": null
               },
               "description": null
@@ -4255,12 +4189,6 @@
               "isDeprecated": false,
               "deprecationReason": null,
               "name": "genreIds",
-              "description": "column name"
-            },
-            {
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "id",
               "description": "column name"
             },
             {
@@ -4951,7 +4879,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "uuid",
+                  "name": "String",
                   "ofType": null
                 }
               },
@@ -5279,7 +5207,7 @@
               "defaultValue": null,
               "type": {
                 "kind": "INPUT_OBJECT",
-                "name": "uuid_comparison_exp",
+                "name": "text_comparison_exp",
                 "ofType": null
               },
               "description": null
@@ -5367,7 +5295,7 @@
               "defaultValue": null,
               "type": {
                 "kind": "SCALAR",
-                "name": "uuid",
+                "name": "String",
                 "ofType": null
               },
               "description": null
@@ -5436,6 +5364,18 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
+              "name": "episodeId",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
               "name": "status",
               "type": {
                 "kind": "SCALAR",
@@ -5474,6 +5414,16 @@
           "inputFields": [
             {
               "name": "addedDateMs",
+              "defaultValue": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "episodeId",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -5546,6 +5496,18 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
+              "name": "episodeId",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
               "name": "status",
               "type": {
                 "kind": "SCALAR",
@@ -5584,6 +5546,16 @@
           "inputFields": [
             {
               "name": "addedDateMs",
+              "defaultValue": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "episodeId",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -5893,7 +5865,7 @@
               "defaultValue": null,
               "type": {
                 "kind": "SCALAR",
-                "name": "uuid",
+                "name": "String",
                 "ofType": null
               },
               "description": null
@@ -6211,14 +6183,14 @@
             {
               "args": [
                 {
-                  "name": "id",
+                  "name": "listennotesId",
                   "defaultValue": null,
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
                       "kind": "SCALAR",
-                      "name": "uuid",
+                      "name": "String",
                       "ofType": null
                     }
                   },
@@ -6464,7 +6436,7 @@
                     "name": null,
                     "ofType": {
                       "kind": "SCALAR",
-                      "name": "uuid",
+                      "name": "String",
                       "ofType": null
                     }
                   },
@@ -8432,14 +8404,14 @@
             {
               "args": [
                 {
-                  "name": "id",
+                  "name": "listennotesId",
                   "defaultValue": null,
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
                       "kind": "SCALAR",
-                      "name": "uuid",
+                      "name": "String",
                       "ofType": null
                     }
                   },
@@ -8640,7 +8612,7 @@
                     "name": null,
                     "ofType": {
                       "kind": "SCALAR",
-                      "name": "uuid",
+                      "name": "String",
                       "ofType": null
                     }
                   },
