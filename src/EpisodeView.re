@@ -3,29 +3,27 @@ open BsReactstrap;
 let str = ReasonReact.string;
 
 [@react.component]
-let make =
-    (
-      ~title,
-      ~podcastTitle,
-      ~listennotesId,
-      ~pubDate,
-      ~lengthSec=?,
-      ~description,
-    ) => {
-  let isSaved = Hooks.useIsSavedEpisode(listennotesId);
+let make = (~episode: EpisodeSearch.episode) => {
+  let isSaved = Hooks.useIsSavedEpisode(episode.listennotesId);
+  let dispatch = AppCore.useDispatch();
+
+  let (isSaving, setIsSaving) = React.useState(() => false);
 
   let descriptionText =
-    String.length(description) < 200 ? description : description ++ "...";
+    String.length(episode.description) < 200
+      ? episode.description : episode.description ++ "...";
 
-  let handleEpisodeSave = (episode: EpisodeSearch.episode) =>
-    SaveToLibrary.saveEpisode(
-      episode,
-      {tags: "Elm, Blah", status: NotListened},
-    )
-    |> Graphql.sendQuery
-    |> Js.Promise.then_(response =>
-         Js.log(response##insert_episodes) |> Js.Promise.resolve
-       );
+  let handleEpisodeSave = () => {
+    setIsSaving(_ => true);
+    SaveToLibrary.saveEpisode(episode, {tags: "", status: NotListened})
+    |> Js.Promise.(
+         then_(_ => {
+           setIsSaving(_ => false);
+           dispatch(SavedEpisode(episode)) |> resolve;
+         })
+       )
+    |> Js.Promise.(catch(_ => setIsSaving(_ => false) |> resolve));
+  };
 
   <Card
     className={
@@ -38,9 +36,9 @@ let make =
          </Badge>
        : ReasonReact.null}
     <CardBody>
-      <CardTitle> {str(title)} </CardTitle>
+      <CardTitle> {str(episode.title)} </CardTitle>
       <CardSubtitle className="search-result-subtitle">
-        {str(podcastTitle ++ ", " ++ pubDate)}
+        {str(episode.podcastTitle ++ ", " ++ episode.pubDate)}
       </CardSubtitle>
       <CardText tag="div">
         <div dangerouslySetInnerHTML={"__html": descriptionText} />
@@ -50,7 +48,8 @@ let make =
              size="sm"
              color="primary"
              className="search-result-save-button"
-             onClick=handleEpisodeSave>
+             disabled=isSaving
+             onClick={_ => handleEpisodeSave()}>
              {str("Save")}
            </Button>
          : ReasonReact.null}
