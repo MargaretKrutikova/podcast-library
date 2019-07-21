@@ -32,12 +32,7 @@ let useSearchQuery = () => {
 };
 
 let isSavedEpisode = (model: AppModel.model, listennotesId) => {
-  Belt.Array.some(model.myLibrary.episodes, ep =>
-    switch (ep) {
-    | Partial({episode}) => episode.listennotesId == listennotesId
-    | Full({episode}) => episode.listennotesId == listennotesId
-    }
-  );
+  Belt.Array.some(model.librarySavedIds, id => id == listennotesId);
 };
 
 let useIsSavedEpisode = listennotesId => {

@@ -29,6 +29,7 @@ type episode = {
 };
 
 type myEpisode = {
+  episodeId: string,
   status,
   tags: string,
   episode,
@@ -39,19 +40,11 @@ type saveEpisodeData = {
   tags: string,
 };
 
-type partialEpisode = {listennotesId: string};
-
-type myPartialEpisode = {
-  status,
-  episode: partialEpisode,
-};
-
-module GetMyLibraryPartial = [%graphql
+module GetMyLibrarySavedIds = [%graphql
   {|
   query($user_id: String!) {
-    my_episodes (where: {userId: {_eq: $user_id}}) @bsRecord {
-      status @bsDecoder(fn: "statusDecoder")
-      episode @bsRecord{
+    my_episodes (where: {userId: {_eq: $user_id}}) {
+      episode {
         listennotesId
       }
     }
@@ -59,13 +52,19 @@ module GetMyLibraryPartial = [%graphql
   |}
 ];
 
-type myLibraryPartial = {episodes: array(myPartialEpisode)};
-type myLibraryFull = {episodes: array(myEpisode)};
+type library = {episodes: array(myEpisode)};
 
-module GetMyLibraryFull = [%graphql
+let uuidToString = (id: Js.Json.t) =>
+  switch (Js.Json.decodeString(id)) {
+  | Some(str) => str
+  | None => ""
+  };
+
+module GetMyLibrary = [%graphql
   {|
   query($user_id: String!) {
     my_episodes (where: {userId: {_eq: $user_id}}) @bsRecord  {
+      episodeId @bsDecoder(fn: "uuidToString")
       status @bsDecoder(fn: "statusDecoder")
       tags
       episode @bsRecord{
@@ -82,14 +81,19 @@ module GetMyLibraryFull = [%graphql
   |}
 ];
 
-let getPartial = () => {
-  GetMyLibraryPartial.make(~user_id="margaretkru", ())
+let getSavedIds = () => {
+  GetMyLibrarySavedIds.make(~user_id="margaretkru", ())
   |> Graphql.sendQuery
-  |> Js.Promise.then_(result => result##my_episodes |> Js.Promise.resolve);
+  |> Js.Promise.then_(result =>
+       Belt.Array.map(result##my_episodes, myEpisode =>
+         myEpisode##episode##listennotesId
+       )
+       |> Js.Promise.resolve
+     );
 };
 
 let getFull = () => {
-  GetMyLibraryFull.make(~user_id="margaretkru", ())
+  GetMyLibrary.make(~user_id="margaretkru", ())
   |> Graphql.sendQuery
   |> Js.Promise.then_(result => result##my_episodes |> Js.Promise.resolve);
 };

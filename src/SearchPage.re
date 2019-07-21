@@ -8,7 +8,7 @@ let make = () => {
   let searchResult = AppCore.useSelector(model => model.episodeSearchResult);
 
   React.useEffect0(() => {
-    dispatch(FetchPartialLibrary);
+    dispatch(FetchLibraryIds);
     dispatch(RequestedSearch);
     None;
   });

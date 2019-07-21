@@ -1,15 +1,15 @@
 /** my library model */
-type savedEpisode =
-  | Partial(MyLibrary.myPartialEpisode)
-  | Full(MyLibrary.myEpisode);
 
-type myLibrary = {episodes: array(savedEpisode)};
+type myLibrary =
+  | NotAsked
+  | Loading(option(MyLibrary.library))
+  | Loaded(MyLibrary.library);
 
 type message =
-  | FetchPartialLibrary
-  | FetchFullLibrary
-  | GotPartialLibrary(MyLibrary.myLibraryPartial)
-  | GotFullLibrary(MyLibrary.myLibraryFull)
+  | FetchLibraryIds
+  | GotLibraryIds(array(string))
+  | FetchLibrary
+  | GotLibrary(MyLibrary.library)
   | SavedEpisode(EpisodeSearch.episode)
   | RequestedSearch
   | EnteredSearchTerm(string)
@@ -29,6 +29,7 @@ type model = {
   baseSearchQuery: SearchQuery.baseQuery,
   episodeSearchQuery: SearchQuery.episodeQuery,
   episodeSearchResult: searchResult(EpisodeSearch.searchResult),
+  librarySavedIds: array(string),
   myLibrary,
 };
 
@@ -37,9 +38,8 @@ let createInitModel = () => {
   baseSearchQuery: SearchQuery.createBaseQuery(),
   episodeSearchQuery: SearchQuery.createEpisodeQuery(),
   episodeSearchResult: NotAsked,
-  myLibrary: {
-    episodes: [||],
-  },
+  librarySavedIds: [||],
+  myLibrary: NotAsked,
 };
 
 /** effects */
@@ -55,23 +55,19 @@ let search = (model, dispatch) => {
   None;
 };
 
-let getMyLibraryPartial = ((), dispatch) => {
-  MyLibrary.getPartial()
-  |> Js.Promise.(
-       then_(episodes =>
-         dispatch(GotPartialLibrary({episodes: episodes})) |> resolve
-       )
-     )
+let getLibraryIds = (model, dispatch) => {
+  MyLibrary.getSavedIds()
+  |> Js.Promise.(then_(ids => dispatch(GotLibraryIds(ids)) |> resolve))
   |> ignore;
 
   None;
 };
 
-let getMyLibraryFull = ((), dispatch) => {
+let getMyLibrary = ((), dispatch) => {
   MyLibrary.getFull()
   |> Js.Promise.(
        then_(episodes =>
-         dispatch(GotFullLibrary({episodes: episodes})) |> resolve
+         dispatch(GotLibrary({episodes: episodes})) |> resolve
        )
      )
   |> ignore;
@@ -91,24 +87,11 @@ let updateEpisodeSearchQuery = (model, episodeSearchQuery) => {
   episodeSearchQuery,
 };
 
-let mapFromPartialLibrary = ({episodes}: MyLibrary.myLibraryPartial) => {
-  episodes: Belt.Array.map(episodes, ep => Partial(ep)),
-};
-
-let mapFromFullLibrary = ({episodes}: MyLibrary.myLibraryFull) => {
-  episodes: Belt.Array.map(episodes, ep => Full(ep)),
-};
-
-let saveToLibrary = (library, episode: EpisodeSearch.episode) => {
-  let partialEpisode: MyLibrary.myPartialEpisode = {
-    status: NotListened,
-    episode: {
-      listennotesId: episode.listennotesId,
-    },
-  };
-  {
-    episodes:
-      Belt.Array.concat(library.episodes, [|Partial(partialEpisode)|]),
+let toLoading = (library: myLibrary): myLibrary => {
+  switch (library) {
+  | NotAsked => Loading(None)
+  | Loaded(data) => Loading(Some(data))
+  | other => other
   };
 };
 
@@ -136,18 +119,25 @@ let update = (model, message) => {
       None,
     )
   | GotSearchError => ({...model, episodeSearchResult: Error}, None)
-  | FetchPartialLibrary => (model, Some(getMyLibraryPartial()))
-  | FetchFullLibrary => (model, Some(getMyLibraryFull()))
-  | GotPartialLibrary(library) => (
-      {...model, myLibrary: mapFromPartialLibrary(library)},
+  | FetchLibraryIds => (model, Some(getLibraryIds()))
+  | FetchLibrary => (
+      {...model, myLibrary: toLoading(model.myLibrary)},
+      Some(getMyLibrary()),
+    )
+  | GotLibrary(myLibrary) => (
+      {...model, myLibrary: Loaded(myLibrary)},
       None,
     )
-  | GotFullLibrary(library) => (
-      {...model, myLibrary: mapFromFullLibrary(library)},
-      None,
-    )
+  | GotLibraryIds(ids) => ({...model, librarySavedIds: ids}, None)
   | SavedEpisode(episode) => (
-      {...model, myLibrary: saveToLibrary(model.myLibrary, episode)},
+      {
+        ...model,
+        librarySavedIds:
+          Belt.Array.concat(
+            model.librarySavedIds,
+            [|episode.listennotesId|],
+          ),
+      },
       None,
     )
   };
