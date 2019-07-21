@@ -1,31 +1,40 @@
 open BsReactstrap;
+open ContentType;
 
 let str = ReasonReact.string;
-
-type state = {
-  searchTerm: string,
-  searchResult: AppModel.searchResult,
-};
 
 [@react.component]
 let make = () => {
   let dispatch = AppCore.useDispatch();
-  let state = AppCore.useSelector(model => model);
+  let searchParams = AppCore.useSelector(model => model.searchParams);
+  let searchResult = AppCore.useSelector(model => model.episodeSearchResult);
+
+  React.useEffect0(() => {
+    dispatch(FetchPartialLibrary);
+    None;
+  });
 
   let handleSearchChange = e =>
     dispatch(EnteredSearchTerm(ReactEvent.Form.target(e)##value));
 
-  <div>
+  let handleEpisodeSave = (episode: EpisodeResult.episode) =>
+    Mutations.saveEpisode(episode, {tags: "Elm, Blah", status: NotListened})
+    |> Graphql.sendQuery
+    |> Js.Promise.then_(response =>
+         Js.log(response##insert_episodes) |> Js.Promise.resolve
+       );
+
+  <Container>
     <Form
       className="cr-search-form"
       onSubmit={e => ReactEvent.Form.preventDefault(e)}>
-      <h1> {str("Search content")} </h1>
+      <h1> {str("Search library")} </h1>
       <FormGroup>
         <Input
           _type="search"
           className="cr-search-form__input"
           placeholder="Search..."
-          value={state.searchTerm}
+          value={searchParams.searchTerm}
           onChange=handleSearchChange
         />
       </FormGroup>
@@ -36,7 +45,7 @@ let make = () => {
               type_="radio"
               name="contentType"
               className="form-check-input"
-              checked={state.contentType == Podcast}
+              checked={searchParams.contentType == Podcast}
               onChange={_ => dispatch(SetContentType(Podcast))}
             />
             {str("Podcast")}
@@ -48,7 +57,7 @@ let make = () => {
               type_="radio"
               name="contentType"
               className="form-check-input"
-              checked={state.contentType == Episode}
+              checked={searchParams.contentType == Episode}
               onChange={_ => dispatch(SetContentType(Episode))}
             />
             {str("Episode")}
@@ -56,26 +65,33 @@ let make = () => {
         </FormGroup>
       </FormGroup>
     </Form>
-    <button onClick={_ => dispatch(RequestedSearch)}>
+    <Button onClick={_ => dispatch(RequestedSearch)}>
       {str("Search")}
-    </button>
+    </Button>
     <div>
-      {switch (state.searchResult) {
+      {switch (searchResult) {
        | NotAsked => <span> {str("Nothing yet")} </span>
        | Loading(_) => <span> {str("Loading")} </span>
        | Success(res) =>
          res.results
-         ->Belt.Array.map(result =>
-             switch (result) {
-             | Podcast(podcast) =>
-               <div key={podcast.id}>
-                 {str(podcast.title)}
-                 <p> {str(podcast.description)} </p>
-               </div>
-             | Episode(episode) =>
-               <div key={episode.id}>
+         ->Belt.Array.map(episode
+             //  switch (result) {
+             //  | Podcast(podcast) =>
+             //    <div key={podcast.id}>
+             //      {str(podcast.title)}
+             //      <p> {str(podcast.description)} </p>
+             //    </div>
+             //  | Episode(episode) =>
+             =>
+               <div key={episode.listennotesId}>
                  {str(episode.title)}
                  <p> {str(episode.description)} </p>
+                 <p>
+                   <Button
+                     onClick={_ => handleEpisodeSave(episode) |> ignore}>
+                     {str("Save")}
+                   </Button>
+                 </p>
                  <p>
                    {str(
                       "Published: "
@@ -88,11 +104,11 @@ let make = () => {
                     )}
                  </p>
                </div>
-             }
-           )
+             )
+         // }
          |> ReasonReact.array
        | Error => <div> {str("Error")} </div>
        }}
     </div>
-  </div>;
+  </Container>;
 };
