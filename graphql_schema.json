@@ -372,13 +372,13 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "pubDateMs",
+              "name": "pubDate",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "Int",
+                  "name": "String",
                   "ofType": null
                 }
               },
@@ -627,13 +627,13 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "earliestPubDateMs",
+              "name": "earliestPubDate",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "Int",
+                  "name": "String",
                   "ofType": null
                 }
               },
@@ -683,13 +683,13 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "latestPubDateMs",
+              "name": "latestPubDate",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "Int",
+                  "name": "String",
                   "ofType": null
                 }
               },
@@ -948,9 +948,13 @@
               "deprecationReason": null,
               "name": "itunesEpisode",
               "type": {
-                "kind": "OBJECT",
-                "name": "ItunesEpisode",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "ItunesEpisode",
+                  "ofType": null
+                }
               },
               "description": ""
             },
@@ -985,9 +989,13 @@
               "deprecationReason": null,
               "name": "searchEpisodes",
               "type": {
-                "kind": "OBJECT",
-                "name": "EpisodeSearchResults",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "EpisodeSearchResults",
+                  "ofType": null
+                }
               },
               "description": ""
             },
@@ -1012,9 +1020,13 @@
               "deprecationReason": null,
               "name": "searchPodcasts",
               "type": {
-                "kind": "OBJECT",
-                "name": "PodcastSearchResults",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "PodcastSearchResults",
+                  "ofType": null
+                }
               },
               "description": ""
             }
@@ -2001,7 +2013,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "genre_ids",
+              "name": "genreIds",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -2033,7 +2045,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "itunes_id",
+              "name": "itunesId",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -2049,7 +2061,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "length_sec",
+              "name": "lengthSec",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -2065,7 +2077,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "listennotes_id",
+              "name": "listennotesId",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -2148,7 +2160,7 @@
               ],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "my_episodes",
+              "name": "myEpisodes",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -2239,7 +2251,7 @@
               ],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "my_episodes_aggregate",
+              "name": "myEpisodes_aggregate",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -2255,7 +2267,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "podcast_itunes_id",
+              "name": "podcastItunesId",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -2271,7 +2283,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "podcast_listennotes_id",
+              "name": "podcastListennotesId",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -2287,7 +2299,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "podcast_title",
+              "name": "podcastTitle",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -2303,13 +2315,13 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "pub_date_ms",
+              "name": "pubDate",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "Int",
+                  "name": "String",
                   "ofType": null
                 }
               },
@@ -2729,19 +2741,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "length_sec",
-              "type": {
-                "kind": "SCALAR",
-                "name": "Float",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "pub_date_ms",
+              "name": "lengthSec",
               "type": {
                 "kind": "SCALAR",
                 "name": "Float",
@@ -2754,17 +2754,7 @@
         {
           "inputFields": [
             {
-              "name": "length_sec",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "pub_date_ms",
+              "name": "lengthSec",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -2833,7 +2823,7 @@
               "description": null
             },
             {
-              "name": "genre_ids",
+              "name": "genreIds",
               "defaultValue": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -2853,7 +2843,7 @@
               "description": null
             },
             {
-              "name": "itunes_id",
+              "name": "itunesId",
               "defaultValue": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -2863,7 +2853,7 @@
               "description": null
             },
             {
-              "name": "length_sec",
+              "name": "lengthSec",
               "defaultValue": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -2873,7 +2863,7 @@
               "description": null
             },
             {
-              "name": "listennotes_id",
+              "name": "listennotesId",
               "defaultValue": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -2883,7 +2873,7 @@
               "description": null
             },
             {
-              "name": "my_episodes",
+              "name": "myEpisodes",
               "defaultValue": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -2893,7 +2883,7 @@
               "description": null
             },
             {
-              "name": "podcast_itunes_id",
+              "name": "podcastItunesId",
               "defaultValue": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -2903,7 +2893,7 @@
               "description": null
             },
             {
-              "name": "podcast_listennotes_id",
+              "name": "podcastListennotesId",
               "defaultValue": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -2913,7 +2903,7 @@
               "description": null
             },
             {
-              "name": "podcast_title",
+              "name": "podcastTitle",
               "defaultValue": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -2923,11 +2913,11 @@
               "description": null
             },
             {
-              "name": "pub_date_ms",
+              "name": "pubDate",
               "defaultValue": null,
               "type": {
                 "kind": "INPUT_OBJECT",
-                "name": "integer_comparison_exp",
+                "name": "text_comparison_exp",
                 "ofType": null
               },
               "description": null
@@ -2977,17 +2967,7 @@
         {
           "inputFields": [
             {
-              "name": "length_sec",
-              "defaultValue": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "pub_date_ms",
+              "name": "lengthSec",
               "defaultValue": null,
               "type": {
                 "kind": "SCALAR",
@@ -3018,7 +2998,7 @@
               "description": null
             },
             {
-              "name": "genre_ids",
+              "name": "genreIds",
               "defaultValue": null,
               "type": {
                 "kind": "SCALAR",
@@ -3038,7 +3018,7 @@
               "description": null
             },
             {
-              "name": "itunes_id",
+              "name": "itunesId",
               "defaultValue": null,
               "type": {
                 "kind": "SCALAR",
@@ -3048,7 +3028,7 @@
               "description": null
             },
             {
-              "name": "length_sec",
+              "name": "lengthSec",
               "defaultValue": null,
               "type": {
                 "kind": "SCALAR",
@@ -3058,7 +3038,7 @@
               "description": null
             },
             {
-              "name": "listennotes_id",
+              "name": "listennotesId",
               "defaultValue": null,
               "type": {
                 "kind": "SCALAR",
@@ -3068,7 +3048,7 @@
               "description": null
             },
             {
-              "name": "my_episodes",
+              "name": "myEpisodes",
               "defaultValue": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -3078,7 +3058,7 @@
               "description": null
             },
             {
-              "name": "podcast_itunes_id",
+              "name": "podcastItunesId",
               "defaultValue": null,
               "type": {
                 "kind": "SCALAR",
@@ -3088,7 +3068,7 @@
               "description": null
             },
             {
-              "name": "podcast_listennotes_id",
+              "name": "podcastListennotesId",
               "defaultValue": null,
               "type": {
                 "kind": "SCALAR",
@@ -3098,7 +3078,7 @@
               "description": null
             },
             {
-              "name": "podcast_title",
+              "name": "podcastTitle",
               "defaultValue": null,
               "type": {
                 "kind": "SCALAR",
@@ -3108,11 +3088,11 @@
               "description": null
             },
             {
-              "name": "pub_date_ms",
+              "name": "pubDate",
               "defaultValue": null,
               "type": {
                 "kind": "SCALAR",
-                "name": "Int",
+                "name": "String",
                 "ofType": null
               },
               "description": null
@@ -3161,7 +3141,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "genre_ids",
+              "name": "genreIds",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -3173,7 +3153,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "itunes_id",
+              "name": "itunesId",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -3185,7 +3165,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "length_sec",
+              "name": "lengthSec",
               "type": {
                 "kind": "SCALAR",
                 "name": "Int",
@@ -3197,7 +3177,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "listennotes_id",
+              "name": "listennotesId",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -3209,7 +3189,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "podcast_itunes_id",
+              "name": "podcastItunesId",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -3221,7 +3201,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "podcast_listennotes_id",
+              "name": "podcastListennotesId",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -3233,7 +3213,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "podcast_title",
+              "name": "podcastTitle",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -3245,10 +3225,10 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "pub_date_ms",
+              "name": "pubDate",
               "type": {
                 "kind": "SCALAR",
-                "name": "Int",
+                "name": "String",
                 "ofType": null
               },
               "description": null
@@ -3280,7 +3260,7 @@
               "description": null
             },
             {
-              "name": "genre_ids",
+              "name": "genreIds",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -3290,7 +3270,7 @@
               "description": null
             },
             {
-              "name": "itunes_id",
+              "name": "itunesId",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -3300,7 +3280,7 @@
               "description": null
             },
             {
-              "name": "length_sec",
+              "name": "lengthSec",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -3310,7 +3290,7 @@
               "description": null
             },
             {
-              "name": "listennotes_id",
+              "name": "listennotesId",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -3320,7 +3300,7 @@
               "description": null
             },
             {
-              "name": "podcast_itunes_id",
+              "name": "podcastItunesId",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -3330,7 +3310,7 @@
               "description": null
             },
             {
-              "name": "podcast_listennotes_id",
+              "name": "podcastListennotesId",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -3340,7 +3320,7 @@
               "description": null
             },
             {
-              "name": "podcast_title",
+              "name": "podcastTitle",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -3350,7 +3330,7 @@
               "description": null
             },
             {
-              "name": "pub_date_ms",
+              "name": "pubDate",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -3403,7 +3383,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "genre_ids",
+              "name": "genreIds",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -3415,7 +3395,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "itunes_id",
+              "name": "itunesId",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -3427,7 +3407,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "length_sec",
+              "name": "lengthSec",
               "type": {
                 "kind": "SCALAR",
                 "name": "Int",
@@ -3439,7 +3419,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "listennotes_id",
+              "name": "listennotesId",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -3451,7 +3431,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "podcast_itunes_id",
+              "name": "podcastItunesId",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -3463,7 +3443,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "podcast_listennotes_id",
+              "name": "podcastListennotesId",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -3475,7 +3455,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "podcast_title",
+              "name": "podcastTitle",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -3487,10 +3467,10 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "pub_date_ms",
+              "name": "pubDate",
               "type": {
                 "kind": "SCALAR",
-                "name": "Int",
+                "name": "String",
                 "ofType": null
               },
               "description": null
@@ -3522,7 +3502,7 @@
               "description": null
             },
             {
-              "name": "genre_ids",
+              "name": "genreIds",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -3532,7 +3512,7 @@
               "description": null
             },
             {
-              "name": "itunes_id",
+              "name": "itunesId",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -3542,7 +3522,7 @@
               "description": null
             },
             {
-              "name": "length_sec",
+              "name": "lengthSec",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -3552,7 +3532,7 @@
               "description": null
             },
             {
-              "name": "listennotes_id",
+              "name": "listennotesId",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -3562,7 +3542,7 @@
               "description": null
             },
             {
-              "name": "podcast_itunes_id",
+              "name": "podcastItunesId",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -3572,7 +3552,7 @@
               "description": null
             },
             {
-              "name": "podcast_listennotes_id",
+              "name": "podcastListennotesId",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -3582,7 +3562,7 @@
               "description": null
             },
             {
-              "name": "podcast_title",
+              "name": "podcastTitle",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -3592,7 +3572,7 @@
               "description": null
             },
             {
-              "name": "pub_date_ms",
+              "name": "pubDate",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -3766,7 +3746,7 @@
               "description": null
             },
             {
-              "name": "genre_ids",
+              "name": "genreIds",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -3786,7 +3766,7 @@
               "description": null
             },
             {
-              "name": "itunes_id",
+              "name": "itunesId",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -3796,7 +3776,7 @@
               "description": null
             },
             {
-              "name": "length_sec",
+              "name": "lengthSec",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -3806,7 +3786,7 @@
               "description": null
             },
             {
-              "name": "listennotes_id",
+              "name": "listennotesId",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -3816,7 +3796,7 @@
               "description": null
             },
             {
-              "name": "my_episodes_aggregate",
+              "name": "myEpisodes_aggregate",
               "defaultValue": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -3826,7 +3806,7 @@
               "description": null
             },
             {
-              "name": "podcast_itunes_id",
+              "name": "podcastItunesId",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -3836,7 +3816,7 @@
               "description": null
             },
             {
-              "name": "podcast_listennotes_id",
+              "name": "podcastListennotesId",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -3846,7 +3826,7 @@
               "description": null
             },
             {
-              "name": "podcast_title",
+              "name": "podcastTitle",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -3856,7 +3836,7 @@
               "description": null
             },
             {
-              "name": "pub_date_ms",
+              "name": "pubDate",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -3900,7 +3880,7 @@
             {
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "genre_ids",
+              "name": "genreIds",
               "description": "column name"
             },
             {
@@ -3912,43 +3892,43 @@
             {
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "itunes_id",
+              "name": "itunesId",
               "description": "column name"
             },
             {
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "length_sec",
+              "name": "lengthSec",
               "description": "column name"
             },
             {
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "listennotes_id",
+              "name": "listennotesId",
               "description": "column name"
             },
             {
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "podcast_itunes_id",
+              "name": "podcastItunesId",
               "description": "column name"
             },
             {
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "podcast_listennotes_id",
+              "name": "podcastListennotesId",
               "description": "column name"
             },
             {
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "podcast_title",
+              "name": "podcastTitle",
               "description": "column name"
             },
             {
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "pub_date_ms",
+              "name": "pubDate",
               "description": "column name"
             },
             {
@@ -3974,7 +3954,7 @@
               "description": null
             },
             {
-              "name": "genre_ids",
+              "name": "genreIds",
               "defaultValue": null,
               "type": {
                 "kind": "SCALAR",
@@ -3994,7 +3974,7 @@
               "description": null
             },
             {
-              "name": "itunes_id",
+              "name": "itunesId",
               "defaultValue": null,
               "type": {
                 "kind": "SCALAR",
@@ -4004,7 +3984,7 @@
               "description": null
             },
             {
-              "name": "length_sec",
+              "name": "lengthSec",
               "defaultValue": null,
               "type": {
                 "kind": "SCALAR",
@@ -4014,7 +3994,7 @@
               "description": null
             },
             {
-              "name": "listennotes_id",
+              "name": "listennotesId",
               "defaultValue": null,
               "type": {
                 "kind": "SCALAR",
@@ -4024,7 +4004,7 @@
               "description": null
             },
             {
-              "name": "podcast_itunes_id",
+              "name": "podcastItunesId",
               "defaultValue": null,
               "type": {
                 "kind": "SCALAR",
@@ -4034,7 +4014,7 @@
               "description": null
             },
             {
-              "name": "podcast_listennotes_id",
+              "name": "podcastListennotesId",
               "defaultValue": null,
               "type": {
                 "kind": "SCALAR",
@@ -4044,7 +4024,7 @@
               "description": null
             },
             {
-              "name": "podcast_title",
+              "name": "podcastTitle",
               "defaultValue": null,
               "type": {
                 "kind": "SCALAR",
@@ -4054,11 +4034,11 @@
               "description": null
             },
             {
-              "name": "pub_date_ms",
+              "name": "pubDate",
               "defaultValue": null,
               "type": {
                 "kind": "SCALAR",
-                "name": "Int",
+                "name": "String",
                 "ofType": null
               },
               "description": null
@@ -4095,19 +4075,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "length_sec",
-              "type": {
-                "kind": "SCALAR",
-                "name": "Float",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "pub_date_ms",
+              "name": "lengthSec",
               "type": {
                 "kind": "SCALAR",
                 "name": "Float",
@@ -4120,17 +4088,7 @@
         {
           "inputFields": [
             {
-              "name": "length_sec",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "pub_date_ms",
+              "name": "lengthSec",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -4161,19 +4119,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "length_sec",
-              "type": {
-                "kind": "SCALAR",
-                "name": "Float",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "pub_date_ms",
+              "name": "lengthSec",
               "type": {
                 "kind": "SCALAR",
                 "name": "Float",
@@ -4186,17 +4132,7 @@
         {
           "inputFields": [
             {
-              "name": "length_sec",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "pub_date_ms",
+              "name": "lengthSec",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -4227,19 +4163,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "length_sec",
-              "type": {
-                "kind": "SCALAR",
-                "name": "Float",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "pub_date_ms",
+              "name": "lengthSec",
               "type": {
                 "kind": "SCALAR",
                 "name": "Float",
@@ -4252,17 +4176,7 @@
         {
           "inputFields": [
             {
-              "name": "length_sec",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "pub_date_ms",
+              "name": "lengthSec",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -4293,19 +4207,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "length_sec",
-              "type": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "pub_date_ms",
+              "name": "lengthSec",
               "type": {
                 "kind": "SCALAR",
                 "name": "Int",
@@ -4318,17 +4220,7 @@
         {
           "inputFields": [
             {
-              "name": "length_sec",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "pub_date_ms",
+              "name": "lengthSec",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -4362,7 +4254,7 @@
             {
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "genre_ids",
+              "name": "genreIds",
               "description": "column name"
             },
             {
@@ -4374,43 +4266,43 @@
             {
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "itunes_id",
+              "name": "itunesId",
               "description": "column name"
             },
             {
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "length_sec",
+              "name": "lengthSec",
               "description": "column name"
             },
             {
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "listennotes_id",
+              "name": "listennotesId",
               "description": "column name"
             },
             {
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "podcast_itunes_id",
+              "name": "podcastItunesId",
               "description": "column name"
             },
             {
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "podcast_listennotes_id",
+              "name": "podcastListennotesId",
               "description": "column name"
             },
             {
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "podcast_title",
+              "name": "podcastTitle",
               "description": "column name"
             },
             {
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "pub_date_ms",
+              "name": "pubDate",
               "description": "column name"
             },
             {
@@ -4436,19 +4328,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "length_sec",
-              "type": {
-                "kind": "SCALAR",
-                "name": "Float",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "pub_date_ms",
+              "name": "lengthSec",
               "type": {
                 "kind": "SCALAR",
                 "name": "Float",
@@ -4461,17 +4341,7 @@
         {
           "inputFields": [
             {
-              "name": "length_sec",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "pub_date_ms",
+              "name": "lengthSec",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -4502,19 +4372,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "length_sec",
-              "type": {
-                "kind": "SCALAR",
-                "name": "Float",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "pub_date_ms",
+              "name": "lengthSec",
               "type": {
                 "kind": "SCALAR",
                 "name": "Float",
@@ -4527,17 +4385,7 @@
         {
           "inputFields": [
             {
-              "name": "length_sec",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "pub_date_ms",
+              "name": "lengthSec",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -4568,19 +4416,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "length_sec",
-              "type": {
-                "kind": "SCALAR",
-                "name": "Float",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "pub_date_ms",
+              "name": "lengthSec",
               "type": {
                 "kind": "SCALAR",
                 "name": "Float",
@@ -4593,17 +4429,7 @@
         {
           "inputFields": [
             {
-              "name": "length_sec",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "pub_date_ms",
+              "name": "lengthSec",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -5091,7 +4917,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "added_date_ms",
+              "name": "addedDateMs",
               "type": {
                 "kind": "SCALAR",
                 "name": "timestamptz",
@@ -5119,7 +4945,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "episode_id",
+              "name": "episodeId",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -5167,7 +4993,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "user_id",
+              "name": "userId",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -5429,7 +5255,7 @@
               "description": null
             },
             {
-              "name": "added_date_ms",
+              "name": "addedDateMs",
               "defaultValue": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -5449,7 +5275,7 @@
               "description": null
             },
             {
-              "name": "episode_id",
+              "name": "episodeId",
               "defaultValue": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -5479,7 +5305,7 @@
               "description": null
             },
             {
-              "name": "user_id",
+              "name": "userId",
               "defaultValue": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -5517,7 +5343,7 @@
         {
           "inputFields": [
             {
-              "name": "added_date_ms",
+              "name": "addedDateMs",
               "defaultValue": null,
               "type": {
                 "kind": "SCALAR",
@@ -5537,7 +5363,7 @@
               "description": null
             },
             {
-              "name": "episode_id",
+              "name": "episodeId",
               "defaultValue": null,
               "type": {
                 "kind": "SCALAR",
@@ -5567,7 +5393,7 @@
               "description": null
             },
             {
-              "name": "user_id",
+              "name": "userId",
               "defaultValue": null,
               "type": {
                 "kind": "SCALAR",
@@ -5598,7 +5424,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "added_date_ms",
+              "name": "addedDateMs",
               "type": {
                 "kind": "SCALAR",
                 "name": "timestamptz",
@@ -5634,7 +5460,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "user_id",
+              "name": "userId",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -5647,7 +5473,7 @@
         {
           "inputFields": [
             {
-              "name": "added_date_ms",
+              "name": "addedDateMs",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -5677,7 +5503,7 @@
               "description": null
             },
             {
-              "name": "user_id",
+              "name": "userId",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -5708,7 +5534,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "added_date_ms",
+              "name": "addedDateMs",
               "type": {
                 "kind": "SCALAR",
                 "name": "timestamptz",
@@ -5744,7 +5570,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "user_id",
+              "name": "userId",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -5757,7 +5583,7 @@
         {
           "inputFields": [
             {
-              "name": "added_date_ms",
+              "name": "addedDateMs",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -5787,7 +5613,7 @@
               "description": null
             },
             {
-              "name": "user_id",
+              "name": "userId",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -5941,7 +5767,7 @@
         {
           "inputFields": [
             {
-              "name": "added_date_ms",
+              "name": "addedDateMs",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -5961,7 +5787,7 @@
               "description": null
             },
             {
-              "name": "episode_id",
+              "name": "episodeId",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -5991,7 +5817,7 @@
               "description": null
             },
             {
-              "name": "user_id",
+              "name": "userId",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -6019,13 +5845,13 @@
             {
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "added_date_ms",
+              "name": "addedDateMs",
               "description": "column name"
             },
             {
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "episode_id",
+              "name": "episodeId",
               "description": "column name"
             },
             {
@@ -6043,7 +5869,7 @@
             {
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "user_id",
+              "name": "userId",
               "description": "column name"
             }
           ],
@@ -6053,7 +5879,7 @@
         {
           "inputFields": [
             {
-              "name": "added_date_ms",
+              "name": "addedDateMs",
               "defaultValue": null,
               "type": {
                 "kind": "SCALAR",
@@ -6063,7 +5889,7 @@
               "description": null
             },
             {
-              "name": "episode_id",
+              "name": "episodeId",
               "defaultValue": null,
               "type": {
                 "kind": "SCALAR",
@@ -6093,7 +5919,7 @@
               "description": null
             },
             {
-              "name": "user_id",
+              "name": "userId",
               "defaultValue": null,
               "type": {
                 "kind": "SCALAR",
@@ -6121,13 +5947,13 @@
             {
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "added_date_ms",
+              "name": "addedDateMs",
               "description": "column name"
             },
             {
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "episode_id",
+              "name": "episodeId",
               "description": "column name"
             },
             {
@@ -6145,7 +5971,7 @@
             {
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "user_id",
+              "name": "userId",
               "description": "column name"
             }
           ],
@@ -6444,9 +6270,13 @@
               "deprecationReason": null,
               "name": "itunesEpisode",
               "type": {
-                "kind": "OBJECT",
-                "name": "ItunesEpisode",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "ItunesEpisode",
+                  "ofType": null
+                }
               },
               "description": ""
             },
@@ -6627,7 +6457,7 @@
             {
               "args": [
                 {
-                  "name": "episode_id",
+                  "name": "episodeId",
                   "defaultValue": null,
                   "type": {
                     "kind": "NON_NULL",
@@ -6641,7 +6471,7 @@
                   "description": null
                 },
                 {
-                  "name": "user_id",
+                  "name": "userId",
                   "defaultValue": null,
                   "type": {
                     "kind": "NON_NULL",
@@ -6897,9 +6727,13 @@
               "deprecationReason": null,
               "name": "searchEpisodes",
               "type": {
-                "kind": "OBJECT",
-                "name": "EpisodeSearchResults",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "EpisodeSearchResults",
+                  "ofType": null
+                }
               },
               "description": ""
             },
@@ -6924,9 +6758,13 @@
               "deprecationReason": null,
               "name": "searchPodcasts",
               "type": {
-                "kind": "OBJECT",
-                "name": "PodcastSearchResults",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "PodcastSearchResults",
+                  "ofType": null
+                }
               },
               "description": ""
             }
@@ -8795,7 +8633,7 @@
             {
               "args": [
                 {
-                  "name": "episode_id",
+                  "name": "episodeId",
                   "defaultValue": null,
                   "type": {
                     "kind": "NON_NULL",
@@ -8809,7 +8647,7 @@
                   "description": null
                 },
                 {
-                  "name": "user_id",
+                  "name": "userId",
                   "defaultValue": null,
                   "type": {
                     "kind": "NON_NULL",

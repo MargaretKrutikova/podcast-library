@@ -1,9 +1,10 @@
+[@bs.deriving jsConverter]
 type episodeQuery = {
-  // minAudioLength: option(int),
-  // maxAudioLength: option(int),
   podcastId: option(string),
   excludePodcastId: option(string),
 };
+
+let createEpisodeQuery = () => {podcastId: None, excludePodcastId: None};
 
 type sort =
   | Relevance
@@ -34,10 +35,10 @@ let searchFieldToParam = field => {
 };
 
 [@bs.deriving jsConverter]
-type searchInput = {
+type baseQuery = {
   searchTerm: string,
   language: option(string),
-  genreIds: array(int),
+  genreIds: option(array(int)),
   offset: int,
   // sort,
   // searchFields: option(array(searchField)),
@@ -45,4 +46,9 @@ type searchInput = {
   // publishedBeforeDate: option(Js.Date.t),
 };
 
-let dateToMsString = date => Js.Float.toString @@ Js.Date.getTime(date);
+let createBaseQuery = () => {
+  searchTerm: "",
+  language: None,
+  genreIds: None,
+  offset: 0,
+};

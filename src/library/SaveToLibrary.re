@@ -43,15 +43,15 @@ module SaveEpisode = [%graphql
 ];
 
 let saveEpisode =
-    (episode: EpisodeResult.t, data: LibraryEpisode.saveEpisodeData) => {
+    (episode: EpisodeSearch.episode, data: MyLibrary.saveEpisodeData) => {
   SaveEpisode.make(
     ~title=episode.title,
     ~pub_date_ms=0,
     ~podcast_title=episode.podcastTitle,
-    ~podcast_listennotes_id=episode.podcastId,
-    ~listennotes_id=episode.id,
+    ~podcast_listennotes_id=episode.podcastListennotesId,
+    ~listennotes_id=episode.listennotesId,
     ~length_sec=episode.lengthSec,
-    ~itunes_id=string_of_int(episode.itunesId),
+    ~itunes_id=string_of_int(episode.podcastItunesId),
     ~description=episode.description,
     ~status="NOT_LISTENED",
     ~genre_ids="",

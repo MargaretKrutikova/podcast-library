@@ -5,7 +5,7 @@ type episode = {
   title: string,
   description: string,
   podcastTitle: string,
-  pubDateMs: int,
+  pubDate: string,
   lengthSec: int,
   podcastItunesId: int,
   podcastListennotesId: string,
@@ -20,8 +20,8 @@ type searchResult = {
 
 module SearchEpisodes = [%graphql
   {|
-  query($searchTerm: String!, $offset: Int!) {
-    searchEpisodes (input: {searchTerm: $searchTerm, offset: $offset}) @bsRecord  {
+  query($input: BaseSearchInput!, $episodeInput: EpisodeSearchInput!) {
+    searchEpisodes (input: $input, episodeInput: $episodeInput) @bsRecord  {
       nextOffset
       total
       count
@@ -33,15 +33,19 @@ module SearchEpisodes = [%graphql
         lengthSec
         podcastListennotesId
         description
-        pubDateMs
+        pubDate
       }
     }
   }
   |}
 ];
 
-let searchForEpisodes = (input: searchInput) => {
-  //, episodeInput: option(SearchQuery.episodeQuery)) => {
-  SearchEpisodes.make(~searchTerm=input.searchTerm, ~offset=input.offset, ())
-  |> Graphql.sendQuery;
+let searchForEpisodes = (baseQuery: baseQuery, episodeQuery: episodeQuery) => {
+  SearchEpisodes.make(
+    ~input=baseQueryToJs(baseQuery),
+    ~episodeInput=episodeQueryToJs(episodeQuery),
+    (),
+  )
+  |> Graphql.sendQuery
+  |> Js.Promise.then_(result => result##searchEpisodes |> Js.Promise.resolve);
 };
