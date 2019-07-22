@@ -50,11 +50,49 @@ module SaveEpisode = [%graphql
   |}
 ];
 
+let toGenres = (arr: array(int)) => Js.Array.joinWith(",", arr);
+
+let performEpisodeSave =
+    (
+      ~episode: EpisodeSearch.episode,
+      ~libraryData: MyLibrary.saveEpisodeData,
+      ~podcastDescription="",
+      ~podcastImage="",
+      ~itunesId=None,
+      (),
+    ) => {
+  SaveEpisode.make(
+    ~title=episode.title,
+    ~pubDate=episode.pubDate,
+    ~podcastTitle=episode.podcastTitle,
+    ~podcastDescription,
+    ~podcastImage,
+    ~itunesId?,
+    ~podcastListennotesId=episode.podcastListennotesId,
+    ~listennotesId=episode.listennotesId,
+    ~lengthSec=episode.lengthSec,
+    ~description=episode.description,
+    ~status=MyLibrary.statusEncoder(libraryData.status),
+    ~genreIds=toGenres(episode.genreIds),
+    ~podcastItunesId=string_of_int(episode.podcastItunesId),
+    ~tags=libraryData.tags,
+    ~userId="margaretkru",
+    ~publisher=episode.publisher,
+    (),
+  )
+  |> Graphql.sendQuery
+  |> Js.Promise.then_(response =>
+       response##insert_episodes |> Js.Promise.resolve
+     );
+};
+
 module UpdateItunesId = [%graphql
   {|
   mutation($listennotesId: String!, $itunesId: String!) {
-    update_episodes(where: {listennotesId: {_eq: $listennotesId}}, _set: {itunesId: $itunesId}) {
-      affected_rows
+    update_episodes(
+      where: {listennotesId: {_eq: $listennotesId}},
+      _set: {itunesId: $itunesId}) {
+        affected_rows
     }
   }
 |}
@@ -69,8 +107,6 @@ module GetEpisodeItunesId = [%graphql
     }
 |}
 ];
-
-let toGenres = (arr: array(int)) => Js.Array.joinWith(",", arr);
 
 module GetEpisodeInsertInfo = [%graphql
   {|
@@ -109,51 +145,6 @@ let updateEpisodeItunesId = (~podcastItunesId, ~episodeId, ~episodeName) => {
      );
 };
 
-let performEpisodeSave =
-    (
-      ~episode: EpisodeSearch.episode,
-      ~libraryData: MyLibrary.saveEpisodeData,
-      ~podcastDescription="",
-      ~podcastImage="",
-      ~itunesId="",
-      (),
-    ) => {
-  SaveEpisode.make(
-    ~title=episode.title,
-    ~pubDate=episode.pubDate,
-    ~podcastTitle=episode.podcastTitle,
-    ~podcastDescription,
-    ~podcastImage,
-    ~podcastListennotesId=episode.podcastListennotesId,
-    ~listennotesId=episode.listennotesId,
-    ~lengthSec=episode.lengthSec,
-    ~itunesId,
-    ~description=episode.description,
-    ~status=MyLibrary.statusEncoder(libraryData.status),
-    ~genreIds=Js.Array.joinWith(", ", episode.genreIds),
-    ~podcastItunesId=string_of_int(episode.podcastItunesId),
-    ~tags=libraryData.tags,
-    ~userId="margaretkru",
-    ~publisher=episode.publisher,
-    (),
-  )
-  |> Graphql.sendQuery
-  |> Js.Promise.then_(response => {
-       let podcast =
-         switch (response##insert_episodes) {
-         | None => None
-         | Some(res) =>
-           Belt.Array.keep(res##returning, obj =>
-             obj##listennotesId == episode.listennotesId
-           )
-           ->Belt.Array.get(0)
-         // ->Belt.Option.getWithDefault(obj => obj##podcast)
-         };
-       Js.log(podcast);
-       response##insert_episodes |> Js.Promise.resolve;
-     });
-};
-
 let saveEpisode =
     (episode: EpisodeSearch.episode, libraryData: MyLibrary.saveEpisodeData) => {
   GetEpisodeInsertInfo.make(
@@ -165,8 +156,7 @@ let saveEpisode =
   |> Graphql.sendQuery
   |> Js.Promise.(
        then_(response => {
-         let itunesId =
-           Belt.Option.getWithDefault(response##itunesEpisode##id, "");
+         let itunesId = response##itunesEpisode##id;
 
          let podcastDescription =
            Belt.Option.mapWithDefault(response##getPodcastById, "", info =>
