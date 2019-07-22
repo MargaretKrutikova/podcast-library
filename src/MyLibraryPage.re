@@ -23,9 +23,9 @@ let make = () => {
 
   let updateItunesId = (myEpisode: MyLibrary.myEpisode) => {
     SaveToLibrary.updateEpisodeItunesId(
-      ~podcastItunesId=myEpisode.episode.podcastItunesId,
-      ~episodeId=myEpisode.episodeId,
-      ~episodeName=myEpisode.episode.title,
+      ~podcastItunesId=myEpisode.podcast.itunesId,
+      ~episodeId=myEpisode.listennotesId,
+      ~episodeName=myEpisode.title,
     )
     |> Js.Promise.(
          then_(affectedRows => {
@@ -44,21 +44,18 @@ let make = () => {
      | Loading(Some(library)) =>
        library.episodes
        ->Belt.Array.map(episode =>
-           <div key={episode.episodeId}>
-             {str(episode.episode.title)}
+           <div key={episode.listennotesId}>
+             {str(episode.title)}
              //  <p> {str(episode.episode.description)} </p>
-             <p> {str("Published: " ++ episode.episode.pubDate)} </p>
-             {switch (episode.episode.itunesId) {
+             <p> {str("Published: " ++ episode.pubDate)} </p>
+             {switch (episode.itunesId) {
               | None =>
                 <Button onClick={_ => updateItunesId(episode)}>
                   {str("Update itunes id")}
                 </Button>
               | Some(itunesId) =>
                 <NavLink
-                  href={createItunesUrl(
-                    episode.episode.podcastItunesId,
-                    itunesId,
-                  )}>
+                  href={createItunesUrl(episode.podcast.itunesId, itunesId)}>
                   {str("Listen on itunes")}
                 </NavLink>
               }}

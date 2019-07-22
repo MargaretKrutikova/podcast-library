@@ -10,6 +10,7 @@ type episode = {
   podcastItunesId: int,
   podcastListennotesId: string,
   genreIds: array(int),
+  publisher: string,
 };
 
 type searchResult = {
@@ -36,6 +37,7 @@ module SearchEpisodes = [%graphql
         description
         pubDate
         genreIds
+        publisher
       }
     }
   }

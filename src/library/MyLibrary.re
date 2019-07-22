@@ -18,23 +18,40 @@ let statusEncoder = s =>
   | Listened => "Listened"
   };
 
-type episode = {
+type podcast = {
   title: string,
-  pubDate: string,
-  podcastTitle: string,
-  podcastListennotesId: string,
-  listennotesId: string,
-  lengthSec: int,
   description: string,
-  podcastItunesId: string,
-  itunesId: option(string),
+  publisher: string,
+  itunesId: string,
+  genreIds: string,
 };
 
 type myEpisode = {
-  episodeId: string,
-  status,
+  listennotesId: string,
+  title: string,
+  description: string,
+  pubDate: string,
+  lengthSec: int,
+  itunesId: option(string),
   tags: string,
-  episode,
+  podcast,
+  status,
+};
+
+let toMyEpisode = data => {
+  let episode = data##episode;
+  let podcast = episode##podcast;
+  {
+    listennotesId: episode##listennotesId,
+    title: episode##title,
+    description: episode##description,
+    pubDate: episode##pubDate,
+    lengthSec: episode##lengthSec,
+    itunesId: episode##itunesId,
+    tags: data##tags,
+    podcast,
+    status: data##status,
+  };
 };
 
 type saveEpisodeData = {
@@ -65,20 +82,24 @@ let uuidToString = (id: Js.Json.t) =>
 module GetMyLibrary = [%graphql
   {|
   query($user_id: String!) {
-    my_episodes (where: {userId: {_eq: $user_id}}) @bsRecord  {
+    my_episodes (where: {userId: {_eq: $user_id}})  {
       episodeId
       status @bsDecoder(fn: "statusDecoder")
       tags
-      episode @bsRecord{
-        podcastItunesId
+      episode {
         listennotesId
         itunesId
         title
         description
         pubDate
-        podcastTitle
         lengthSec
-        podcastListennotesId
+        podcast @bsRecord {
+          title
+          description
+          itunesId
+          publisher
+          genreIds
+        }
       }
     }
   }
@@ -99,5 +120,7 @@ let getSavedIds = () => {
 let getFull = () => {
   GetMyLibrary.make(~user_id="margaretkru", ())
   |> Graphql.sendQuery
-  |> Js.Promise.then_(result => result##my_episodes |> Js.Promise.resolve);
+  |> Js.Promise.then_(result =>
+       Belt.Array.map(result##my_episodes, toMyEpisode) |> Js.Promise.resolve
+     );
 };

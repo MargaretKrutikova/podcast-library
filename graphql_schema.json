@@ -916,6 +916,33 @@
             {
               "args": [
                 {
+                  "name": "podcastId",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "description": ""
+                }
+              ],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "getPodcastById",
+              "type": {
+                "kind": "OBJECT",
+                "name": "PodcastSearchResult",
+                "ofType": null
+              },
+              "description": ""
+            },
+            {
+              "args": [
+                {
                   "name": "episodeName",
                   "defaultValue": null,
                   "type": {
@@ -2013,22 +2040,6 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "genreIds",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
               "name": "itunesId",
               "type": {
                 "kind": "SCALAR",
@@ -2247,39 +2258,23 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "podcastItunesId",
+              "name": "podcast",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
+                  "kind": "OBJECT",
+                  "name": "podcasts",
                   "ofType": null
                 }
               },
-              "description": null
+              "description": "An object relationship"
             },
             {
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
               "name": "podcastListennotesId",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "podcastTitle",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -2803,16 +2798,6 @@
               "description": null
             },
             {
-              "name": "genreIds",
-              "defaultValue": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "text_comparison_exp",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
               "name": "itunesId",
               "defaultValue": null,
               "type": {
@@ -2853,27 +2838,17 @@
               "description": null
             },
             {
-              "name": "podcastItunesId",
+              "name": "podcast",
               "defaultValue": null,
               "type": {
                 "kind": "INPUT_OBJECT",
-                "name": "text_comparison_exp",
+                "name": "podcasts_bool_exp",
                 "ofType": null
               },
               "description": null
             },
             {
               "name": "podcastListennotesId",
-              "defaultValue": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "text_comparison_exp",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "podcastTitle",
               "defaultValue": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -2968,16 +2943,6 @@
               "description": null
             },
             {
-              "name": "genreIds",
-              "defaultValue": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
               "name": "itunesId",
               "defaultValue": null,
               "type": {
@@ -3018,27 +2983,17 @@
               "description": null
             },
             {
-              "name": "podcastItunesId",
+              "name": "podcast",
               "defaultValue": null,
               "type": {
-                "kind": "SCALAR",
-                "name": "String",
+                "kind": "INPUT_OBJECT",
+                "name": "podcasts_obj_rel_insert_input",
                 "ofType": null
               },
               "description": null
             },
             {
               "name": "podcastListennotesId",
-              "defaultValue": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "podcastTitle",
               "defaultValue": null,
               "type": {
                 "kind": "SCALAR",
@@ -3101,18 +3056,6 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "genreIds",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
               "name": "itunesId",
               "type": {
                 "kind": "SCALAR",
@@ -3149,31 +3092,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "podcastItunesId",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
               "name": "podcastListennotesId",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "podcastTitle",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -3220,16 +3139,6 @@
               "description": null
             },
             {
-              "name": "genreIds",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
               "name": "itunesId",
               "defaultValue": null,
               "type": {
@@ -3260,27 +3169,7 @@
               "description": null
             },
             {
-              "name": "podcastItunesId",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
               "name": "podcastListennotesId",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "podcastTitle",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -3343,18 +3232,6 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "genreIds",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
               "name": "itunesId",
               "type": {
                 "kind": "SCALAR",
@@ -3391,31 +3268,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "podcastItunesId",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
               "name": "podcastListennotesId",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "podcastTitle",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -3462,16 +3315,6 @@
               "description": null
             },
             {
-              "name": "genreIds",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
               "name": "itunesId",
               "defaultValue": null,
               "type": {
@@ -3502,27 +3345,7 @@
               "description": null
             },
             {
-              "name": "podcastItunesId",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
               "name": "podcastListennotesId",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "podcastTitle",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -3706,16 +3529,6 @@
               "description": null
             },
             {
-              "name": "genreIds",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
               "name": "itunesId",
               "defaultValue": null,
               "type": {
@@ -3756,27 +3569,17 @@
               "description": null
             },
             {
-              "name": "podcastItunesId",
+              "name": "podcast",
               "defaultValue": null,
               "type": {
-                "kind": "ENUM",
-                "name": "order_by",
+                "kind": "INPUT_OBJECT",
+                "name": "podcasts_order_by",
                 "ofType": null
               },
               "description": null
             },
             {
               "name": "podcastListennotesId",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "podcastTitle",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -3830,12 +3633,6 @@
             {
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "genreIds",
-              "description": "column name"
-            },
-            {
-              "isDeprecated": false,
-              "deprecationReason": null,
               "name": "itunesId",
               "description": "column name"
             },
@@ -3854,19 +3651,7 @@
             {
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "podcastItunesId",
-              "description": "column name"
-            },
-            {
-              "isDeprecated": false,
-              "deprecationReason": null,
               "name": "podcastListennotesId",
-              "description": "column name"
-            },
-            {
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "podcastTitle",
               "description": "column name"
             },
             {
@@ -3889,16 +3674,6 @@
           "inputFields": [
             {
               "name": "description",
-              "defaultValue": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "genreIds",
               "defaultValue": null,
               "type": {
                 "kind": "SCALAR",
@@ -3938,27 +3713,7 @@
               "description": null
             },
             {
-              "name": "podcastItunesId",
-              "defaultValue": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
               "name": "podcastListennotesId",
-              "defaultValue": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "podcastTitle",
               "defaultValue": null,
               "type": {
                 "kind": "SCALAR",
@@ -4188,12 +3943,6 @@
             {
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "genreIds",
-              "description": "column name"
-            },
-            {
-              "isDeprecated": false,
-              "deprecationReason": null,
               "name": "itunesId",
               "description": "column name"
             },
@@ -4212,19 +3961,7 @@
             {
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "podcastItunesId",
-              "description": "column name"
-            },
-            {
-              "isDeprecated": false,
-              "deprecationReason": null,
               "name": "podcastListennotesId",
-              "description": "column name"
-            },
-            {
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "podcastTitle",
               "description": "column name"
             },
             {
@@ -4557,7 +4294,7 @@
                     "name": null,
                     "ofType": {
                       "kind": "INPUT_OBJECT",
-                      "name": "saved_podcasts_bool_exp",
+                      "name": "my_podcasts_bool_exp",
                       "ofType": null
                     }
                   },
@@ -4566,13 +4303,40 @@
               ],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "delete_saved_podcasts",
+              "name": "delete_my_podcasts",
               "type": {
                 "kind": "OBJECT",
-                "name": "saved_podcasts_mutation_response",
+                "name": "my_podcasts_mutation_response",
                 "ofType": null
               },
-              "description": "delete data from the table: \"saved_podcasts\""
+              "description": "delete data from the table: \"my_podcasts\""
+            },
+            {
+              "args": [
+                {
+                  "name": "where",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "podcasts_bool_exp",
+                      "ofType": null
+                    }
+                  },
+                  "description": "filter the rows which have to be deleted"
+                }
+              ],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "delete_podcasts",
+              "type": {
+                "kind": "OBJECT",
+                "name": "podcasts_mutation_response",
+                "ofType": null
+              },
+              "description": "delete data from the table: \"podcasts\""
             },
             {
               "args": [
@@ -4680,7 +4444,7 @@
                         "name": null,
                         "ofType": {
                           "kind": "INPUT_OBJECT",
-                          "name": "saved_podcasts_insert_input",
+                          "name": "my_podcasts_insert_input",
                           "ofType": null
                         }
                       }
@@ -4693,7 +4457,7 @@
                   "defaultValue": null,
                   "type": {
                     "kind": "INPUT_OBJECT",
-                    "name": "saved_podcasts_on_conflict",
+                    "name": "my_podcasts_on_conflict",
                     "ofType": null
                   },
                   "description": "on conflict condition"
@@ -4701,13 +4465,58 @@
               ],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "insert_saved_podcasts",
+              "name": "insert_my_podcasts",
               "type": {
                 "kind": "OBJECT",
-                "name": "saved_podcasts_mutation_response",
+                "name": "my_podcasts_mutation_response",
                 "ofType": null
               },
-              "description": "insert data into the table: \"saved_podcasts\""
+              "description": "insert data into the table: \"my_podcasts\""
+            },
+            {
+              "args": [
+                {
+                  "name": "objects",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "LIST",
+                      "name": null,
+                      "ofType": {
+                        "kind": "NON_NULL",
+                        "name": null,
+                        "ofType": {
+                          "kind": "INPUT_OBJECT",
+                          "name": "podcasts_insert_input",
+                          "ofType": null
+                        }
+                      }
+                    }
+                  },
+                  "description": "the rows to be inserted"
+                },
+                {
+                  "name": "on_conflict",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "podcasts_on_conflict",
+                    "ofType": null
+                  },
+                  "description": "on conflict condition"
+                }
+              ],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "insert_podcasts",
+              "type": {
+                "kind": "OBJECT",
+                "name": "podcasts_mutation_response",
+                "ofType": null
+              },
+              "description": "insert data into the table: \"podcasts\""
             },
             {
               "args": [
@@ -4800,7 +4609,7 @@
                   "defaultValue": null,
                   "type": {
                     "kind": "INPUT_OBJECT",
-                    "name": "saved_podcasts_set_input",
+                    "name": "my_podcasts_set_input",
                     "ofType": null
                   },
                   "description": "sets the columns of the filtered rows to the given values"
@@ -4813,7 +4622,7 @@
                     "name": null,
                     "ofType": {
                       "kind": "INPUT_OBJECT",
-                      "name": "saved_podcasts_bool_exp",
+                      "name": "my_podcasts_bool_exp",
                       "ofType": null
                     }
                   },
@@ -4822,13 +4631,50 @@
               ],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "update_saved_podcasts",
+              "name": "update_my_podcasts",
               "type": {
                 "kind": "OBJECT",
-                "name": "saved_podcasts_mutation_response",
+                "name": "my_podcasts_mutation_response",
                 "ofType": null
               },
-              "description": "update data of the table: \"saved_podcasts\""
+              "description": "update data of the table: \"my_podcasts\""
+            },
+            {
+              "args": [
+                {
+                  "name": "_set",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "podcasts_set_input",
+                    "ofType": null
+                  },
+                  "description": "sets the columns of the filtered rows to the given values"
+                },
+                {
+                  "name": "where",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "podcasts_bool_exp",
+                      "ofType": null
+                    }
+                  },
+                  "description": "filter the rows which have to be updated"
+                }
+              ],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "update_podcasts",
+              "type": {
+                "kind": "OBJECT",
+                "name": "podcasts_mutation_response",
+                "ofType": null
+              },
+              "description": "update data of the table: \"podcasts\""
             }
           ]
         },
@@ -4845,7 +4691,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "addedDateMs",
+              "name": "addedDate",
               "type": {
                 "kind": "SCALAR",
                 "name": "timestamptz",
@@ -5183,7 +5029,7 @@
               "description": null
             },
             {
-              "name": "addedDateMs",
+              "name": "addedDate",
               "defaultValue": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -5271,7 +5117,7 @@
         {
           "inputFields": [
             {
-              "name": "addedDateMs",
+              "name": "addedDate",
               "defaultValue": null,
               "type": {
                 "kind": "SCALAR",
@@ -5352,7 +5198,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "addedDateMs",
+              "name": "addedDate",
               "type": {
                 "kind": "SCALAR",
                 "name": "timestamptz",
@@ -5413,7 +5259,7 @@
         {
           "inputFields": [
             {
-              "name": "addedDateMs",
+              "name": "addedDate",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -5484,7 +5330,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "addedDateMs",
+              "name": "addedDate",
               "type": {
                 "kind": "SCALAR",
                 "name": "timestamptz",
@@ -5545,7 +5391,7 @@
         {
           "inputFields": [
             {
-              "name": "addedDateMs",
+              "name": "addedDate",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -5739,7 +5585,7 @@
         {
           "inputFields": [
             {
-              "name": "addedDateMs",
+              "name": "addedDate",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -5817,7 +5663,7 @@
             {
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "addedDateMs",
+              "name": "addedDate",
               "description": "column name"
             },
             {
@@ -5851,7 +5697,7 @@
         {
           "inputFields": [
             {
-              "name": "addedDateMs",
+              "name": "addedDate",
               "defaultValue": null,
               "type": {
                 "kind": "SCALAR",
@@ -5919,7 +5765,7 @@
             {
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "addedDateMs",
+              "name": "addedDate",
               "description": "column name"
             },
             {
@@ -5948,6 +5794,1016 @@
             }
           ],
           "description": "update columns of table \"my_episodes\"",
+          "fields": null
+        },
+        {
+          "inputFields": null,
+          "kind": "OBJECT",
+          "possibleTypes": null,
+          "interfaces": [],
+          "name": "my_podcasts",
+          "enumValues": null,
+          "description": "columns and relationships of \"my_podcasts\"",
+          "fields": [
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "addedDate",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "date",
+                  "ofType": null
+                }
+              },
+              "description": null
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "podcast",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "podcasts",
+                  "ofType": null
+                }
+              },
+              "description": "An object relationship"
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "podcastId",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "description": null
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "tags",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "description": null
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "userId",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "description": null
+            }
+          ]
+        },
+        {
+          "inputFields": null,
+          "kind": "OBJECT",
+          "possibleTypes": null,
+          "interfaces": [],
+          "name": "my_podcasts_aggregate",
+          "enumValues": null,
+          "description": "aggregated selection of \"my_podcasts\"",
+          "fields": [
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "aggregate",
+              "type": {
+                "kind": "OBJECT",
+                "name": "my_podcasts_aggregate_fields",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "nodes",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "my_podcasts",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "description": null
+            }
+          ]
+        },
+        {
+          "inputFields": null,
+          "kind": "OBJECT",
+          "possibleTypes": null,
+          "interfaces": [],
+          "name": "my_podcasts_aggregate_fields",
+          "enumValues": null,
+          "description": "aggregate fields of \"my_podcasts\"",
+          "fields": [
+            {
+              "args": [
+                {
+                  "name": "columns",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": {
+                        "kind": "ENUM",
+                        "name": "my_podcasts_select_column",
+                        "ofType": null
+                      }
+                    }
+                  },
+                  "description": null
+                },
+                {
+                  "name": "distinct",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Boolean",
+                    "ofType": null
+                  },
+                  "description": null
+                }
+              ],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "count",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "max",
+              "type": {
+                "kind": "OBJECT",
+                "name": "my_podcasts_max_fields",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "min",
+              "type": {
+                "kind": "OBJECT",
+                "name": "my_podcasts_min_fields",
+                "ofType": null
+              },
+              "description": null
+            }
+          ]
+        },
+        {
+          "inputFields": [
+            {
+              "name": "count",
+              "defaultValue": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "max",
+              "defaultValue": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "my_podcasts_max_order_by",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "min",
+              "defaultValue": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "my_podcasts_min_order_by",
+                "ofType": null
+              },
+              "description": null
+            }
+          ],
+          "kind": "INPUT_OBJECT",
+          "possibleTypes": null,
+          "interfaces": null,
+          "name": "my_podcasts_aggregate_order_by",
+          "enumValues": null,
+          "description": "order by aggregate values of table \"my_podcasts\"",
+          "fields": null
+        },
+        {
+          "inputFields": [
+            {
+              "name": "data",
+              "defaultValue": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "my_podcasts_insert_input",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "description": null
+            },
+            {
+              "name": "on_conflict",
+              "defaultValue": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "my_podcasts_on_conflict",
+                "ofType": null
+              },
+              "description": null
+            }
+          ],
+          "kind": "INPUT_OBJECT",
+          "possibleTypes": null,
+          "interfaces": null,
+          "name": "my_podcasts_arr_rel_insert_input",
+          "enumValues": null,
+          "description": "input type for inserting array relation for remote table \"my_podcasts\"",
+          "fields": null
+        },
+        {
+          "inputFields": [
+            {
+              "name": "_and",
+              "defaultValue": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "my_podcasts_bool_exp",
+                  "ofType": null
+                }
+              },
+              "description": null
+            },
+            {
+              "name": "_not",
+              "defaultValue": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "my_podcasts_bool_exp",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "_or",
+              "defaultValue": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "my_podcasts_bool_exp",
+                  "ofType": null
+                }
+              },
+              "description": null
+            },
+            {
+              "name": "addedDate",
+              "defaultValue": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "date_comparison_exp",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "podcast",
+              "defaultValue": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "podcasts_bool_exp",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "podcastId",
+              "defaultValue": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "text_comparison_exp",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "tags",
+              "defaultValue": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "text_comparison_exp",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "userId",
+              "defaultValue": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "text_comparison_exp",
+                "ofType": null
+              },
+              "description": null
+            }
+          ],
+          "kind": "INPUT_OBJECT",
+          "possibleTypes": null,
+          "interfaces": null,
+          "name": "my_podcasts_bool_exp",
+          "enumValues": null,
+          "description": "Boolean expression to filter rows from the table \"my_podcasts\". All fields are combined with a logical 'AND'.",
+          "fields": null
+        },
+        {
+          "inputFields": null,
+          "kind": "ENUM",
+          "possibleTypes": null,
+          "interfaces": null,
+          "name": "my_podcasts_constraint",
+          "enumValues": [
+            {
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "my_podcasts_pkey",
+              "description": "unique or primary key constraint"
+            }
+          ],
+          "description": "unique or primary key constraints on table \"my_podcasts\"",
+          "fields": null
+        },
+        {
+          "inputFields": [
+            {
+              "name": "addedDate",
+              "defaultValue": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "date",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "podcast",
+              "defaultValue": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "podcasts_obj_rel_insert_input",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "podcastId",
+              "defaultValue": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "tags",
+              "defaultValue": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "userId",
+              "defaultValue": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            }
+          ],
+          "kind": "INPUT_OBJECT",
+          "possibleTypes": null,
+          "interfaces": null,
+          "name": "my_podcasts_insert_input",
+          "enumValues": null,
+          "description": "input type for inserting data into table \"my_podcasts\"",
+          "fields": null
+        },
+        {
+          "inputFields": null,
+          "kind": "OBJECT",
+          "possibleTypes": null,
+          "interfaces": [],
+          "name": "my_podcasts_max_fields",
+          "enumValues": null,
+          "description": "aggregate max on columns",
+          "fields": [
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "addedDate",
+              "type": {
+                "kind": "SCALAR",
+                "name": "date",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "podcastId",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "tags",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "userId",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            }
+          ]
+        },
+        {
+          "inputFields": [
+            {
+              "name": "addedDate",
+              "defaultValue": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "podcastId",
+              "defaultValue": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "tags",
+              "defaultValue": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "userId",
+              "defaultValue": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "description": null
+            }
+          ],
+          "kind": "INPUT_OBJECT",
+          "possibleTypes": null,
+          "interfaces": null,
+          "name": "my_podcasts_max_order_by",
+          "enumValues": null,
+          "description": "order by max() on columns of table \"my_podcasts\"",
+          "fields": null
+        },
+        {
+          "inputFields": null,
+          "kind": "OBJECT",
+          "possibleTypes": null,
+          "interfaces": [],
+          "name": "my_podcasts_min_fields",
+          "enumValues": null,
+          "description": "aggregate min on columns",
+          "fields": [
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "addedDate",
+              "type": {
+                "kind": "SCALAR",
+                "name": "date",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "podcastId",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "tags",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "userId",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            }
+          ]
+        },
+        {
+          "inputFields": [
+            {
+              "name": "addedDate",
+              "defaultValue": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "podcastId",
+              "defaultValue": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "tags",
+              "defaultValue": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "userId",
+              "defaultValue": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "description": null
+            }
+          ],
+          "kind": "INPUT_OBJECT",
+          "possibleTypes": null,
+          "interfaces": null,
+          "name": "my_podcasts_min_order_by",
+          "enumValues": null,
+          "description": "order by min() on columns of table \"my_podcasts\"",
+          "fields": null
+        },
+        {
+          "inputFields": null,
+          "kind": "OBJECT",
+          "possibleTypes": null,
+          "interfaces": [],
+          "name": "my_podcasts_mutation_response",
+          "enumValues": null,
+          "description": "response of any mutation on the table \"my_podcasts\"",
+          "fields": [
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "affected_rows",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
+              "description": "number of affected rows by the mutation"
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "returning",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "my_podcasts",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "description": "data of the affected rows by the mutation"
+            }
+          ]
+        },
+        {
+          "inputFields": [
+            {
+              "name": "data",
+              "defaultValue": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "my_podcasts_insert_input",
+                  "ofType": null
+                }
+              },
+              "description": null
+            },
+            {
+              "name": "on_conflict",
+              "defaultValue": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "my_podcasts_on_conflict",
+                "ofType": null
+              },
+              "description": null
+            }
+          ],
+          "kind": "INPUT_OBJECT",
+          "possibleTypes": null,
+          "interfaces": null,
+          "name": "my_podcasts_obj_rel_insert_input",
+          "enumValues": null,
+          "description": "input type for inserting object relation for remote table \"my_podcasts\"",
+          "fields": null
+        },
+        {
+          "inputFields": [
+            {
+              "name": "constraint",
+              "defaultValue": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "my_podcasts_constraint",
+                  "ofType": null
+                }
+              },
+              "description": null
+            },
+            {
+              "name": "update_columns",
+              "defaultValue": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "ENUM",
+                      "name": "my_podcasts_update_column",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "description": null
+            }
+          ],
+          "kind": "INPUT_OBJECT",
+          "possibleTypes": null,
+          "interfaces": null,
+          "name": "my_podcasts_on_conflict",
+          "enumValues": null,
+          "description": "on conflict condition type for table \"my_podcasts\"",
+          "fields": null
+        },
+        {
+          "inputFields": [
+            {
+              "name": "addedDate",
+              "defaultValue": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "podcast",
+              "defaultValue": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "podcasts_order_by",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "podcastId",
+              "defaultValue": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "tags",
+              "defaultValue": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "userId",
+              "defaultValue": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "description": null
+            }
+          ],
+          "kind": "INPUT_OBJECT",
+          "possibleTypes": null,
+          "interfaces": null,
+          "name": "my_podcasts_order_by",
+          "enumValues": null,
+          "description": "ordering options when selecting data from \"my_podcasts\"",
+          "fields": null
+        },
+        {
+          "inputFields": null,
+          "kind": "ENUM",
+          "possibleTypes": null,
+          "interfaces": null,
+          "name": "my_podcasts_select_column",
+          "enumValues": [
+            {
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "addedDate",
+              "description": "column name"
+            },
+            {
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "podcastId",
+              "description": "column name"
+            },
+            {
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "tags",
+              "description": "column name"
+            },
+            {
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "userId",
+              "description": "column name"
+            }
+          ],
+          "description": "select columns of table \"my_podcasts\"",
+          "fields": null
+        },
+        {
+          "inputFields": [
+            {
+              "name": "addedDate",
+              "defaultValue": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "date",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "podcastId",
+              "defaultValue": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "tags",
+              "defaultValue": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "userId",
+              "defaultValue": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            }
+          ],
+          "kind": "INPUT_OBJECT",
+          "possibleTypes": null,
+          "interfaces": null,
+          "name": "my_podcasts_set_input",
+          "enumValues": null,
+          "description": "input type for updating data in table \"my_podcasts\"",
+          "fields": null
+        },
+        {
+          "inputFields": null,
+          "kind": "ENUM",
+          "possibleTypes": null,
+          "interfaces": null,
+          "name": "my_podcasts_update_column",
+          "enumValues": [
+            {
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "addedDate",
+              "description": "column name"
+            },
+            {
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "podcastId",
+              "description": "column name"
+            },
+            {
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "tags",
+              "description": "column name"
+            },
+            {
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "userId",
+              "description": "column name"
+            }
+          ],
+          "description": "update columns of table \"my_podcasts\"",
           "fields": null
         },
         {
@@ -5995,6 +6851,1720 @@
             }
           ],
           "description": "column ordering options",
+          "fields": null
+        },
+        {
+          "inputFields": null,
+          "kind": "OBJECT",
+          "possibleTypes": null,
+          "interfaces": [],
+          "name": "podcasts",
+          "enumValues": null,
+          "description": "columns and relationships of \"podcasts\"",
+          "fields": [
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "description",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "description": null
+            },
+            {
+              "args": [
+                {
+                  "name": "distinct_on",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": {
+                        "kind": "ENUM",
+                        "name": "episodes_select_column",
+                        "ofType": null
+                      }
+                    }
+                  },
+                  "description": "distinct select on columns"
+                },
+                {
+                  "name": "limit",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "description": "limit the nuber of rows returned"
+                },
+                {
+                  "name": "offset",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "description": "skip the first n rows. Use only with order_by"
+                },
+                {
+                  "name": "order_by",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": {
+                        "kind": "INPUT_OBJECT",
+                        "name": "episodes_order_by",
+                        "ofType": null
+                      }
+                    }
+                  },
+                  "description": "sort the rows by one or more columns"
+                },
+                {
+                  "name": "where",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "episodes_bool_exp",
+                    "ofType": null
+                  },
+                  "description": "filter the rows returned"
+                }
+              ],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "episodes",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "episodes",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "description": "An array relationship"
+            },
+            {
+              "args": [
+                {
+                  "name": "distinct_on",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": {
+                        "kind": "ENUM",
+                        "name": "episodes_select_column",
+                        "ofType": null
+                      }
+                    }
+                  },
+                  "description": "distinct select on columns"
+                },
+                {
+                  "name": "limit",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "description": "limit the nuber of rows returned"
+                },
+                {
+                  "name": "offset",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "description": "skip the first n rows. Use only with order_by"
+                },
+                {
+                  "name": "order_by",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": {
+                        "kind": "INPUT_OBJECT",
+                        "name": "episodes_order_by",
+                        "ofType": null
+                      }
+                    }
+                  },
+                  "description": "sort the rows by one or more columns"
+                },
+                {
+                  "name": "where",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "episodes_bool_exp",
+                    "ofType": null
+                  },
+                  "description": "filter the rows returned"
+                }
+              ],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "episodes_aggregate",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "episodes_aggregate",
+                  "ofType": null
+                }
+              },
+              "description": "An aggregated array relationship"
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "genreIds",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "description": null
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "image",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "description": null
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "itunesId",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "description": null
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "listennotesId",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "description": null
+            },
+            {
+              "args": [
+                {
+                  "name": "distinct_on",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": {
+                        "kind": "ENUM",
+                        "name": "my_podcasts_select_column",
+                        "ofType": null
+                      }
+                    }
+                  },
+                  "description": "distinct select on columns"
+                },
+                {
+                  "name": "limit",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "description": "limit the nuber of rows returned"
+                },
+                {
+                  "name": "offset",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "description": "skip the first n rows. Use only with order_by"
+                },
+                {
+                  "name": "order_by",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": {
+                        "kind": "INPUT_OBJECT",
+                        "name": "my_podcasts_order_by",
+                        "ofType": null
+                      }
+                    }
+                  },
+                  "description": "sort the rows by one or more columns"
+                },
+                {
+                  "name": "where",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "my_podcasts_bool_exp",
+                    "ofType": null
+                  },
+                  "description": "filter the rows returned"
+                }
+              ],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "my_podcasts",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "my_podcasts",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "description": "An array relationship"
+            },
+            {
+              "args": [
+                {
+                  "name": "distinct_on",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": {
+                        "kind": "ENUM",
+                        "name": "my_podcasts_select_column",
+                        "ofType": null
+                      }
+                    }
+                  },
+                  "description": "distinct select on columns"
+                },
+                {
+                  "name": "limit",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "description": "limit the nuber of rows returned"
+                },
+                {
+                  "name": "offset",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "description": "skip the first n rows. Use only with order_by"
+                },
+                {
+                  "name": "order_by",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": {
+                        "kind": "INPUT_OBJECT",
+                        "name": "my_podcasts_order_by",
+                        "ofType": null
+                      }
+                    }
+                  },
+                  "description": "sort the rows by one or more columns"
+                },
+                {
+                  "name": "where",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "my_podcasts_bool_exp",
+                    "ofType": null
+                  },
+                  "description": "filter the rows returned"
+                }
+              ],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "my_podcasts_aggregate",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "my_podcasts_aggregate",
+                  "ofType": null
+                }
+              },
+              "description": "An aggregated array relationship"
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "publisher",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "description": null
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "title",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "description": null
+            }
+          ]
+        },
+        {
+          "inputFields": null,
+          "kind": "OBJECT",
+          "possibleTypes": null,
+          "interfaces": [],
+          "name": "podcasts_aggregate",
+          "enumValues": null,
+          "description": "aggregated selection of \"podcasts\"",
+          "fields": [
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "aggregate",
+              "type": {
+                "kind": "OBJECT",
+                "name": "podcasts_aggregate_fields",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "nodes",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "podcasts",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "description": null
+            }
+          ]
+        },
+        {
+          "inputFields": null,
+          "kind": "OBJECT",
+          "possibleTypes": null,
+          "interfaces": [],
+          "name": "podcasts_aggregate_fields",
+          "enumValues": null,
+          "description": "aggregate fields of \"podcasts\"",
+          "fields": [
+            {
+              "args": [
+                {
+                  "name": "columns",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": {
+                        "kind": "ENUM",
+                        "name": "podcasts_select_column",
+                        "ofType": null
+                      }
+                    }
+                  },
+                  "description": null
+                },
+                {
+                  "name": "distinct",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Boolean",
+                    "ofType": null
+                  },
+                  "description": null
+                }
+              ],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "count",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "max",
+              "type": {
+                "kind": "OBJECT",
+                "name": "podcasts_max_fields",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "min",
+              "type": {
+                "kind": "OBJECT",
+                "name": "podcasts_min_fields",
+                "ofType": null
+              },
+              "description": null
+            }
+          ]
+        },
+        {
+          "inputFields": [
+            {
+              "name": "count",
+              "defaultValue": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "max",
+              "defaultValue": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "podcasts_max_order_by",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "min",
+              "defaultValue": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "podcasts_min_order_by",
+                "ofType": null
+              },
+              "description": null
+            }
+          ],
+          "kind": "INPUT_OBJECT",
+          "possibleTypes": null,
+          "interfaces": null,
+          "name": "podcasts_aggregate_order_by",
+          "enumValues": null,
+          "description": "order by aggregate values of table \"podcasts\"",
+          "fields": null
+        },
+        {
+          "inputFields": [
+            {
+              "name": "data",
+              "defaultValue": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "podcasts_insert_input",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "description": null
+            },
+            {
+              "name": "on_conflict",
+              "defaultValue": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "podcasts_on_conflict",
+                "ofType": null
+              },
+              "description": null
+            }
+          ],
+          "kind": "INPUT_OBJECT",
+          "possibleTypes": null,
+          "interfaces": null,
+          "name": "podcasts_arr_rel_insert_input",
+          "enumValues": null,
+          "description": "input type for inserting array relation for remote table \"podcasts\"",
+          "fields": null
+        },
+        {
+          "inputFields": [
+            {
+              "name": "_and",
+              "defaultValue": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "podcasts_bool_exp",
+                  "ofType": null
+                }
+              },
+              "description": null
+            },
+            {
+              "name": "_not",
+              "defaultValue": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "podcasts_bool_exp",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "_or",
+              "defaultValue": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "podcasts_bool_exp",
+                  "ofType": null
+                }
+              },
+              "description": null
+            },
+            {
+              "name": "description",
+              "defaultValue": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "text_comparison_exp",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "episodes",
+              "defaultValue": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "episodes_bool_exp",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "genreIds",
+              "defaultValue": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "text_comparison_exp",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "image",
+              "defaultValue": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "text_comparison_exp",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "itunesId",
+              "defaultValue": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "text_comparison_exp",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "listennotesId",
+              "defaultValue": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "text_comparison_exp",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "my_podcasts",
+              "defaultValue": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "my_podcasts_bool_exp",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "publisher",
+              "defaultValue": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "text_comparison_exp",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "title",
+              "defaultValue": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "text_comparison_exp",
+                "ofType": null
+              },
+              "description": null
+            }
+          ],
+          "kind": "INPUT_OBJECT",
+          "possibleTypes": null,
+          "interfaces": null,
+          "name": "podcasts_bool_exp",
+          "enumValues": null,
+          "description": "Boolean expression to filter rows from the table \"podcasts\". All fields are combined with a logical 'AND'.",
+          "fields": null
+        },
+        {
+          "inputFields": null,
+          "kind": "ENUM",
+          "possibleTypes": null,
+          "interfaces": null,
+          "name": "podcasts_constraint",
+          "enumValues": [
+            {
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "podcasts_itunesId_key",
+              "description": "unique or primary key constraint"
+            },
+            {
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "podcasts_pkey",
+              "description": "unique or primary key constraint"
+            }
+          ],
+          "description": "unique or primary key constraints on table \"podcasts\"",
+          "fields": null
+        },
+        {
+          "inputFields": [
+            {
+              "name": "description",
+              "defaultValue": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "episodes",
+              "defaultValue": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "episodes_arr_rel_insert_input",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "genreIds",
+              "defaultValue": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "image",
+              "defaultValue": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "itunesId",
+              "defaultValue": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "listennotesId",
+              "defaultValue": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "my_podcasts",
+              "defaultValue": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "my_podcasts_arr_rel_insert_input",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "publisher",
+              "defaultValue": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "title",
+              "defaultValue": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            }
+          ],
+          "kind": "INPUT_OBJECT",
+          "possibleTypes": null,
+          "interfaces": null,
+          "name": "podcasts_insert_input",
+          "enumValues": null,
+          "description": "input type for inserting data into table \"podcasts\"",
+          "fields": null
+        },
+        {
+          "inputFields": null,
+          "kind": "OBJECT",
+          "possibleTypes": null,
+          "interfaces": [],
+          "name": "podcasts_max_fields",
+          "enumValues": null,
+          "description": "aggregate max on columns",
+          "fields": [
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "description",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "genreIds",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "image",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "itunesId",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "listennotesId",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "publisher",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "title",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            }
+          ]
+        },
+        {
+          "inputFields": [
+            {
+              "name": "description",
+              "defaultValue": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "genreIds",
+              "defaultValue": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "image",
+              "defaultValue": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "itunesId",
+              "defaultValue": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "listennotesId",
+              "defaultValue": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "publisher",
+              "defaultValue": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "title",
+              "defaultValue": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "description": null
+            }
+          ],
+          "kind": "INPUT_OBJECT",
+          "possibleTypes": null,
+          "interfaces": null,
+          "name": "podcasts_max_order_by",
+          "enumValues": null,
+          "description": "order by max() on columns of table \"podcasts\"",
+          "fields": null
+        },
+        {
+          "inputFields": null,
+          "kind": "OBJECT",
+          "possibleTypes": null,
+          "interfaces": [],
+          "name": "podcasts_min_fields",
+          "enumValues": null,
+          "description": "aggregate min on columns",
+          "fields": [
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "description",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "genreIds",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "image",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "itunesId",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "listennotesId",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "publisher",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "title",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            }
+          ]
+        },
+        {
+          "inputFields": [
+            {
+              "name": "description",
+              "defaultValue": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "genreIds",
+              "defaultValue": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "image",
+              "defaultValue": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "itunesId",
+              "defaultValue": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "listennotesId",
+              "defaultValue": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "publisher",
+              "defaultValue": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "title",
+              "defaultValue": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "description": null
+            }
+          ],
+          "kind": "INPUT_OBJECT",
+          "possibleTypes": null,
+          "interfaces": null,
+          "name": "podcasts_min_order_by",
+          "enumValues": null,
+          "description": "order by min() on columns of table \"podcasts\"",
+          "fields": null
+        },
+        {
+          "inputFields": null,
+          "kind": "OBJECT",
+          "possibleTypes": null,
+          "interfaces": [],
+          "name": "podcasts_mutation_response",
+          "enumValues": null,
+          "description": "response of any mutation on the table \"podcasts\"",
+          "fields": [
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "affected_rows",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
+              "description": "number of affected rows by the mutation"
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "returning",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "podcasts",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "description": "data of the affected rows by the mutation"
+            }
+          ]
+        },
+        {
+          "inputFields": [
+            {
+              "name": "data",
+              "defaultValue": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "podcasts_insert_input",
+                  "ofType": null
+                }
+              },
+              "description": null
+            },
+            {
+              "name": "on_conflict",
+              "defaultValue": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "podcasts_on_conflict",
+                "ofType": null
+              },
+              "description": null
+            }
+          ],
+          "kind": "INPUT_OBJECT",
+          "possibleTypes": null,
+          "interfaces": null,
+          "name": "podcasts_obj_rel_insert_input",
+          "enumValues": null,
+          "description": "input type for inserting object relation for remote table \"podcasts\"",
+          "fields": null
+        },
+        {
+          "inputFields": [
+            {
+              "name": "constraint",
+              "defaultValue": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "podcasts_constraint",
+                  "ofType": null
+                }
+              },
+              "description": null
+            },
+            {
+              "name": "update_columns",
+              "defaultValue": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "ENUM",
+                      "name": "podcasts_update_column",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "description": null
+            }
+          ],
+          "kind": "INPUT_OBJECT",
+          "possibleTypes": null,
+          "interfaces": null,
+          "name": "podcasts_on_conflict",
+          "enumValues": null,
+          "description": "on conflict condition type for table \"podcasts\"",
+          "fields": null
+        },
+        {
+          "inputFields": [
+            {
+              "name": "description",
+              "defaultValue": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "episodes_aggregate",
+              "defaultValue": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "episodes_aggregate_order_by",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "genreIds",
+              "defaultValue": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "image",
+              "defaultValue": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "itunesId",
+              "defaultValue": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "listennotesId",
+              "defaultValue": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "my_podcasts_aggregate",
+              "defaultValue": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "my_podcasts_aggregate_order_by",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "publisher",
+              "defaultValue": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "title",
+              "defaultValue": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "description": null
+            }
+          ],
+          "kind": "INPUT_OBJECT",
+          "possibleTypes": null,
+          "interfaces": null,
+          "name": "podcasts_order_by",
+          "enumValues": null,
+          "description": "ordering options when selecting data from \"podcasts\"",
+          "fields": null
+        },
+        {
+          "inputFields": null,
+          "kind": "ENUM",
+          "possibleTypes": null,
+          "interfaces": null,
+          "name": "podcasts_select_column",
+          "enumValues": [
+            {
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "description",
+              "description": "column name"
+            },
+            {
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "genreIds",
+              "description": "column name"
+            },
+            {
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "image",
+              "description": "column name"
+            },
+            {
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "itunesId",
+              "description": "column name"
+            },
+            {
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "listennotesId",
+              "description": "column name"
+            },
+            {
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "publisher",
+              "description": "column name"
+            },
+            {
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "title",
+              "description": "column name"
+            }
+          ],
+          "description": "select columns of table \"podcasts\"",
+          "fields": null
+        },
+        {
+          "inputFields": [
+            {
+              "name": "description",
+              "defaultValue": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "genreIds",
+              "defaultValue": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "image",
+              "defaultValue": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "itunesId",
+              "defaultValue": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "listennotesId",
+              "defaultValue": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "publisher",
+              "defaultValue": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            },
+            {
+              "name": "title",
+              "defaultValue": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": null
+            }
+          ],
+          "kind": "INPUT_OBJECT",
+          "possibleTypes": null,
+          "interfaces": null,
+          "name": "podcasts_set_input",
+          "enumValues": null,
+          "description": "input type for updating data in table \"podcasts\"",
+          "fields": null
+        },
+        {
+          "inputFields": null,
+          "kind": "ENUM",
+          "possibleTypes": null,
+          "interfaces": null,
+          "name": "podcasts_update_column",
+          "enumValues": [
+            {
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "description",
+              "description": "column name"
+            },
+            {
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "genreIds",
+              "description": "column name"
+            },
+            {
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "image",
+              "description": "column name"
+            },
+            {
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "itunesId",
+              "description": "column name"
+            },
+            {
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "listennotesId",
+              "description": "column name"
+            },
+            {
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "publisher",
+              "description": "column name"
+            },
+            {
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "title",
+              "description": "column name"
+            }
+          ],
+          "description": "update columns of table \"podcasts\"",
           "fields": null
         },
         {
@@ -6206,6 +8776,33 @@
                 "ofType": null
               },
               "description": "fetch data from the table: \"episodes\" using primary key columns"
+            },
+            {
+              "args": [
+                {
+                  "name": "podcastId",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "description": ""
+                }
+              ],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "getPodcastById",
+              "type": {
+                "kind": "OBJECT",
+                "name": "PodcastSearchResult",
+                "ofType": null
+              },
+              "description": ""
             },
             {
               "args": [
@@ -6480,7 +9077,7 @@
                       "name": null,
                       "ofType": {
                         "kind": "ENUM",
-                        "name": "saved_podcasts_select_column",
+                        "name": "my_podcasts_select_column",
                         "ofType": null
                       }
                     }
@@ -6518,7 +9115,7 @@
                       "name": null,
                       "ofType": {
                         "kind": "INPUT_OBJECT",
-                        "name": "saved_podcasts_order_by",
+                        "name": "my_podcasts_order_by",
                         "ofType": null
                       }
                     }
@@ -6530,7 +9127,7 @@
                   "defaultValue": null,
                   "type": {
                     "kind": "INPUT_OBJECT",
-                    "name": "saved_podcasts_bool_exp",
+                    "name": "my_podcasts_bool_exp",
                     "ofType": null
                   },
                   "description": "filter the rows returned"
@@ -6538,7 +9135,7 @@
               ],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "saved_podcasts",
+              "name": "my_podcasts",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -6550,13 +9147,13 @@
                     "name": null,
                     "ofType": {
                       "kind": "OBJECT",
-                      "name": "saved_podcasts",
+                      "name": "my_podcasts",
                       "ofType": null
                     }
                   }
                 }
               },
-              "description": "fetch data from the table: \"saved_podcasts\""
+              "description": "fetch data from the table: \"my_podcasts\""
             },
             {
               "args": [
@@ -6571,7 +9168,7 @@
                       "name": null,
                       "ofType": {
                         "kind": "ENUM",
-                        "name": "saved_podcasts_select_column",
+                        "name": "my_podcasts_select_column",
                         "ofType": null
                       }
                     }
@@ -6609,7 +9206,7 @@
                       "name": null,
                       "ofType": {
                         "kind": "INPUT_OBJECT",
-                        "name": "saved_podcasts_order_by",
+                        "name": "my_podcasts_order_by",
                         "ofType": null
                       }
                     }
@@ -6621,7 +9218,7 @@
                   "defaultValue": null,
                   "type": {
                     "kind": "INPUT_OBJECT",
-                    "name": "saved_podcasts_bool_exp",
+                    "name": "my_podcasts_bool_exp",
                     "ofType": null
                   },
                   "description": "filter the rows returned"
@@ -6629,29 +9226,43 @@
               ],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "saved_podcasts_aggregate",
+              "name": "my_podcasts_aggregate",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
                   "kind": "OBJECT",
-                  "name": "saved_podcasts_aggregate",
+                  "name": "my_podcasts_aggregate",
                   "ofType": null
                 }
               },
-              "description": "fetch aggregated fields from the table: \"saved_podcasts\""
+              "description": "fetch aggregated fields from the table: \"my_podcasts\""
             },
             {
               "args": [
                 {
-                  "name": "id",
+                  "name": "podcastId",
                   "defaultValue": null,
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
                       "kind": "SCALAR",
-                      "name": "uuid",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "description": null
+                },
+                {
+                  "name": "tags",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
                       "ofType": null
                     }
                   },
@@ -6660,13 +9271,214 @@
               ],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "saved_podcasts_by_pk",
+              "name": "my_podcasts_by_pk",
               "type": {
                 "kind": "OBJECT",
-                "name": "saved_podcasts",
+                "name": "my_podcasts",
                 "ofType": null
               },
-              "description": "fetch data from the table: \"saved_podcasts\" using primary key columns"
+              "description": "fetch data from the table: \"my_podcasts\" using primary key columns"
+            },
+            {
+              "args": [
+                {
+                  "name": "distinct_on",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": {
+                        "kind": "ENUM",
+                        "name": "podcasts_select_column",
+                        "ofType": null
+                      }
+                    }
+                  },
+                  "description": "distinct select on columns"
+                },
+                {
+                  "name": "limit",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "description": "limit the nuber of rows returned"
+                },
+                {
+                  "name": "offset",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "description": "skip the first n rows. Use only with order_by"
+                },
+                {
+                  "name": "order_by",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": {
+                        "kind": "INPUT_OBJECT",
+                        "name": "podcasts_order_by",
+                        "ofType": null
+                      }
+                    }
+                  },
+                  "description": "sort the rows by one or more columns"
+                },
+                {
+                  "name": "where",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "podcasts_bool_exp",
+                    "ofType": null
+                  },
+                  "description": "filter the rows returned"
+                }
+              ],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "podcasts",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "podcasts",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "description": "fetch data from the table: \"podcasts\""
+            },
+            {
+              "args": [
+                {
+                  "name": "distinct_on",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": {
+                        "kind": "ENUM",
+                        "name": "podcasts_select_column",
+                        "ofType": null
+                      }
+                    }
+                  },
+                  "description": "distinct select on columns"
+                },
+                {
+                  "name": "limit",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "description": "limit the nuber of rows returned"
+                },
+                {
+                  "name": "offset",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "description": "skip the first n rows. Use only with order_by"
+                },
+                {
+                  "name": "order_by",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": {
+                        "kind": "INPUT_OBJECT",
+                        "name": "podcasts_order_by",
+                        "ofType": null
+                      }
+                    }
+                  },
+                  "description": "sort the rows by one or more columns"
+                },
+                {
+                  "name": "where",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "podcasts_bool_exp",
+                    "ofType": null
+                  },
+                  "description": "filter the rows returned"
+                }
+              ],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "podcasts_aggregate",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "podcasts_aggregate",
+                  "ofType": null
+                }
+              },
+              "description": "fetch aggregated fields from the table: \"podcasts\""
+            },
+            {
+              "args": [
+                {
+                  "name": "listennotesId",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "description": null
+                }
+              ],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "podcasts_by_pk",
+              "type": {
+                "kind": "OBJECT",
+                "name": "podcasts",
+                "ofType": null
+              },
+              "description": "fetch data from the table: \"podcasts\" using primary key columns"
             },
             {
               "args": [
@@ -6741,1482 +9553,6 @@
               "description": ""
             }
           ]
-        },
-        {
-          "inputFields": null,
-          "kind": "OBJECT",
-          "possibleTypes": null,
-          "interfaces": [],
-          "name": "saved_podcasts",
-          "enumValues": null,
-          "description": "columns and relationships of \"saved_podcasts\"",
-          "fields": [
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "added_date",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "date",
-                  "ofType": null
-                }
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "description",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "id",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "uuid",
-                  "ofType": null
-                }
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "itunes_id",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "listennotes_genre_ids",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "listennotes_id",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "tags",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "title",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "user_id",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              },
-              "description": null
-            }
-          ]
-        },
-        {
-          "inputFields": null,
-          "kind": "OBJECT",
-          "possibleTypes": null,
-          "interfaces": [],
-          "name": "saved_podcasts_aggregate",
-          "enumValues": null,
-          "description": "aggregated selection of \"saved_podcasts\"",
-          "fields": [
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "aggregate",
-              "type": {
-                "kind": "OBJECT",
-                "name": "saved_podcasts_aggregate_fields",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "nodes",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "OBJECT",
-                      "name": "saved_podcasts",
-                      "ofType": null
-                    }
-                  }
-                }
-              },
-              "description": null
-            }
-          ]
-        },
-        {
-          "inputFields": null,
-          "kind": "OBJECT",
-          "possibleTypes": null,
-          "interfaces": [],
-          "name": "saved_podcasts_aggregate_fields",
-          "enumValues": null,
-          "description": "aggregate fields of \"saved_podcasts\"",
-          "fields": [
-            {
-              "args": [
-                {
-                  "name": "columns",
-                  "defaultValue": null,
-                  "type": {
-                    "kind": "LIST",
-                    "name": null,
-                    "ofType": {
-                      "kind": "NON_NULL",
-                      "name": null,
-                      "ofType": {
-                        "kind": "ENUM",
-                        "name": "saved_podcasts_select_column",
-                        "ofType": null
-                      }
-                    }
-                  },
-                  "description": null
-                },
-                {
-                  "name": "distinct",
-                  "defaultValue": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "Boolean",
-                    "ofType": null
-                  },
-                  "description": null
-                }
-              ],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "count",
-              "type": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "max",
-              "type": {
-                "kind": "OBJECT",
-                "name": "saved_podcasts_max_fields",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "min",
-              "type": {
-                "kind": "OBJECT",
-                "name": "saved_podcasts_min_fields",
-                "ofType": null
-              },
-              "description": null
-            }
-          ]
-        },
-        {
-          "inputFields": [
-            {
-              "name": "count",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "max",
-              "defaultValue": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "saved_podcasts_max_order_by",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "min",
-              "defaultValue": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "saved_podcasts_min_order_by",
-                "ofType": null
-              },
-              "description": null
-            }
-          ],
-          "kind": "INPUT_OBJECT",
-          "possibleTypes": null,
-          "interfaces": null,
-          "name": "saved_podcasts_aggregate_order_by",
-          "enumValues": null,
-          "description": "order by aggregate values of table \"saved_podcasts\"",
-          "fields": null
-        },
-        {
-          "inputFields": [
-            {
-              "name": "data",
-              "defaultValue": null,
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "INPUT_OBJECT",
-                      "name": "saved_podcasts_insert_input",
-                      "ofType": null
-                    }
-                  }
-                }
-              },
-              "description": null
-            },
-            {
-              "name": "on_conflict",
-              "defaultValue": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "saved_podcasts_on_conflict",
-                "ofType": null
-              },
-              "description": null
-            }
-          ],
-          "kind": "INPUT_OBJECT",
-          "possibleTypes": null,
-          "interfaces": null,
-          "name": "saved_podcasts_arr_rel_insert_input",
-          "enumValues": null,
-          "description": "input type for inserting array relation for remote table \"saved_podcasts\"",
-          "fields": null
-        },
-        {
-          "inputFields": [
-            {
-              "name": "_and",
-              "defaultValue": null,
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "saved_podcasts_bool_exp",
-                  "ofType": null
-                }
-              },
-              "description": null
-            },
-            {
-              "name": "_not",
-              "defaultValue": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "saved_podcasts_bool_exp",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "_or",
-              "defaultValue": null,
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "saved_podcasts_bool_exp",
-                  "ofType": null
-                }
-              },
-              "description": null
-            },
-            {
-              "name": "added_date",
-              "defaultValue": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "date_comparison_exp",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "description",
-              "defaultValue": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "text_comparison_exp",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "id",
-              "defaultValue": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "uuid_comparison_exp",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "itunes_id",
-              "defaultValue": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "text_comparison_exp",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "listennotes_genre_ids",
-              "defaultValue": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "text_comparison_exp",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "listennotes_id",
-              "defaultValue": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "text_comparison_exp",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "tags",
-              "defaultValue": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "text_comparison_exp",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "title",
-              "defaultValue": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "text_comparison_exp",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "user_id",
-              "defaultValue": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "text_comparison_exp",
-                "ofType": null
-              },
-              "description": null
-            }
-          ],
-          "kind": "INPUT_OBJECT",
-          "possibleTypes": null,
-          "interfaces": null,
-          "name": "saved_podcasts_bool_exp",
-          "enumValues": null,
-          "description": "Boolean expression to filter rows from the table \"saved_podcasts\". All fields are combined with a logical 'AND'.",
-          "fields": null
-        },
-        {
-          "inputFields": null,
-          "kind": "ENUM",
-          "possibleTypes": null,
-          "interfaces": null,
-          "name": "saved_podcasts_constraint",
-          "enumValues": [
-            {
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "saved_podcasts_pkey",
-              "description": "unique or primary key constraint"
-            }
-          ],
-          "description": "unique or primary key constraints on table \"saved_podcasts\"",
-          "fields": null
-        },
-        {
-          "inputFields": [
-            {
-              "name": "added_date",
-              "defaultValue": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "date",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "description",
-              "defaultValue": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "id",
-              "defaultValue": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "uuid",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "itunes_id",
-              "defaultValue": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "listennotes_genre_ids",
-              "defaultValue": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "listennotes_id",
-              "defaultValue": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "tags",
-              "defaultValue": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "title",
-              "defaultValue": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "user_id",
-              "defaultValue": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": null
-            }
-          ],
-          "kind": "INPUT_OBJECT",
-          "possibleTypes": null,
-          "interfaces": null,
-          "name": "saved_podcasts_insert_input",
-          "enumValues": null,
-          "description": "input type for inserting data into table \"saved_podcasts\"",
-          "fields": null
-        },
-        {
-          "inputFields": null,
-          "kind": "OBJECT",
-          "possibleTypes": null,
-          "interfaces": [],
-          "name": "saved_podcasts_max_fields",
-          "enumValues": null,
-          "description": "aggregate max on columns",
-          "fields": [
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "added_date",
-              "type": {
-                "kind": "SCALAR",
-                "name": "date",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "description",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "itunes_id",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "listennotes_genre_ids",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "listennotes_id",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "tags",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "title",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "user_id",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": null
-            }
-          ]
-        },
-        {
-          "inputFields": [
-            {
-              "name": "added_date",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "description",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "itunes_id",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "listennotes_genre_ids",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "listennotes_id",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "tags",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "title",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "user_id",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            }
-          ],
-          "kind": "INPUT_OBJECT",
-          "possibleTypes": null,
-          "interfaces": null,
-          "name": "saved_podcasts_max_order_by",
-          "enumValues": null,
-          "description": "order by max() on columns of table \"saved_podcasts\"",
-          "fields": null
-        },
-        {
-          "inputFields": null,
-          "kind": "OBJECT",
-          "possibleTypes": null,
-          "interfaces": [],
-          "name": "saved_podcasts_min_fields",
-          "enumValues": null,
-          "description": "aggregate min on columns",
-          "fields": [
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "added_date",
-              "type": {
-                "kind": "SCALAR",
-                "name": "date",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "description",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "itunes_id",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "listennotes_genre_ids",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "listennotes_id",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "tags",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "title",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "user_id",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": null
-            }
-          ]
-        },
-        {
-          "inputFields": [
-            {
-              "name": "added_date",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "description",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "itunes_id",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "listennotes_genre_ids",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "listennotes_id",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "tags",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "title",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "user_id",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            }
-          ],
-          "kind": "INPUT_OBJECT",
-          "possibleTypes": null,
-          "interfaces": null,
-          "name": "saved_podcasts_min_order_by",
-          "enumValues": null,
-          "description": "order by min() on columns of table \"saved_podcasts\"",
-          "fields": null
-        },
-        {
-          "inputFields": null,
-          "kind": "OBJECT",
-          "possibleTypes": null,
-          "interfaces": [],
-          "name": "saved_podcasts_mutation_response",
-          "enumValues": null,
-          "description": "response of any mutation on the table \"saved_podcasts\"",
-          "fields": [
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "affected_rows",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                }
-              },
-              "description": "number of affected rows by the mutation"
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "returning",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "OBJECT",
-                      "name": "saved_podcasts",
-                      "ofType": null
-                    }
-                  }
-                }
-              },
-              "description": "data of the affected rows by the mutation"
-            }
-          ]
-        },
-        {
-          "inputFields": [
-            {
-              "name": "data",
-              "defaultValue": null,
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "saved_podcasts_insert_input",
-                  "ofType": null
-                }
-              },
-              "description": null
-            },
-            {
-              "name": "on_conflict",
-              "defaultValue": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "saved_podcasts_on_conflict",
-                "ofType": null
-              },
-              "description": null
-            }
-          ],
-          "kind": "INPUT_OBJECT",
-          "possibleTypes": null,
-          "interfaces": null,
-          "name": "saved_podcasts_obj_rel_insert_input",
-          "enumValues": null,
-          "description": "input type for inserting object relation for remote table \"saved_podcasts\"",
-          "fields": null
-        },
-        {
-          "inputFields": [
-            {
-              "name": "constraint",
-              "defaultValue": null,
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "ENUM",
-                  "name": "saved_podcasts_constraint",
-                  "ofType": null
-                }
-              },
-              "description": null
-            },
-            {
-              "name": "update_columns",
-              "defaultValue": null,
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "ENUM",
-                      "name": "saved_podcasts_update_column",
-                      "ofType": null
-                    }
-                  }
-                }
-              },
-              "description": null
-            }
-          ],
-          "kind": "INPUT_OBJECT",
-          "possibleTypes": null,
-          "interfaces": null,
-          "name": "saved_podcasts_on_conflict",
-          "enumValues": null,
-          "description": "on conflict condition type for table \"saved_podcasts\"",
-          "fields": null
-        },
-        {
-          "inputFields": [
-            {
-              "name": "added_date",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "description",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "id",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "itunes_id",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "listennotes_genre_ids",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "listennotes_id",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "tags",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "title",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "user_id",
-              "defaultValue": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "description": null
-            }
-          ],
-          "kind": "INPUT_OBJECT",
-          "possibleTypes": null,
-          "interfaces": null,
-          "name": "saved_podcasts_order_by",
-          "enumValues": null,
-          "description": "ordering options when selecting data from \"saved_podcasts\"",
-          "fields": null
-        },
-        {
-          "inputFields": null,
-          "kind": "ENUM",
-          "possibleTypes": null,
-          "interfaces": null,
-          "name": "saved_podcasts_select_column",
-          "enumValues": [
-            {
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "added_date",
-              "description": "column name"
-            },
-            {
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "description",
-              "description": "column name"
-            },
-            {
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "id",
-              "description": "column name"
-            },
-            {
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "itunes_id",
-              "description": "column name"
-            },
-            {
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "listennotes_genre_ids",
-              "description": "column name"
-            },
-            {
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "listennotes_id",
-              "description": "column name"
-            },
-            {
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "tags",
-              "description": "column name"
-            },
-            {
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "title",
-              "description": "column name"
-            },
-            {
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "user_id",
-              "description": "column name"
-            }
-          ],
-          "description": "select columns of table \"saved_podcasts\"",
-          "fields": null
-        },
-        {
-          "inputFields": [
-            {
-              "name": "added_date",
-              "defaultValue": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "date",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "description",
-              "defaultValue": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "id",
-              "defaultValue": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "uuid",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "itunes_id",
-              "defaultValue": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "listennotes_genre_ids",
-              "defaultValue": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "listennotes_id",
-              "defaultValue": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "tags",
-              "defaultValue": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "title",
-              "defaultValue": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "user_id",
-              "defaultValue": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": null
-            }
-          ],
-          "kind": "INPUT_OBJECT",
-          "possibleTypes": null,
-          "interfaces": null,
-          "name": "saved_podcasts_set_input",
-          "enumValues": null,
-          "description": "input type for updating data in table \"saved_podcasts\"",
-          "fields": null
-        },
-        {
-          "inputFields": null,
-          "kind": "ENUM",
-          "possibleTypes": null,
-          "interfaces": null,
-          "name": "saved_podcasts_update_column",
-          "enumValues": [
-            {
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "added_date",
-              "description": "column name"
-            },
-            {
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "description",
-              "description": "column name"
-            },
-            {
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "id",
-              "description": "column name"
-            },
-            {
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "itunes_id",
-              "description": "column name"
-            },
-            {
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "listennotes_genre_ids",
-              "description": "column name"
-            },
-            {
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "listennotes_id",
-              "description": "column name"
-            },
-            {
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "tags",
-              "description": "column name"
-            },
-            {
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "title",
-              "description": "column name"
-            },
-            {
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "user_id",
-              "description": "column name"
-            }
-          ],
-          "description": "update columns of table \"saved_podcasts\"",
-          "fields": null
         },
         {
           "inputFields": null,
@@ -8656,7 +9992,7 @@
                       "name": null,
                       "ofType": {
                         "kind": "ENUM",
-                        "name": "saved_podcasts_select_column",
+                        "name": "my_podcasts_select_column",
                         "ofType": null
                       }
                     }
@@ -8694,7 +10030,7 @@
                       "name": null,
                       "ofType": {
                         "kind": "INPUT_OBJECT",
-                        "name": "saved_podcasts_order_by",
+                        "name": "my_podcasts_order_by",
                         "ofType": null
                       }
                     }
@@ -8706,7 +10042,7 @@
                   "defaultValue": null,
                   "type": {
                     "kind": "INPUT_OBJECT",
-                    "name": "saved_podcasts_bool_exp",
+                    "name": "my_podcasts_bool_exp",
                     "ofType": null
                   },
                   "description": "filter the rows returned"
@@ -8714,7 +10050,7 @@
               ],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "saved_podcasts",
+              "name": "my_podcasts",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -8726,13 +10062,13 @@
                     "name": null,
                     "ofType": {
                       "kind": "OBJECT",
-                      "name": "saved_podcasts",
+                      "name": "my_podcasts",
                       "ofType": null
                     }
                   }
                 }
               },
-              "description": "fetch data from the table: \"saved_podcasts\""
+              "description": "fetch data from the table: \"my_podcasts\""
             },
             {
               "args": [
@@ -8747,7 +10083,7 @@
                       "name": null,
                       "ofType": {
                         "kind": "ENUM",
-                        "name": "saved_podcasts_select_column",
+                        "name": "my_podcasts_select_column",
                         "ofType": null
                       }
                     }
@@ -8785,7 +10121,7 @@
                       "name": null,
                       "ofType": {
                         "kind": "INPUT_OBJECT",
-                        "name": "saved_podcasts_order_by",
+                        "name": "my_podcasts_order_by",
                         "ofType": null
                       }
                     }
@@ -8797,7 +10133,7 @@
                   "defaultValue": null,
                   "type": {
                     "kind": "INPUT_OBJECT",
-                    "name": "saved_podcasts_bool_exp",
+                    "name": "my_podcasts_bool_exp",
                     "ofType": null
                   },
                   "description": "filter the rows returned"
@@ -8805,29 +10141,43 @@
               ],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "saved_podcasts_aggregate",
+              "name": "my_podcasts_aggregate",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
                   "kind": "OBJECT",
-                  "name": "saved_podcasts_aggregate",
+                  "name": "my_podcasts_aggregate",
                   "ofType": null
                 }
               },
-              "description": "fetch aggregated fields from the table: \"saved_podcasts\""
+              "description": "fetch aggregated fields from the table: \"my_podcasts\""
             },
             {
               "args": [
                 {
-                  "name": "id",
+                  "name": "podcastId",
                   "defaultValue": null,
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
                       "kind": "SCALAR",
-                      "name": "uuid",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "description": null
+                },
+                {
+                  "name": "tags",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
                       "ofType": null
                     }
                   },
@@ -8836,13 +10186,214 @@
               ],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "saved_podcasts_by_pk",
+              "name": "my_podcasts_by_pk",
               "type": {
                 "kind": "OBJECT",
-                "name": "saved_podcasts",
+                "name": "my_podcasts",
                 "ofType": null
               },
-              "description": "fetch data from the table: \"saved_podcasts\" using primary key columns"
+              "description": "fetch data from the table: \"my_podcasts\" using primary key columns"
+            },
+            {
+              "args": [
+                {
+                  "name": "distinct_on",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": {
+                        "kind": "ENUM",
+                        "name": "podcasts_select_column",
+                        "ofType": null
+                      }
+                    }
+                  },
+                  "description": "distinct select on columns"
+                },
+                {
+                  "name": "limit",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "description": "limit the nuber of rows returned"
+                },
+                {
+                  "name": "offset",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "description": "skip the first n rows. Use only with order_by"
+                },
+                {
+                  "name": "order_by",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": {
+                        "kind": "INPUT_OBJECT",
+                        "name": "podcasts_order_by",
+                        "ofType": null
+                      }
+                    }
+                  },
+                  "description": "sort the rows by one or more columns"
+                },
+                {
+                  "name": "where",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "podcasts_bool_exp",
+                    "ofType": null
+                  },
+                  "description": "filter the rows returned"
+                }
+              ],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "podcasts",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "podcasts",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "description": "fetch data from the table: \"podcasts\""
+            },
+            {
+              "args": [
+                {
+                  "name": "distinct_on",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": {
+                        "kind": "ENUM",
+                        "name": "podcasts_select_column",
+                        "ofType": null
+                      }
+                    }
+                  },
+                  "description": "distinct select on columns"
+                },
+                {
+                  "name": "limit",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "description": "limit the nuber of rows returned"
+                },
+                {
+                  "name": "offset",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "description": "skip the first n rows. Use only with order_by"
+                },
+                {
+                  "name": "order_by",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": {
+                        "kind": "INPUT_OBJECT",
+                        "name": "podcasts_order_by",
+                        "ofType": null
+                      }
+                    }
+                  },
+                  "description": "sort the rows by one or more columns"
+                },
+                {
+                  "name": "where",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "podcasts_bool_exp",
+                    "ofType": null
+                  },
+                  "description": "filter the rows returned"
+                }
+              ],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "podcasts_aggregate",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "podcasts_aggregate",
+                  "ofType": null
+                }
+              },
+              "description": "fetch aggregated fields from the table: \"podcasts\""
+            },
+            {
+              "args": [
+                {
+                  "name": "listennotesId",
+                  "defaultValue": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "description": null
+                }
+              ],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "podcasts_by_pk",
+              "type": {
+                "kind": "OBJECT",
+                "name": "podcasts",
+                "ofType": null
+              },
+              "description": "fetch data from the table: \"podcasts\" using primary key columns"
             }
           ]
         },
@@ -9132,125 +10683,6 @@
           "name": "timestamptz_comparison_exp",
           "enumValues": null,
           "description": "expression to compare columns of type timestamptz. All fields are combined with logical 'AND'.",
-          "fields": null
-        },
-        {
-          "inputFields": null,
-          "kind": "SCALAR",
-          "possibleTypes": null,
-          "interfaces": null,
-          "name": "uuid",
-          "enumValues": null,
-          "description": null,
-          "fields": null
-        },
-        {
-          "inputFields": [
-            {
-              "name": "_eq",
-              "defaultValue": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "uuid",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "_gt",
-              "defaultValue": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "uuid",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "_gte",
-              "defaultValue": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "uuid",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "_in",
-              "defaultValue": null,
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "uuid",
-                  "ofType": null
-                }
-              },
-              "description": null
-            },
-            {
-              "name": "_is_null",
-              "defaultValue": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "_lt",
-              "defaultValue": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "uuid",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "_lte",
-              "defaultValue": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "uuid",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "_neq",
-              "defaultValue": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "uuid",
-                "ofType": null
-              },
-              "description": null
-            },
-            {
-              "name": "_nin",
-              "defaultValue": null,
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "uuid",
-                  "ofType": null
-                }
-              },
-              "description": null
-            }
-          ],
-          "kind": "INPUT_OBJECT",
-          "possibleTypes": null,
-          "interfaces": null,
-          "name": "uuid_comparison_exp",
-          "enumValues": null,
-          "description": "expression to compare columns of type uuid. All fields are combined with logical 'AND'.",
           "fields": null
         }
       ],
