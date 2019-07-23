@@ -26,15 +26,20 @@ let useSearchQuery = () => {
   };
 };
 
-let isSavedEpisode = (model: AppModel.model, listennotesId) => {
-  Belt.Array.some(model.librarySavedIds, id => id == listennotesId);
+let isSavedEpisode = (listennotesId, model: AppModel.model) => {
+  Belt.Array.some(model.libraryIds.episodes, id => id == listennotesId);
+};
+
+let isSavedPodcast = (listennotesId, model: AppModel.model) => {
+  Belt.Array.some(model.libraryIds.podcasts, id => id == listennotesId);
 };
 
 let useIsSavedEpisode = listennotesId => {
-  let isSaved =
-    AppCore.useSelector(model => isSavedEpisode(model, listennotesId));
+  AppCore.useSelector(isSavedEpisode(listennotesId));
+};
 
-  isSaved;
+let useIsSavedPodcast = listennotesId => {
+  AppCore.useSelector(isSavedPodcast(listennotesId));
 };
 
 type searchResultByType =

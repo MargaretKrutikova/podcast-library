@@ -63,15 +63,20 @@ module GetMyLibrarySavedIds = [%graphql
   {|
   query($user_id: String!) {
     my_episodes (where: {userId: {_eq: $user_id}}) {
-      episode {
-        listennotesId
-      }
+      episodeId
+    }
+    my_podcasts (where: {userId: {_eq: $user_id}}) {
+      podcastId
     }
   }
   |}
 ];
 
 type library = {episodes: array(myEpisode)};
+type libraryIds = {
+  episodes: array(string),
+  podcasts: array(string),
+};
 
 let uuidToString = (id: Js.Json.t) =>
   switch (Js.Json.decodeString(id)) {
@@ -110,9 +115,16 @@ let getSavedIds = () => {
   GetMyLibrarySavedIds.make(~user_id="margaretkru", ())
   |> Graphql.sendQuery
   |> Js.Promise.then_(result =>
-       Belt.Array.map(result##my_episodes, myEpisode =>
-         myEpisode##episode##listennotesId
-       )
+       {
+         episodes:
+           Belt.Array.map(result##my_episodes, myEpisode =>
+             myEpisode##episodeId
+           ),
+         podcasts:
+           Belt.Array.map(result##my_podcasts, myPodcast =>
+             myPodcast##podcastId
+           ),
+       }
        |> Js.Promise.resolve
      );
 };

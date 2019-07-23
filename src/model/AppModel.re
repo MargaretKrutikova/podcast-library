@@ -9,20 +9,24 @@ type message =
   | GotSearchMessage(SearchModel.message)
   | /** library */
     FetchLibraryIds
-  | GotLibraryIds(array(string))
+  | GotLibraryIds(MyLibrary.libraryIds)
   | FetchLibrary
   | GotLibrary(MyLibrary.library)
-  | SavedEpisode(SearchResult.episode);
+  | SavedEpisode(SearchResult.episode)
+  | SavedPodcast(SearchResult.podcast);
 
 type model = {
   search: SearchModel.t,
-  librarySavedIds: array(string),
+  libraryIds: MyLibrary.libraryIds,
   myLibrary,
 };
 
 let createInitModel = () => {
   search: SearchModel.createInitModel(),
-  librarySavedIds: [||],
+  libraryIds: {
+    episodes: [||],
+    podcasts: [||],
+  },
   myLibrary: NotAsked,
 };
 
@@ -56,6 +60,16 @@ let getMyLibrary = ((), dispatch) => {
   None;
 };
 
+let addEpisodeId = (libraryIds: MyLibrary.libraryIds, episodeId) => {
+  ...libraryIds,
+  episodes: Belt.Array.concat(libraryIds.episodes, [|episodeId|]),
+};
+
+let addPodcastId = (libraryIds: MyLibrary.libraryIds, podcastId) => {
+  ...libraryIds,
+  podcasts: Belt.Array.concat(libraryIds.podcasts, [|podcastId|]),
+};
+
 let update = (model, message) => {
   switch (message) {
   | GotSearchMessage(subMessage) =>
@@ -73,15 +87,18 @@ let update = (model, message) => {
       {...model, myLibrary: Loaded(myLibrary)},
       None,
     )
-  | GotLibraryIds(ids) => ({...model, librarySavedIds: ids}, None)
+  | GotLibraryIds(ids) => ({...model, libraryIds: ids}, None)
   | SavedEpisode(episode) => (
       {
         ...model,
-        librarySavedIds:
-          Belt.Array.concat(
-            model.librarySavedIds,
-            [|episode.listennotesId|],
-          ),
+        libraryIds: addEpisodeId(model.libraryIds, episode.listennotesId),
+      },
+      None,
+    )
+  | SavedPodcast(podcast) => (
+      {
+        ...model,
+        libraryIds: addPodcastId(model.libraryIds, podcast.listennotesId),
       },
       None,
     )

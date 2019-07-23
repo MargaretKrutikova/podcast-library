@@ -17,6 +17,7 @@ module SearchPodcasts = [%graphql
         latestPubDate
         genreIds
         totalEpisodes
+        image
       }
     }
   }

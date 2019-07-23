@@ -4,15 +4,37 @@ let str = ReasonReact.string;
 
 [@react.component]
 let make = (~podcast: SearchResult.podcast) => {
-  // let dispatch = AppCore.useDispatch();
+  let dispatch = AppCore.useDispatch();
+  let isSaved = Hooks.useIsSavedPodcast(podcast.listennotesId);
 
-  // let (isSaving, setIsSaving) = React.useState(() => false);
+  let (isSaving, setIsSaving) = React.useState(() => false);
+
+  let handlePodcastSave = () => {
+    setIsSaving(_ => true);
+    SaveToLibrary.savePodcast(podcast)
+    |> Js.Promise.(
+         then_(_ => {
+           setIsSaving(_ => false);
+           dispatch(SavedPodcast(podcast)) |> resolve;
+         })
+       )
+    |> Js.Promise.(catch(_ => setIsSaving(_ => false) |> resolve));
+  };
 
   let descriptionText =
     String.length(podcast.description) < 200
       ? podcast.description : podcast.description ++ "...";
 
-  <Card className="search-result-card">
+  <Card
+    className={
+      isSaved
+        ? "search-result-card search-result-card--saved" : "search-result-card"
+    }>
+    {isSaved
+       ? <Badge className="search-result-saved-badge" color="info">
+           {str("Saved")}
+         </Badge>
+       : ReasonReact.null}
     <CardBody>
       <CardTitle> {str(podcast.title)} </CardTitle>
       <CardSubtitle className="search-result-subtitle">
@@ -29,9 +51,16 @@ let make = (~podcast: SearchResult.podcast) => {
       <CardText tag="div">
         <div dangerouslySetInnerHTML={"__html": descriptionText} />
       </CardText>
-      <Button size="sm" color="primary" className="search-result-save-button">
-        {str("Save")}
-      </Button>
+      {!isSaved
+         ? <Button
+             size="sm"
+             color="primary"
+             className="search-result-save-button"
+             disabled=isSaving
+             onClick={_ => handlePodcastSave()}>
+             {str("Save")}
+           </Button>
+         : ReasonReact.null}
     </CardBody>
   </Card>;
 };

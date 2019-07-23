@@ -7,6 +7,7 @@ type podcast = {
   latestPubDate: string,
   genreIds: array(int),
   totalEpisodes: int,
+  image: string,
 };
 
 type episode = {
