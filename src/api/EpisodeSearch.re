@@ -1,24 +1,5 @@
 open SearchQuery;
-
-type episode = {
-  listennotesId: string,
-  title: string,
-  description: string,
-  podcastTitle: string,
-  pubDate: string,
-  lengthSec: int,
-  podcastItunesId: int,
-  podcastListennotesId: string,
-  genreIds: array(int),
-  publisher: string,
-};
-
-type searchResult = {
-  nextOffset: int,
-  total: int,
-  count: int,
-  results: array(episode),
-};
+open SearchResult;
 
 module SearchEpisodes = [%graphql
   {|

@@ -5,7 +5,7 @@ let str = ReasonReact.string;
 module SearchTypeButton = {
   [@react.component]
   let make = (~searchType, ~activeSearchType, ~text) => {
-    let dispatch = AppCore.useDispatch();
+    let dispatch = Hooks.useSearchDispatch();
     let isActive = searchType == activeSearchType;
 
     <Button
@@ -19,7 +19,7 @@ module SearchTypeButton = {
 
 [@react.component]
 let make = () => {
-  let dispatch = AppCore.useDispatch();
+  let dispatch = Hooks.useSearchDispatch();
   let searchQuery = Hooks.useSearchQuery();
 
   let handleSearchChange = e =>

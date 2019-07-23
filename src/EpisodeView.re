@@ -3,7 +3,7 @@ open BsReactstrap;
 let str = ReasonReact.string;
 
 [@react.component]
-let make = (~episode: EpisodeSearch.episode) => {
+let make = (~episode: SearchResult.episode) => {
   let isSaved = Hooks.useIsSavedEpisode(episode.listennotesId);
   let dispatch = AppCore.useDispatch();
 

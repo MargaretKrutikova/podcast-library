@@ -878,9 +878,13 @@
                   "kind": "LIST",
                   "name": null,
                   "ofType": {
-                    "kind": "OBJECT",
-                    "name": "PodcastSearchResult",
-                    "ofType": null
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "PodcastSearchResult",
+                      "ofType": null
+                    }
                   }
                 }
               },

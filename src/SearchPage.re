@@ -5,11 +5,12 @@ let str = ReasonReact.string;
 [@react.component]
 let make = () => {
   let dispatch = AppCore.useDispatch();
-  let searchResult = AppCore.useSelector(model => model.episodeSearchResult);
+  let searchDispatch = Hooks.useSearchDispatch();
+  let searchResult = Hooks.useSearchResult();
 
   React.useEffect0(() => {
     dispatch(FetchLibraryIds);
-    dispatch(RequestedSearch);
+    searchDispatch(RequestedSearch);
     None;
   });
 
@@ -18,15 +19,25 @@ let make = () => {
     <SearchQueryView />
     <div>
       {switch (searchResult) {
-       | NotAsked => <span> {str("Nothing yet")} </span>
-       | Loading(_) => <span> {str("Loading")} </span>
-       | Success(res) =>
-         res.results
+       | PodcastResult(NotAsked)
+       | EpisodeResult(NotAsked) => <span> {str("Nothing yet")} </span>
+       | PodcastResult(Loading(_, _))
+       | EpisodeResult(Loading(_, _)) => <span> {str("Loading")} </span>
+       | PodcastResult(Error)
+       | EpisodeResult(Error) => <div> {str("Error")} </div>
+       | PodcastResult(Success(data, _)) =>
+         data.results
+         ->Belt.Array.map(podcast =>
+             <PodcastView key={podcast.listennotesId} podcast />
+           )
+         |> ReasonReact.array
+
+       | EpisodeResult(Success(data, _)) =>
+         data.results
          ->Belt.Array.map(episode =>
              <EpisodeView key={episode.listennotesId} episode />
            )
          |> ReasonReact.array
-       | Error => <div> {str("Error")} </div>
        }}
     </div>
   </Container>;

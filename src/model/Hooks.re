@@ -1,6 +1,5 @@
 type searchQuery = {
   searchTerm: string,
-  language: option(string),
   genreIds: array(int),
   offset: int,
   podcastId: option(string),
@@ -9,20 +8,16 @@ type searchQuery = {
 };
 
 let hasSearchResult = (model: AppModel.model) =>
-  switch (model.episodeSearchResult) {
-  | NotAsked
-  | Loading(None) => false
-  | _ => true
-  };
+  SearchModel.hasSearchResult(model.search.episodeResult)
+  || SearchModel.hasSearchResult(model.search.podcastResult);
 
 let useSearchQuery = () => {
-  let baseQuery = AppCore.useSelector(model => model.baseSearchQuery);
-  let episodeQuery = AppCore.useSelector(model => model.episodeSearchQuery);
-  let searchType = AppCore.useSelector(model => model.searchContentType);
+  let baseQuery = AppCore.useSelector(model => model.search.baseQuery);
+  let episodeQuery = AppCore.useSelector(model => model.search.episodeQuery);
+  let searchType = AppCore.useSelector(model => model.search.searchType);
   let hasSearchResult = AppCore.useSelector(model => hasSearchResult(model));
   {
     searchTerm: baseQuery.searchTerm,
-    language: baseQuery.language,
     genreIds: Belt.Option.getWithDefault(baseQuery.genreIds, [||]),
     offset: baseQuery.offset,
     podcastId: episodeQuery.podcastId,
@@ -40,4 +35,27 @@ let useIsSavedEpisode = listennotesId => {
     AppCore.useSelector(model => isSavedEpisode(model, listennotesId));
 
   isSaved;
+};
+
+type searchResultByType =
+  | PodcastResult(SearchModel.podcastResult)
+  | EpisodeResult(SearchModel.episodeResult);
+
+let useSearchResult = () => {
+  let episodeSearchResult =
+    AppCore.useSelector(model => model.search.episodeResult);
+  let podcastSearchResult =
+    AppCore.useSelector(model => model.search.podcastResult);
+  let searchContentType =
+    AppCore.useSelector(model => model.search.searchType);
+
+  switch (searchContentType) {
+  | Podcast => PodcastResult(podcastSearchResult)
+  | Episode => EpisodeResult(episodeSearchResult)
+  };
+};
+
+let useSearchDispatch = () => {
+  let dispatch = AppCore.useDispatch();
+  searchMessage => dispatch(GotSearchMessage(searchMessage));
 };

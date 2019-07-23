@@ -6,56 +6,35 @@ type myLibrary =
   | Loaded(MyLibrary.library);
 
 type message =
+  | GotSearchMessage(SearchModel.message)
   | /** library */
     FetchLibraryIds
   | GotLibraryIds(array(string))
   | FetchLibrary
   | GotLibrary(MyLibrary.library)
-  | SavedEpisode(EpisodeSearch.episode)
-  | /** search */
-    RequestedSearch
-  | EnteredSearchTerm(string)
-  | SetContentType(ContentType.t)
-  | GotSearchResult(EpisodeSearch.searchResult)
-  | GotSearchError;
-
-/** search model */
-type searchResult('a) =
-  | NotAsked
-  | Loading(option('a))
-  | Success('a)
-  | Error;
+  | SavedEpisode(SearchResult.episode);
 
 type model = {
-  searchContentType: ContentType.t,
-  baseSearchQuery: SearchQuery.baseQuery,
-  episodeSearchQuery: SearchQuery.episodeQuery,
-  episodeSearchResult: searchResult(EpisodeSearch.searchResult),
+  search: SearchModel.t,
   librarySavedIds: array(string),
   myLibrary,
 };
 
 let createInitModel = () => {
-  searchContentType: Episode,
-  baseSearchQuery: SearchQuery.createBaseQuery(),
-  episodeSearchQuery: SearchQuery.createEpisodeQuery(),
-  episodeSearchResult: NotAsked,
+  search: SearchModel.createInitModel(),
   librarySavedIds: [||],
   myLibrary: NotAsked,
 };
 
-/** effects */
-
-let search = (model, dispatch) => {
-  let {baseSearchQuery, episodeSearchQuery} = model;
-  EpisodeSearch.searchForEpisodes(baseSearchQuery, episodeSearchQuery)
-  |> Js.Promise.(
-       then_(result => dispatch(GotSearchResult(result)) |> resolve)
-     )
-  |> ignore;
-
-  None;
+let toLoading = (library: myLibrary): myLibrary => {
+  switch (library) {
+  | NotAsked => Loading(None)
+  | Loaded(data) => Loading(Some(data))
+  | other => other
+  };
 };
+
+/** effects */
 
 let getLibraryIds = (model, dispatch) => {
   MyLibrary.getSavedIds()
@@ -77,50 +56,14 @@ let getMyLibrary = ((), dispatch) => {
   None;
 };
 
-/** update */
-
-let updateBaseSearchQuery = (model, baseSearchQuery) => {
-  ...model,
-  baseSearchQuery,
-};
-
-let updateEpisodeSearchQuery = (model, episodeSearchQuery) => {
-  ...model,
-  episodeSearchQuery,
-};
-
-let toLoading = (library: myLibrary): myLibrary => {
-  switch (library) {
-  | NotAsked => Loading(None)
-  | Loaded(data) => Loading(Some(data))
-  | other => other
-  };
-};
-
 let update = (model, message) => {
-  let {baseSearchQuery} = model;
   switch (message) {
-  | EnteredSearchTerm(searchTerm) => (
-      updateBaseSearchQuery(model, {...baseSearchQuery, searchTerm}),
-      None,
-    )
-  | SetContentType(searchContentType) => (
-      {...model, searchContentType},
-      None,
-    )
-  | RequestedSearch =>
-    String.trim(baseSearchQuery.searchTerm) != ""
-      ? (
-        {...model, episodeSearchResult: Loading(None)},
-        Some(search(model)),
-      )
-      : (model, None)
-
-  | GotSearchResult(result) => (
-      {...model, episodeSearchResult: Success(result)},
-      None,
-    )
-  | GotSearchError => ({...model, episodeSearchResult: Error}, None)
+  | GotSearchMessage(subMessage) =>
+    let (search, effect) =
+      SearchModel.update(model.search, subMessage, message =>
+        GotSearchMessage(message)
+      );
+    ({...model, search}, effect);
   | FetchLibraryIds => (model, Some(getLibraryIds()))
   | FetchLibrary => (
       {...model, myLibrary: toLoading(model.myLibrary)},

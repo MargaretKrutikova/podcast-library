@@ -54,7 +54,7 @@ let toGenres = (arr: array(int)) => Js.Array.joinWith(",", arr);
 
 let performEpisodeSave =
     (
-      ~episode: EpisodeSearch.episode,
+      ~episode: SearchResult.episode,
       ~libraryData: MyLibrary.saveEpisodeData,
       ~podcastDescription="",
       ~podcastImage="",
@@ -146,7 +146,7 @@ let updateEpisodeItunesId = (~podcastItunesId, ~episodeId, ~episodeName) => {
 };
 
 let saveEpisode =
-    (episode: EpisodeSearch.episode, libraryData: MyLibrary.saveEpisodeData) => {
+    (episode: SearchResult.episode, libraryData: MyLibrary.saveEpisodeData) => {
   GetEpisodeInsertInfo.make(
     ~podcastItunesId=string_of_int(episode.podcastItunesId),
     ~podcastListennotesId=episode.podcastListennotesId,
