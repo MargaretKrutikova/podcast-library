@@ -22,7 +22,7 @@ let make = () => {
   });
 
   let updateItunesId = (myEpisode: MyLibrary.myEpisode) => {
-    SaveToLibrary.updateEpisodeItunesId(
+    ItunesEpisode.updateItunesId(
       ~podcastItunesId=myEpisode.podcast.itunesId,
       ~episodeId=myEpisode.listennotesId,
       ~episodeName=myEpisode.title,

@@ -51,16 +51,23 @@ let make = (~podcast: SearchResult.podcast) => {
       <CardText tag="div">
         <div dangerouslySetInnerHTML={"__html": descriptionText} />
       </CardText>
-      {!isSaved
-         ? <Button
-             size="sm"
-             color="primary"
-             className="search-result-save-button"
-             disabled=isSaving
-             onClick={_ => handlePodcastSave()}>
-             {str("Save")}
-           </Button>
-         : ReasonReact.null}
+      <div className="search-result-card-actions">
+        <NavLink
+          href={ItunesLink.makeForPodcast(
+            string_of_int(podcast.podcastItunesId),
+          )}>
+          {str("Open in itunes")}
+        </NavLink>
+        {!isSaved
+           ? <Button
+               size="sm"
+               color="primary"
+               disabled=isSaving
+               onClick={_ => handlePodcastSave()}>
+               {str("Save")}
+             </Button>
+           : ReasonReact.null}
+      </div>
     </CardBody>
   </Card>;
 };

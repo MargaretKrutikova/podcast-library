@@ -111,28 +111,6 @@ let performEpisodeSave =
      );
 };
 
-module UpdateItunesId = [%graphql
-  {|
-  mutation($listennotesId: String!, $itunesId: String!) {
-    update_episodes(
-      where: {listennotesId: {_eq: $listennotesId}},
-      _set: {itunesId: $itunesId}) {
-        affected_rows
-    }
-  }
-|}
-];
-
-module GetEpisodeItunesId = [%graphql
-  {|
-    query($podcastItunesId: String!, $episodeName: String!) {
-      itunesEpisode (podcastId: $podcastItunesId, episodeName: $episodeName) {
-        id
-      }
-    }
-|}
-];
-
 module GetEpisodeInsertInfo = [%graphql
   {|
     query($podcastItunesId: String!, $podcastListennotesId: String!, $episodeName: String!) {
@@ -146,29 +124,6 @@ module GetEpisodeInsertInfo = [%graphql
     }
 |}
 ];
-
-let updateEpisodeItunesId = (~podcastItunesId, ~episodeId, ~episodeName) => {
-  GetEpisodeItunesId.make(~podcastItunesId, ~episodeName, ())
-  |> Graphql.sendQuery
-  |> Js.Promise.(
-       then_(response => {
-         let itunesId = response##itunesEpisode##id;
-
-         switch (itunesId) {
-         | None => resolve(0)
-         | Some(id) =>
-           UpdateItunesId.make(~listennotesId=episodeId, ~itunesId=id, ())
-           |> Graphql.sendQuery
-           |> then_(response =>
-                switch (response##update_episodes) {
-                | None => resolve(0)
-                | Some(res) => resolve(res##affected_rows)
-                }
-              )
-         };
-       })
-     );
-};
 
 let saveEpisode =
     (episode: SearchResult.episode, libraryData: MyLibrary.saveEpisodeData) => {
