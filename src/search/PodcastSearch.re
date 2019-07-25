@@ -24,8 +24,14 @@ module SearchPodcasts = [%graphql
   |}
 ];
 
-let searchForPodcasts = (baseQuery: baseQuery) => {
-  SearchPodcasts.make(~input=baseQueryToJs(baseQuery), ())
+let searchForPodcasts = (baseQuery: baseQuery, offset: int) => {
+  let input = {
+    "searchTerm": baseQuery.searchTerm,
+    "language": baseQuery.language,
+    "genreIds": baseQuery.genreIds,
+    "offset": offset,
+  };
+  SearchPodcasts.make(~input, ())
   |> Graphql.sendQuery
   |> Js.Promise.then_(result => result##searchPodcasts |> Js.Promise.resolve);
 };

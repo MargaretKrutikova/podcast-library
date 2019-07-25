@@ -25,9 +25,16 @@ module SearchEpisodes = [%graphql
   |}
 ];
 
-let searchForEpisodes = (baseQuery: baseQuery, episodeQuery: episodeQuery) => {
+let searchForEpisodes =
+    (baseQuery: baseQuery, offset: int, episodeQuery: episodeQuery) => {
+  let input = {
+    "searchTerm": baseQuery.searchTerm,
+    "language": baseQuery.language,
+    "genreIds": baseQuery.genreIds,
+    "offset": offset,
+  };
   SearchEpisodes.make(
-    ~input=baseQueryToJs(baseQuery),
+    ~input,
     ~episodeInput=episodeQueryToJs(episodeQuery),
     (),
   )

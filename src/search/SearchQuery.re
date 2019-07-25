@@ -39,7 +39,6 @@ type baseQuery = {
   searchTerm: string,
   language: option(string),
   genreIds: option(array(int)),
-  offset: int,
   // sort,
   // searchFields: option(array(searchField)),
   // publishedAfterDate: option(Js.Date.t),
@@ -48,7 +47,6 @@ type baseQuery = {
 
 let createBaseQuery = () => {
   searchTerm: "Elm",
-  language: None,
+  language: Some("English"),
   genreIds: None,
-  offset: 0,
 };

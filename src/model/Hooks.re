@@ -1,7 +1,6 @@
 type searchQuery = {
   searchTerm: string,
   genreIds: array(int),
-  offset: int,
   podcastId: option(string),
   searchType: ContentType.t,
   hasSearchResult: bool,
@@ -16,10 +15,10 @@ let useSearchQuery = () => {
   let episodeQuery = AppCore.useSelector(model => model.search.episodeQuery);
   let searchType = AppCore.useSelector(model => model.search.searchType);
   let hasSearchResult = AppCore.useSelector(model => hasSearchResult(model));
+
   {
     searchTerm: baseQuery.searchTerm,
     genreIds: Belt.Option.getWithDefault(baseQuery.genreIds, [||]),
-    offset: baseQuery.offset,
     podcastId: episodeQuery.podcastId,
     hasSearchResult,
     searchType,
