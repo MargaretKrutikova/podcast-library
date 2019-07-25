@@ -13,6 +13,7 @@ let typeToColor = (type_: AppNotifications.type_) =>
   };
 
 let fadeMs = 150;
+let showMs = 2000;
 
 [@bs.deriving abstract]
 type transitionProps = {timeout: int};
@@ -24,7 +25,7 @@ let make = (~type_, ~id, ~isShown: bool, ~children) => {
   let remove = () => dispatch(RemoveNotification(id));
 
   React.useEffect0(() => {
-    let timer = Js.Global.setTimeout(hide, 3000);
+    let timer = Js.Global.setTimeout(hide, showMs);
     Some(() => Js.Global.clearTimeout(timer));
   });
 

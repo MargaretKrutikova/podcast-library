@@ -37,7 +37,7 @@ let make = () => {
        );
   };
 
-  <Container>
+  <>
     {str("My library")}
     {switch (myLibrary) {
      | Loaded(library)
@@ -64,5 +64,5 @@ let make = () => {
        |> ReasonReact.array
      | _ => <div />
      }}
-  </Container>;
+  </>;
 };

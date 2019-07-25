@@ -23,24 +23,27 @@ module GetEpisodeItunesId = [%graphql
 let getItunesId = (~podcastItunesId, ~episodeName) =>
   GetEpisodeItunesId.make(~podcastItunesId, ~episodeName, ())
   |> Graphql.sendQuery
-  |> Js.Promise.(then_(response => response##itunesEpisode##id |> resolve));
+  |> Js.Promise.(
+       then_(response =>
+         switch (response##itunesEpisode##id) {
+         | Some(id) => resolve(id)
+         | None => reject(Not_found)
+         }
+       )
+     );
 
 let updateItunesId = (~podcastItunesId, ~episodeId, ~episodeName) => {
   getItunesId(~podcastItunesId, ~episodeName)
   |> Js.Promise.(
        then_(itunesId =>
-         switch (itunesId) {
-         | None => resolve(0)
-         | Some(id) =>
-           UpdateItunesId.make(~listennotesId=episodeId, ~itunesId=id, ())
-           |> Graphql.sendQuery
-           |> then_(response =>
-                switch (response##update_episodes) {
-                | None => resolve(0)
-                | Some(res) => resolve(res##affected_rows)
-                }
-              )
-         }
+         UpdateItunesId.make(~listennotesId=episodeId, ~itunesId, ())
+         |> Graphql.sendQuery
+         |> then_(response =>
+              switch (response##update_episodes) {
+              | None => resolve(0)
+              | Some(res) => resolve(res##affected_rows)
+              }
+            )
        )
      );
 };

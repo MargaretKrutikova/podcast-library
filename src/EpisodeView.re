@@ -43,16 +43,21 @@ let make = (~episode: SearchResult.episode) => {
       <CardText tag="div">
         <div dangerouslySetInnerHTML={"__html": descriptionText} />
       </CardText>
-      {!isSaved
-         ? <Button
-             size="sm"
-             color="primary"
-             className="search-result-save-button"
-             disabled=isSaving
-             onClick={_ => handleEpisodeSave()}>
-             {str("Save")}
-           </Button>
-         : ReasonReact.null}
+      <div className="search-result-card-actions">
+        <EpisodeItunesLink
+          podcastItunesId={episode.podcastItunesId}
+          episodeName={episode.title}
+        />
+        {!isSaved
+           ? <Button
+               size="sm"
+               color="primary"
+               disabled=isSaving
+               onClick={_ => handleEpisodeSave()}>
+               {str("Save")}
+             </Button>
+           : ReasonReact.null}
+      </div>
     </CardBody>
   </Card>;
 };

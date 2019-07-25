@@ -1,6 +1,10 @@
-let baseUrl = "https://podcasts.apple.com/us/podcast";
+let setLocation: string => unit = [%bs.raw
+  {| function (href) { window.location.href = href; } |}
+];
 
-let makeForPodcast = podcastItunesId => baseUrl ++ "/id" ++ podcastItunesId;
+let baseUrl = "https://podcasts.apple.com/us/podcast/";
+
+let makeForPodcast = podcastItunesId => baseUrl ++ "id" ++ podcastItunesId;
 
 let makeForEpisode = (~podcastItunesId, ~episodeItunesId) =>
   baseUrl

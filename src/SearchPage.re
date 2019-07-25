@@ -14,7 +14,7 @@ let make = () => {
     None;
   });
 
-  <Container>
+  <>
     <h1> {str("Search library")} </h1>
     <SearchQueryView />
     <div>
@@ -40,5 +40,5 @@ let make = () => {
          |> ReasonReact.array
        }}
     </div>
-  </Container>;
+  </>;
 };

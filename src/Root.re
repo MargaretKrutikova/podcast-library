@@ -28,6 +28,7 @@ let make = () => {
         </NavItem>
       </Nav>
     </Navbar>
-    pageToShow
+    <Container> pageToShow </Container>
+    <RootNotifications />
   </div>;
 };
