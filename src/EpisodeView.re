@@ -19,10 +19,22 @@ let make = (~episode: SearchResult.episode) => {
     |> Js.Promise.(
          then_(_ => {
            setIsSaving(_ => false);
-           dispatch(SavedEpisode(episode)) |> resolve;
+           dispatch(SavedEpisode(episode));
+           dispatch(
+             ShowNotification({text: "Saved to library", type_: Info}),
+           )
+           |> resolve;
          })
        )
-    |> Js.Promise.(catch(_ => setIsSaving(_ => false) |> resolve));
+    |> Js.Promise.(
+         catch(_ => {
+           setIsSaving(_ => false);
+           dispatch(
+             ShowNotification({text: "Failed to save", type_: Danger}),
+           )
+           |> resolve;
+         })
+       );
   };
 
   <Card
