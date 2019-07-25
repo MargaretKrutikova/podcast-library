@@ -6,6 +6,10 @@ type myLibrary =
   | Loaded(MyLibrary.library);
 
 type message =
+  | /** notification  */
+    ShowNotification(AppNotifications.data)
+  | HideNotification(int)
+  | RemoveNotification(int)
   | GotSearchMessage(SearchModel.message)
   | /** library */
     FetchLibraryIds
@@ -19,6 +23,7 @@ type model = {
   search: SearchModel.t,
   libraryIds: MyLibrary.libraryIds,
   myLibrary,
+  notifications: AppNotifications.t,
 };
 
 let createInitModel = () => {
@@ -28,6 +33,7 @@ let createInitModel = () => {
     podcasts: [||],
   },
   myLibrary: NotAsked,
+  notifications: AppNotifications.init(),
 };
 
 let toLoading = (library: myLibrary): myLibrary => {
@@ -40,7 +46,7 @@ let toLoading = (library: myLibrary): myLibrary => {
 
 /** effects */
 
-let getLibraryIds = (model, dispatch) => {
+let getLibraryIds = ((), dispatch) => {
   MyLibrary.getSavedIds()
   |> Js.Promise.(then_(ids => dispatch(GotLibraryIds(ids)) |> resolve))
   |> ignore;
@@ -69,6 +75,8 @@ let addPodcastId = (libraryIds: MyLibrary.libraryIds, podcastId) => {
   ...libraryIds,
   podcasts: Belt.Array.concat(libraryIds.podcasts, [|podcastId|]),
 };
+
+/** notifications */
 
 let update = (model, message) => {
   switch (message) {
@@ -99,6 +107,27 @@ let update = (model, message) => {
       {
         ...model,
         libraryIds: addPodcastId(model.libraryIds, podcast.listennotesId),
+      },
+      None,
+    )
+  | ShowNotification(data) => (
+      {
+        ...model,
+        notifications: model.notifications |> AppNotifications.add(data),
+      },
+      None,
+    )
+  | HideNotification(id) => (
+      {
+        ...model,
+        notifications: model.notifications |> AppNotifications.hide(id),
+      },
+      None,
+    )
+  | RemoveNotification(id) => (
+      {
+        ...model,
+        notifications: model.notifications |> AppNotifications.remove(id),
       },
       None,
     )
