@@ -56,11 +56,7 @@ let getLibraryIds = ((), dispatch) => {
 
 let getMyLibrary = ((), dispatch) => {
   MyLibrary.getFull()
-  |> Js.Promise.(
-       then_(episodes =>
-         dispatch(GotLibrary({episodes: episodes})) |> resolve
-       )
-     )
+  |> Js.Promise.(then_(library => dispatch(GotLibrary(library)) |> resolve))
   |> ignore;
 
   None;

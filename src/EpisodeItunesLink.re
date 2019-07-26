@@ -9,7 +9,7 @@ type itunesWebData =
 let createItunesLinkHref = (podcastItunesId, itunesData) =>
   switch (itunesData) {
   | Loaded(episodeItunesId) =>
-    ItunesLink.makeForEpisode(
+    Utils.makeEpisodeItunesUrl(
       ~podcastItunesId=string_of_int(podcastItunesId),
       ~episodeItunesId,
     )
@@ -17,11 +17,11 @@ let createItunesLinkHref = (podcastItunesId, itunesData) =>
   };
 
 let openItunesLink = (~podcastItunesId, ~episodeItunesId) =>
-  ItunesLink.makeForEpisode(
+  Utils.makeEpisodeItunesUrl(
     ~podcastItunesId=string_of_int(podcastItunesId),
     ~episodeItunesId,
   )
-  |> ItunesLink.setLocation;
+  |> Utils.setWindowLocation;
 
 [@react.component]
 let make = (~podcastItunesId, ~episodeName) => {

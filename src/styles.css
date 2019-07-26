@@ -1,24 +1,29 @@
-.search-result-card {
+/** cards */
+.library-card {
   margin-bottom: 15px;
   margin-top: 15px;
 }
-.search-result-subtitle {
-  margin-bottom: 15px;
-}
-.search-result-card--saved {
+.library-card--top-actions {
   padding-top: 10px;
 }
-.search-result-saved-badge {
+.library-card-top-actions {
   position: absolute;
   top: 10px;
   right: 10px;
+  display: flex;
+  justify-content: flex-end;
 }
-.search-result-card-actions {
+.library-card-bottom-actions {
   display: flex;
   align-items: center;
   justify-content: flex-end;
   margin-top: 10px;
 }
+.library-card-subtitle {
+  margin-bottom: 15px;
+}
+
+/** */
 
 .app-notifications-root {
   position: fixed;

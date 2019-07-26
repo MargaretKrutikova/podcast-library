@@ -1,4 +1,5 @@
 open BsReactstrap;
+open Cards;
 
 let str = ReasonReact.string;
 
@@ -8,10 +9,6 @@ let make = (~episode: SearchResult.episode) => {
   let dispatch = AppCore.useDispatch();
 
   let (isSaving, setIsSaving) = React.useState(() => false);
-
-  let descriptionText =
-    String.length(episode.description) < 200
-      ? episode.description : episode.description ++ "...";
 
   let handleEpisodeSave = () => {
     setIsSaving(_ => true);
@@ -37,39 +34,25 @@ let make = (~episode: SearchResult.episode) => {
        );
   };
 
-  <Card
-    className={
-      isSaved
-        ? "search-result-card search-result-card--saved" : "search-result-card"
-    }>
-    {isSaved
-       ? <Badge className="search-result-saved-badge" color="info">
-           {str("Saved")}
-         </Badge>
-       : ReasonReact.null}
+  <SearchCard isSaved>
     <CardBody>
       <CardTitle> {str(episode.title)} </CardTitle>
-      <CardSubtitle className="search-result-subtitle">
+      <LibraryCardSubtitle>
         {str(episode.podcastTitle ++ ", " ++ episode.pubDate)}
-      </CardSubtitle>
+      </LibraryCardSubtitle>
       <CardText tag="div">
-        <div dangerouslySetInnerHTML={"__html": descriptionText} />
+        <div
+          dangerouslySetInnerHTML={
+            "__html": Utils.truncateDescription(episode.description),
+          }
+        />
       </CardText>
-      <div className="search-result-card-actions">
+      <SearchCardActions isSaved isSaving onSave=handleEpisodeSave>
         <EpisodeItunesLink
           podcastItunesId={episode.podcastItunesId}
           episodeName={episode.title}
         />
-        {!isSaved
-           ? <Button
-               size="sm"
-               color="primary"
-               disabled=isSaving
-               onClick={_ => handleEpisodeSave()}>
-               {str("Save")}
-             </Button>
-           : ReasonReact.null}
-      </div>
+      </SearchCardActions>
     </CardBody>
-  </Card>;
+  </SearchCard>;
 };
