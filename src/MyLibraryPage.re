@@ -14,7 +14,7 @@ let make = () => {
         | Loading => <div> {ReasonReact.string("Loading")} </div>
         | Data(response) =>
           <div>
-            {response##podcasts
+            {MyLibrary.toMyLibrary(response).myPodcasts
              ->Belt.Array.map(podcast =>
                  <MyPodcastView key={podcast.listennotesId} podcast />
                )

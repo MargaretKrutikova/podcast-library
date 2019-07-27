@@ -1,10 +1,3 @@
-/** my library model */
-
-type myLibrary =
-  | NotAsked
-  | Loading(option(MyLibrary.library))
-  | Loaded(MyLibrary.library);
-
 type message =
   | /** notification  */
     ShowNotification(AppNotifications.data)
@@ -14,15 +7,12 @@ type message =
   | /** library */
     FetchLibraryIds
   | GotLibraryIds(MyLibrary.libraryIds)
-  | FetchLibrary
-  | GotLibrary(MyLibrary.library)
   | SavedEpisode(SearchResult.episode)
   | SavedPodcast(SearchResult.podcast);
 
 type model = {
   search: SearchModel.t,
   libraryIds: MyLibrary.libraryIds,
-  myLibrary,
   notifications: AppNotifications.t,
 };
 
@@ -32,16 +22,7 @@ let createInitModel = () => {
     episodes: [||],
     podcasts: [||],
   },
-  myLibrary: NotAsked,
   notifications: AppNotifications.init(),
-};
-
-let toLoading = (library: myLibrary): myLibrary => {
-  switch (library) {
-  | NotAsked => Loading(None)
-  | Loaded(data) => Loading(Some(data))
-  | other => other
-  };
 };
 
 /** effects */
@@ -49,14 +30,6 @@ let toLoading = (library: myLibrary): myLibrary => {
 let getLibraryIds = ((), dispatch) => {
   MyLibrary.getSavedIds()
   |> Js.Promise.(then_(ids => dispatch(GotLibraryIds(ids)) |> resolve))
-  |> ignore;
-
-  None;
-};
-
-let getMyLibrary = ((), dispatch) => {
-  MyLibrary.getFull()
-  |> Js.Promise.(then_(library => dispatch(GotLibrary(library)) |> resolve))
   |> ignore;
 
   None;
@@ -83,14 +56,6 @@ let update = (model, message) => {
       );
     ({...model, search}, effect);
   | FetchLibraryIds => (model, Some(getLibraryIds()))
-  | FetchLibrary => (
-      {...model, myLibrary: toLoading(model.myLibrary)},
-      Some(getMyLibrary()),
-    )
-  | GotLibrary(myLibrary) => (
-      {...model, myLibrary: Loaded(myLibrary)},
-      None,
-    )
   | GotLibraryIds(ids) => ({...model, libraryIds: ids}, None)
   | SavedEpisode(episode) => (
       {
