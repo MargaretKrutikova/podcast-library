@@ -2,7 +2,18 @@ external promiseErrorToJsObj: Js.Promise.error => Js.t('a) = "%identity";
 
 exception Graphql_error(string);
 
-let apiLink = "http://localhost:8080/v1/graphql";
+let apiLink = "http://192.168.1.188:8080/v1/graphql";
+
+let makeApolloClient = _ => {
+  // Create an InMemoryCache
+  let inMemoryCache = ApolloInMemoryCache.createInMemoryCache();
+
+  // Create an HTTP Link
+  let httpLink = ApolloLinks.createHttpLink(~uri=apiLink, ());
+
+  // return apollo client instance
+  ReasonApollo.createApolloClient(~link=httpLink, ~cache=inMemoryCache, ());
+};
 
 let sendQuery = q =>
   Axios.postDatac(

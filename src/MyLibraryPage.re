@@ -1,28 +1,28 @@
 let str = ReasonReact.string;
+module GetMyLibraryQuery = ReasonApollo.CreateQuery(MyLibrary.GetMyLibrary);
 
 [@react.component]
 let make = () => {
-  let dispatch = AppCore.useDispatch();
-  let myLibrary = AppCore.useSelector(model => model.myLibrary);
-
-  React.useEffect0(() => {
-    dispatch(FetchLibrary);
-    None;
-  });
+  let myLibraryQuery =
+    MyLibrary.GetMyLibrary.make(~user_id="margaretkru", ());
 
   <>
     <h1> {str("My library")} </h1>
-    {switch (myLibrary) {
-     | Loaded(library)
-     | Loading(Some(library)) =>
-       <div>
-         {library.myPodcasts
-          ->Belt.Array.map(podcast =>
-              <MyPodcastView key={podcast.listennotesId} podcast />
-            )
-          |> ReasonReact.array}
-       </div>
-     | _ => <div />
-     }}
+    <GetMyLibraryQuery variables=myLibraryQuery##variables>
+      ...{({result}) =>
+        switch (result) {
+        | Loading => <div> {ReasonReact.string("Loading")} </div>
+        | Data(response) =>
+          <div>
+            {response##podcasts
+             ->Belt.Array.map(podcast =>
+                 <MyPodcastView key={podcast.listennotesId} podcast />
+               )
+             |> ReasonReact.array}
+          </div>
+        | Error(_) => <div> {ReasonReact.string("Error")} </div>
+        }
+      }
+    </GetMyLibraryQuery>
   </>;
 };

@@ -20,3 +20,16 @@ let maxDescrptionTextLength = 200;
 let truncateDescription = description =>
   String.length(description) < maxDescrptionTextLength
     ? description : description ++ "...";
+
+/** reason apollo */
+let convertToQueryObj = (result): ReasonApolloTypes.queryObj => {
+  "query": ApolloClient.gql(. result##query),
+  "variables": result##variables,
+};
+
+let hasMutationData = (result: ReasonApolloTypes.mutationResponse('a)) => {
+  switch (result) {
+  | Data(_) => true
+  | _ => false
+  };
+};
