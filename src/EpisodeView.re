@@ -3,56 +3,77 @@ open Cards;
 
 let str = ReasonReact.string;
 
+module SaveEpisodeMutation =
+  ReasonApollo.CreateMutation(SaveToLibrary.SaveEpisode);
+
 [@react.component]
 let make = (~episode: SearchResult.episode) => {
-  let isSaved = Hooks.useIsSavedEpisode(episode.listennotesId);
   let dispatch = AppCore.useDispatch();
+  let isSaved = Hooks.useIsSavedEpisode(episode.listennotesId);
 
-  let (isSaving, setIsSaving) = React.useState(() => false);
-
-  let handleEpisodeSave = () => {
-    setIsSaving(_ => true);
-    SaveToLibrary.saveEpisode(episode, {tags: "", status: NotListened})
-    |> Js.Promise.(
-         then_(_ => {
-           setIsSaving(_ => false);
-           dispatch(SavedEpisode(episode));
-           dispatch(
-             ShowNotification({text: "Saved to library", type_: Info}),
-           )
-           |> resolve;
-         })
-       )
-    |> Js.Promise.(
-         catch(_ => {
-           setIsSaving(_ => false);
-           dispatch(
-             ShowNotification({text: "Failed to save", type_: Danger}),
-           )
-           |> resolve;
-         })
-       );
+  let handleError = _ => {
+    dispatch(ShowNotification({text: "Failed to save", type_: Danger}));
   };
 
-  <SearchCard isSaved>
-    <CardBody>
-      <CardTitle> {str(episode.title)} </CardTitle>
-      <LibraryCardSubtitle>
-        {str(episode.podcastTitle ++ ", " ++ episode.pubDate)}
-      </LibraryCardSubtitle>
-      <CardText tag="div">
-        <div
-          dangerouslySetInnerHTML={
-            "__html": Utils.truncateDescription(episode.description),
-          }
-        />
-      </CardText>
-      <SearchCardActions isSaved isSaving onSave=handleEpisodeSave>
-        <EpisodeItunesLink
-          podcastItunesId={episode.podcastItunesId}
-          episodeName={episode.title}
-        />
-      </SearchCardActions>
-    </CardBody>
-  </SearchCard>;
+  let handleSaveDone = _ => {
+    dispatch(SavedEpisode(episode));
+    dispatch(ShowNotification({text: "Saved to library", type_: Info}));
+  };
+
+  <SaveEpisodeMutation onError=handleError onCompleted=handleSaveDone>
+    ...{(mutation, {result}) => {
+      let saveEpisodeMutation =
+        SaveToLibrary.getEpisodeInsertInfo(episode)
+        |> Js.Promise.(
+             then_(_ =>
+               SaveToLibrary.performEpisodeSave(
+                 ~episode,
+                 ~libraryData={tags: "", status: NotListened},
+                 (),
+               )
+               |> resolve
+             )
+           );
+
+      let refetchMyLibraryQuery = MyLibrary.getMyLibraryQuery();
+
+      let handleSave = _ =>
+        mutation(
+          ~variables=saveEpisodeMutation##variables,
+          ~refetchQueries=
+            _ => [|Utils.convertToQueryObj(refetchMyLibraryQuery)|],
+          (),
+        );
+      <SearchCard isSaved>
+        <CardBody>
+          <CardTitle> {str(episode.title)} </CardTitle>
+          <LibraryCardSubtitle>
+            {str(episode.podcastTitle ++ ", " ++ episode.pubDate)}
+          </LibraryCardSubtitle>
+          <CardText tag="div">
+            <div
+              dangerouslySetInnerHTML={
+                "__html": Utils.truncateDescription(episode.description),
+              }
+            />
+          </CardText>
+          <BottomActions>
+            <EpisodeItunesLink
+              podcastItunesId={episode.podcastItunesId}
+              episodeName={episode.title}
+            />
+            {!isSaved
+               ? <Button
+                   size="sm"
+                   color="primary"
+                   disabled={result == Loading}
+                   onClick=handleSave>
+                   {str("Save")}
+                 </Button>
+               : <Button size="sm" color="warning"> {str("Remove")} </Button>}
+          </BottomActions>
+        </CardBody>
+      </SearchCard>;
+    }}
+  </SaveEpisodeMutation>;
 };
