@@ -20,6 +20,7 @@
     "reason-react",
     "@glennsl/bs-json",
     "bs-axios",
+    "reason-apollo",
     "reason-react-elmish",
     "@ahrefs/bs-reactstrap"
   ],

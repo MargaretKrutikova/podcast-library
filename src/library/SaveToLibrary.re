@@ -66,7 +66,7 @@ module SavePodcast = [%graphql
       userId: $userId, tags: $tags,
       podcast: {
         data: {description: $description, genreIds: $genreIds, image: $image, itunesId: $itunesId, title: $title, publisher: $publisher, listennotesId: $listennotesId},
-        on_conflict: {constraint: podcasts_itunesId_key, update_columns: []}
+        on_conflict: {constraint: podcasts_pkey, update_columns: []}
       }
     }) {
       affected_rows
@@ -77,22 +77,26 @@ module SavePodcast = [%graphql
 
 let toGenres = (arr: array(int)) => Js.Array.joinWith(",", arr);
 
+type episodeInsertInfo = {
+  itunesId: option(string),
+  podcastDescription: string,
+  podcastImage: string,
+};
+
 let performEpisodeSave =
     (
       ~episode: SearchResult.episode,
       ~libraryData: MyLibrary.saveEpisodeData,
-      ~podcastDescription="",
-      ~podcastImage="",
-      ~itunesId=None,
+      ~episodeInfo,
       (),
     ) => {
   SaveEpisode.make(
     ~title=episode.title,
     ~pubDate=episode.pubDate,
     ~podcastTitle=episode.podcastTitle,
-    ~podcastDescription,
-    ~podcastImage,
-    ~itunesId?,
+    ~podcastDescription=episodeInfo.podcastDescription,
+    ~podcastImage=episodeInfo.podcastImage,
+    ~itunesId=?episodeInfo.itunesId,
     ~podcastListennotesId=episode.podcastListennotesId,
     ~listennotesId=episode.listennotesId,
     ~lengthSec=episode.lengthSec,
@@ -104,11 +108,7 @@ let performEpisodeSave =
     ~userId="margaretkru",
     ~publisher=episode.publisher,
     (),
-  )
-  |> Graphql.sendQuery
-  |> Js.Promise.then_(response =>
-       response##insert_episodes |> Js.Promise.resolve
-     );
+  );
 };
 
 module GetEpisodeInsertInfo = [%graphql
@@ -125,8 +125,7 @@ module GetEpisodeInsertInfo = [%graphql
 |}
 ];
 
-let saveEpisode =
-    (episode: SearchResult.episode, libraryData: MyLibrary.saveEpisodeData) => {
+let getEpisodeInsertInfo = (episode: SearchResult.episode) => {
   GetEpisodeInsertInfo.make(
     ~podcastItunesId=string_of_int(episode.podcastItunesId),
     ~podcastListennotesId=episode.podcastListennotesId,
@@ -148,20 +147,18 @@ let saveEpisode =
              info##image
            );
 
-         performEpisodeSave(
-           ~episode,
-           ~libraryData,
-           ~itunesId,
-           ~podcastDescription,
-           ~podcastImage,
-           (),
-         );
+         let info = {itunesId, podcastDescription, podcastImage};
+         info |> resolve;
        })
      )
-  |> Js.Promise.(catch(_ => performEpisodeSave(~episode, ~libraryData, ())));
+  |> Js.Promise.(
+       catch(_ =>
+         {itunesId: None, podcastDescription: "", podcastImage: ""} |> resolve
+       )
+     );
 };
 
-let savePodcast = (podcast: SearchResult.podcast) =>
+let savePodcastMutation = (podcast: SearchResult.podcast) =>
   SavePodcast.make(
     ~userId="margaretkru",
     ~tags="",
@@ -173,5 +170,4 @@ let savePodcast = (podcast: SearchResult.podcast) =>
     ~itunesId=string_of_int(podcast.podcastItunesId),
     ~genreIds=toGenres(podcast.genreIds),
     (),
-  )
-  |> Graphql.sendQuery;
+  );

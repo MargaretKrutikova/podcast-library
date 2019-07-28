@@ -18,13 +18,31 @@ let statusEncoder = s =>
   | Listened => "Listened"
   };
 
-type podcast = {
-  listennotesId: string,
-  title: string,
-  description: string,
-  itunesId: string,
-  publisher: string,
-};
+/** my episodes */
+module GetMyEpisodes = [%graphql
+  {|
+query($userId: String!, $podcastId: String!) {
+  my_episodes(where: {episode: {podcast: {listennotesId: {_eq: $podcastId}}}, _and: {userId: {_eq: $userId}}}) {
+    episodeId
+    status @bsDecoder(fn: "statusDecoder")
+    tags
+    episode {
+      listennotesId
+      itunesId
+      title
+      description
+      pubDate
+      lengthSec
+    }
+  }
+  podcasts(limit: 1, where: {listennotesId: {_eq: $podcastId}}) {
+      title
+      description
+      itunesId
+    }
+}
+|}
+];
 
 type myEpisode = {
   listennotesId: string,
@@ -34,13 +52,13 @@ type myEpisode = {
   lengthSec: int,
   itunesId: option(string),
   tags: string,
-  podcast,
+  // podcast,
   status,
 };
 
 let toMyEpisode = data => {
   let episode = data##episode;
-  let podcast = episode##podcast;
+  //let podcast = episode##podcast;
   {
     listennotesId: episode##listennotesId,
     title: episode##title,
@@ -49,10 +67,65 @@ let toMyEpisode = data => {
     lengthSec: episode##lengthSec,
     itunesId: episode##itunesId,
     tags: data##tags,
-    podcast,
+    // podcast,
     status: data##status,
   };
 };
+
+/** my library */
+
+type myPodcast = {
+  listennotesId: string,
+  title: string,
+  description: string,
+  itunesId: string,
+  publisher: string,
+  numberOfSavedEpisodes: int,
+  lastEpisodeAddedDate: option(Js.Json.t),
+  podcastAddedDate: option(Js.Json.t),
+};
+
+type library = {myPodcasts: array(myPodcast)};
+let fromBigInt = value =>
+  value->Js.Json.decodeNumber->Belt.Option.mapWithDefault(0, int_of_float);
+
+module GetMyLibrary = [%graphql
+  {|
+  query($user_id: String!) {
+    get_my_episodes_grouped_by_podcasts (args:{userid: $user_id}) {
+        title
+        numberOfEpisodes
+        lastEpisodeAddedDate
+        podcastAddedDate
+        listennotesId
+        description
+        itunesId
+        publisher
+      }
+    }
+  |}
+];
+
+let toMyPodcast = query => {
+  listennotesId: query##listennotesId,
+  title: query##title,
+  description: query##description,
+  itunesId: query##itunesId,
+  publisher: query##publisher,
+  numberOfSavedEpisodes: fromBigInt(query##numberOfEpisodes),
+  lastEpisodeAddedDate: query##lastEpisodeAddedDate,
+  podcastAddedDate: query##podcastAddedDate,
+};
+
+let toMyLibrary = queryResponse => {
+  myPodcasts:
+    queryResponse##get_my_episodes_grouped_by_podcasts
+    ->Belt.Array.map(toMyPodcast),
+};
+
+let getMyLibraryQuery = () => GetMyLibrary.make(~user_id="margaretkru", ());
+
+/** saved ids */
 
 type saveEpisodeData = {
   status,
@@ -72,54 +145,10 @@ module GetMyLibrarySavedIds = [%graphql
   |}
 ];
 
-type library = {
-  // myEpisodes: array(myEpisode),
-  myPodcasts: array(podcast),
-};
 type libraryIds = {
   episodes: array(string),
   podcasts: array(string),
 };
-
-let uuidToString = (id: Js.Json.t) =>
-  switch (Js.Json.decodeString(id)) {
-  | Some(str) => str
-  | None => ""
-  };
-
-module GetMyLibrary = [%graphql
-  {|
-  query($user_id: String!) {
-    podcasts(where: {episodes: {myEpisodes: {userId: {_eq: $user_id}}}}) @bsRecord {
-      title
-      listennotesId
-      itunesId
-      description
-      publisher
-    }
-  }
-  |}
-];
-
-module GetMyEpisodes = [%graphql
-  {|
-  query($user_id: String!, $podcastId: String!) {
-    my_episodes(where: {episode: {podcast: {listennotesId: {_eq: $podcastId}}}, _and: {userId: {_eq: $user_id}}}) {
-      episodeId
-      status @bsDecoder(fn: "statusDecoder")
-      tags
-      episode {
-        listennotesId
-        itunesId
-        title
-        description
-        pubDate
-        lengthSec
-      }
-    }
-  }
-  |}
-];
 
 let getSavedIds = () => {
   GetMyLibrarySavedIds.make(~user_id="margaretkru", ())
@@ -134,18 +163,6 @@ let getSavedIds = () => {
            Belt.Array.map(result##my_podcasts, myPodcast =>
              myPodcast##podcastId
            ),
-       }
-       |> Js.Promise.resolve
-     );
-};
-
-let getFull = () => {
-  GetMyLibrary.make(~user_id="margaretkru", ())
-  |> Graphql.sendQuery
-  |> Js.Promise.then_(result =>
-       {
-         // myEpisodes: Belt.Array.map(result##my_episodes, toMyEpisode),
-         myPodcasts: result##podcasts,
        }
        |> Js.Promise.resolve
      );

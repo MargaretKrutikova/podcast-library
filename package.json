@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "webpack": "webpack -w",
     "webpack:production": "NODE_ENV=production webpack",
-    "server": "webpack-dev-server",
+    "server": "webpack-dev-server --port 8083 --host 0.0.0.0 --disable-host-check",
     "introspection": "./node_modules/graphql_ppx/sendIntrospectionQuery.js http://localhost:8080/v1/graphql"
   },
   "keywords": [
@@ -24,6 +24,7 @@
     "css-loader": "^3.0.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "reason-apollo": "git+https://github.com/MargaretKrutikova/reason-apollo.git",
     "reason-react": "^0.7.0",
     "reason-react-elmish": "git+https://github.com/MargaretKrutikova/reason-react-elmish.git",
     "style-loader": "^0.23.1"

@@ -5,21 +5,25 @@ let str = ReasonReact.string;
 module LibraryCardSubtitle = {
   [@react.component]
   let make = (~children) => {
-    <CardSubtitle className="library-card-subtitle"> children </CardSubtitle>;
+    <CardSubtitle className="mb-3"> children </CardSubtitle>;
   };
 };
 
 module BottomActions = {
   [@react.component]
   let make = (~children) => {
-    <div className="library-card-bottom-actions"> children </div>;
+    <div className="mt-2 d-flex justify-content-end align-items-center">
+      children
+    </div>;
   };
 };
 
 module TopActions = {
   [@react.component]
   let make = (~children) => {
-    <div className="library-card-top-actions"> children </div>;
+    <div className="library-card-top-actions d-flex justify-content-end">
+      children
+    </div>;
   };
 };
 
@@ -40,8 +44,7 @@ module SearchCardActions = {
 module LibraryCard = {
   [@react.component]
   let make = (~hasTopActions=false, ~children) => {
-    let className =
-      "library-card" ++ (hasTopActions ? " library-card--top-actions" : "");
+    let className = "mt-3 mb-3 " ++ (hasTopActions ? " pt-3" : "");
 
     <Card className> children </Card>;
   };

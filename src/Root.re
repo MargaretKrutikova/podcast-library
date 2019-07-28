@@ -9,6 +9,7 @@ let make = () => {
   let pageToShow =
     switch (url.path) {
     | ["my-library"] => <MyLibraryPage />
+    | ["my-library", id, "episodes"] => <MyEpisodesPage podcastId=id />
     | _ => <SearchPage />
     };
 
