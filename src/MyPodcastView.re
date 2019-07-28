@@ -38,7 +38,7 @@ let make = (~podcast: MyLibrary.myPodcast) => {
         <NavLink href={Utils.makePodcastItunesUrl(podcast.itunesId)}>
           {str("Open in itunes")}
         </NavLink>
-        <Button size="sm" color="primary">
+        <Button size="sm" color="warning">
           //  disabled=isSaving
           //  onClick={_ => handlePodcastSave()}
            {str("Remove")} </Button>
