@@ -77,22 +77,26 @@ module SavePodcast = [%graphql
 
 let toGenres = (arr: array(int)) => Js.Array.joinWith(",", arr);
 
+type episodeInsertInfo = {
+  itunesId: option(string),
+  podcastDescription: string,
+  podcastImage: string,
+};
+
 let performEpisodeSave =
     (
       ~episode: SearchResult.episode,
       ~libraryData: MyLibrary.saveEpisodeData,
-      ~podcastDescription="",
-      ~podcastImage="",
-      ~itunesId=None,
+      ~episodeInfo,
       (),
     ) => {
   SaveEpisode.make(
     ~title=episode.title,
     ~pubDate=episode.pubDate,
     ~podcastTitle=episode.podcastTitle,
-    ~podcastDescription,
-    ~podcastImage,
-    ~itunesId?,
+    ~podcastDescription=episodeInfo.podcastDescription,
+    ~podcastImage=episodeInfo.podcastImage,
+    ~itunesId=?episodeInfo.itunesId,
     ~podcastListennotesId=episode.podcastListennotesId,
     ~listennotesId=episode.listennotesId,
     ~lengthSec=episode.lengthSec,
@@ -120,12 +124,6 @@ module GetEpisodeInsertInfo = [%graphql
     }
 |}
 ];
-
-type episodeInsertInfo = {
-  itunesId: option(string),
-  podcastDescription: string,
-  podcastImage: string,
-};
 
 let getEpisodeInsertInfo = (episode: SearchResult.episode) => {
   GetEpisodeInsertInfo.make(

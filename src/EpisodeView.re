@@ -22,28 +22,30 @@ let make = (~episode: SearchResult.episode) => {
 
   <SaveEpisodeMutation onError=handleError onCompleted=handleSaveDone>
     ...{(mutation, {result}) => {
-      let saveEpisodeMutation =
-        SaveToLibrary.getEpisodeInsertInfo(episode)
-        |> Js.Promise.(
-             then_(_ =>
-               SaveToLibrary.performEpisodeSave(
-                 ~episode,
-                 ~libraryData={tags: "", status: NotListened},
-                 (),
-               )
-               |> resolve
-             )
-           );
-
       let refetchMyLibraryQuery = MyLibrary.getMyLibraryQuery();
 
       let handleSave = _ =>
-        mutation(
-          ~variables=saveEpisodeMutation##variables,
-          ~refetchQueries=
-            _ => [|Utils.convertToQueryObj(refetchMyLibraryQuery)|],
-          (),
-        );
+        SaveToLibrary.getEpisodeInsertInfo(episode)
+        |> Js.Promise.(
+             then_(episodeInfo => {
+               let saveEpisodeMutation =
+                 SaveToLibrary.performEpisodeSave(
+                   ~episode,
+                   ~libraryData={tags: "", status: NotListened},
+                   ~episodeInfo,
+                   (),
+                 );
+
+               mutation(
+                 ~variables=saveEpisodeMutation##variables,
+                 ~refetchQueries=
+                   _ => [|Utils.convertToQueryObj(refetchMyLibraryQuery)|],
+                 (),
+               )
+               |> resolve;
+             })
+           );
+
       <SearchCard isSaved>
         <CardBody>
           <CardTitle> {str(episode.title)} </CardTitle>
