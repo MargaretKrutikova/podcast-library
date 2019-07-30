@@ -79,12 +79,14 @@ let make = () => {
 
   <>
     <h1> {str("Search library")} </h1>
-    <SearchQueryView hasSearchResult=true /> // TODO: fix this
+    <SearchQueryView />
     {switch (searchModel.searchType) {
      | Episode =>
        <SearchEpisodesQuery
-         variables={getEpisodeSearchVariables()} skip=shouldSkipSearch>
-         ...{({result, fetchMore}) =>
+         variables={getEpisodeSearchVariables()}
+         skip=shouldSkipSearch
+         notifyOnNetworkStatusChange=true>
+         ...{({result, fetchMore, networkStatus}) =>
            <SearchResultView
              result
              renderData={data =>
@@ -103,7 +105,7 @@ let make = () => {
                        ~nextOffset=data##searchEpisodes.nextOffset,
                      )
                    }
-                   isFetching=false // TODO: fix this
+                   isFetching={networkStatus === ReasonApolloTypes.FetchMore}
                  />
                </div>
              }
@@ -112,8 +114,10 @@ let make = () => {
        </SearchEpisodesQuery>
      | Podcast =>
        <SearchPodcastsQuery
-         variables={getPodcastSearchVariables()} skip=shouldSkipSearch>
-         ...{({result, fetchMore}) =>
+         variables={getPodcastSearchVariables()}
+         skip=shouldSkipSearch
+         notifyOnNetworkStatusChange=true>
+         ...{({result, fetchMore, networkStatus}) =>
            <SearchResultView
              result
              renderData={data =>
@@ -132,7 +136,7 @@ let make = () => {
                        ~nextOffset=data##searchPodcasts.nextOffset,
                      )
                    }
-                   isFetching=false // TODO: fix this
+                   isFetching={networkStatus === ReasonApolloTypes.FetchMore}
                  />
                </div>
              }

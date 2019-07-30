@@ -24,7 +24,7 @@
     "css-loader": "^3.0.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "reason-apollo": "git+https://github.com/MargaretKrutikova/reason-apollo.git",
+    "reason-apollo": "git+https://github.com/MargaretKrutikova/reason-apollo.git#update-version",
     "reason-react": "^0.7.0",
     "reason-react-elmish": "git+https://github.com/MargaretKrutikova/reason-react-elmish.git",
     "style-loader": "^0.23.1"

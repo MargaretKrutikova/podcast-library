@@ -18,7 +18,7 @@ module SearchTypeButton = {
 };
 
 [@react.component]
-let make = (~hasSearchResult) => {
+let make = () => {
   let dispatch = Hooks.useSearchDispatch();
   let searchQuery = Hooks.useSearchQuery();
 
@@ -56,34 +56,21 @@ let make = (~hasSearchResult) => {
         </Button>
       </InputGroup>
     </FormGroup>
-    {!hasSearchResult
-       ? <ButtonGroup>
-           <SearchTypeButton
-             searchType=ContentType.Episode
-             activeSearchType={searchQuery.searchType}
-             text="Episodes"
-           />
-           <SearchTypeButton
-             searchType=ContentType.Podcast
-             activeSearchType={searchQuery.searchType}
-             text="Podcasts"
-           />
-         </ButtonGroup>
-       : <Nav tabs=true>
-           <NavItem>
-             <NavLink
-               active={isActive(Episode)}
-               onClick={_ => dispatch(SetContentType(Episode))}>
-               {str("Episodes")}
-             </NavLink>
-           </NavItem>
-           <NavItem>
-             <NavLink
-               active={isActive(Podcast)}
-               onClick={_ => dispatch(SetContentType(Podcast))}>
-               {str("Podcasts")}
-             </NavLink>
-           </NavItem>
-         </Nav>}
+    <Nav tabs=true>
+      <NavItem>
+        <NavLink
+          active={isActive(Episode)}
+          onClick={_ => dispatch(SetContentType(Episode))}>
+          {str("Episodes")}
+        </NavLink>
+      </NavItem>
+      <NavItem>
+        <NavLink
+          active={isActive(Podcast)}
+          onClick={_ => dispatch(SetContentType(Podcast))}>
+          {str("Podcasts")}
+        </NavLink>
+      </NavItem>
+    </Nav>
   </Form>;
 };
