@@ -50,10 +50,7 @@ let addPodcastId = (libraryIds: MyLibrary.libraryIds, podcastId) => {
 let update = (model, message) => {
   switch (message) {
   | GotSearchMessage(subMessage) =>
-    let (search, effect) =
-      SearchModel.update(model.search, subMessage, message =>
-        GotSearchMessage(message)
-      );
+    let (search, effect) = SearchModel.update(model.search, subMessage);
     ({...model, search}, effect);
   | FetchLibraryIds => (model, Some(getLibraryIds()))
   | GotLibraryIds(ids) => ({...model, libraryIds: ids}, None)

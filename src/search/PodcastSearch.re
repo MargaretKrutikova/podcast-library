@@ -24,14 +24,8 @@ module SearchPodcasts = [%graphql
   |}
 ];
 
-let searchForPodcasts = (baseQuery: baseQuery, offset: int) => {
-  let input = {
-    "searchTerm": baseQuery.searchTerm,
-    "language": baseQuery.language,
-    "genreIds": baseQuery.genreIds,
-    "offset": offset,
-  };
-  SearchPodcasts.make(~input, ())
-  |> Graphql.sendQuery
-  |> Js.Promise.then_(result => result##searchPodcasts |> Js.Promise.resolve);
-};
+let makeSearchQuery = (baseQuery: baseQuery, offset: int) =>
+  SearchPodcasts.make(~input=toSearchInput(~baseQuery, ~offset), ());
+
+let fetchMoreUpdateQuery: ReasonApolloQuery.updateQueryT =
+  SearchResult.fetchMoreUpdateQuery("searchPodcasts");

@@ -18,13 +18,25 @@ module SearchTypeButton = {
 };
 
 [@react.component]
-let make = () => {
+let make = (~hasSearchResult) => {
   let dispatch = Hooks.useSearchDispatch();
   let searchQuery = Hooks.useSearchQuery();
 
-  let handleSearchChange = e =>
-    dispatch(EnteredSearchTerm(ReactEvent.Form.target(e)##value));
+  let (searchTerm, setSearchTerm) = React.useState(() => "");
+  let handleSearchTermChange = e => {
+    let value = ReactEvent.Form.target(e)##value;
+    setSearchTerm(_ => value);
+  };
+
   let isActive = searchType => searchQuery.searchType == searchType;
+
+  React.useEffect1(
+    () => {
+      setSearchTerm(_ => searchQuery.searchTerm);
+      None;
+    },
+    [|searchQuery.searchTerm|],
+  );
 
   <Form
     className="cr-search-form"
@@ -35,15 +47,16 @@ let make = () => {
           _type="search"
           className="cr-search-form__input"
           placeholder="Search..."
-          value={searchQuery.searchTerm}
-          onChange=handleSearchChange
+          value=searchTerm
+          onChange=handleSearchTermChange
         />
-        <Button onClick={_ => dispatch(RequestedSearch)} size="sm">
+        <Button
+          onClick={_ => dispatch(EnteredSearchTerm(searchTerm))} size="sm">
           {str("Search")}
         </Button>
       </InputGroup>
     </FormGroup>
-    {!searchQuery.hasSearchResult
+    {!hasSearchResult
        ? <ButtonGroup>
            <SearchTypeButton
              searchType=ContentType.Episode

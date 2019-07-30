@@ -32,3 +32,39 @@ type searchResult('a) = {
 
 type episodeResults = searchResult(episode);
 type podcastResults = searchResult(podcast);
+
+let fetchMoreUpdateQuery =
+    (
+      queryName,
+      prevResult: Js.Json.t,
+      options: ReasonApolloQuery.updateQueryOptions,
+    ) => {
+  let mergeResults: (string, Js.Json.t, option(Js.Json.t)) => Js.Json.t = [%bs.raw
+    {|
+    function (queryName, prevResult, fetchMoreResult) {
+      if (!fetchMoreResult) return prevResult;
+
+      const results = prevResult[queryName].results.concat(
+        fetchMoreResult[queryName].results
+      );
+
+      return {
+        ...fetchMoreResult,
+        [queryName]: { ...fetchMoreResult[queryName], results }
+      };
+    }
+   |}
+  ];
+  mergeResults(
+    queryName,
+    prevResult,
+    options->ReasonApolloQuery.fetchMoreResultGet,
+  );
+};
+
+let toSearchInput = (~baseQuery: SearchQuery.baseQuery, ~offset) => {
+  "searchTerm": baseQuery.searchTerm,
+  "language": baseQuery.language,
+  "genreIds": baseQuery.genreIds,
+  "offset": offset,
+};
