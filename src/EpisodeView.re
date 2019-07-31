@@ -9,6 +9,7 @@ module SaveEpisodeMutation =
 [@react.component]
 let make = (~episode: SearchResult.episode, ~isSaved) => {
   let dispatch = AppCore.useDispatch();
+  let (isFetchingInfo, setIsFetchingInfo) = React.useState(() => false);
 
   let handleError = _ =>
     dispatch(ShowNotification({text: "Failed to save", type_: Danger}));
@@ -20,18 +21,21 @@ let make = (~episode: SearchResult.episode, ~isSaved) => {
     ...{(mutation, {result}) => {
       let refetchMyLibraryQuery = MyLibrary.getMyLibraryQuery();
 
-      let handleSave = _ =>
+      let handleSave = _ => {
+        setIsFetchingInfo(_ => true);
+
         SaveToLibrary.getEpisodeInsertInfo(episode)
         |> Js.Promise.(
              then_(episodeInfo => {
                let saveEpisodeMutation =
-                 SaveToLibrary.performEpisodeSave(
+                 SaveToLibrary.makeSaveEpisodeMutation(
                    ~episode,
                    ~libraryData={tags: "", status: NotListened},
                    ~episodeInfo,
                    (),
                  );
 
+               setIsFetchingInfo(_ => false);
                mutation(
                  ~variables=saveEpisodeMutation##variables,
                  ~refetchQueries=
@@ -42,6 +46,7 @@ let make = (~episode: SearchResult.episode, ~isSaved) => {
                |> resolve;
              })
            );
+      };
 
       <SearchCard isSaved>
         <CardBody>
@@ -65,7 +70,7 @@ let make = (~episode: SearchResult.episode, ~isSaved) => {
                ? <Button
                    size="sm"
                    color="primary"
-                   disabled={result == Loading}
+                   disabled={result == Loading || isFetchingInfo}
                    onClick=handleSave>
                    {str("Save")}
                  </Button>

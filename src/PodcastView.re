@@ -18,7 +18,8 @@ let make = (~podcast: SearchResult.podcast, ~isSaved) => {
 
   <SavePodcastMutation onError=handleError onCompleted=handleSaveDone>
     ...{(mutation, {result}) => {
-      let savePodcastMutation = SaveToLibrary.savePodcastMutation(podcast);
+      let savePodcastMutation =
+        SaveToLibrary.makeSavePodcastMutation(podcast);
       let refetchMyLibraryQuery = MyLibrary.getMyLibraryQuery();
 
       let handleSave = _ =>

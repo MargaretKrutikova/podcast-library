@@ -87,7 +87,7 @@ type episodeInsertInfo = {
   podcastImage: string,
 };
 
-let performEpisodeSave =
+let makeSaveEpisodeMutation =
     (
       ~episode: SearchResult.episode,
       ~libraryData: MyLibrary.saveEpisodeData,
@@ -162,7 +162,7 @@ let getEpisodeInsertInfo = (episode: SearchResult.episode) => {
      );
 };
 
-let savePodcastMutation = (podcast: SearchResult.podcast) =>
+let makeSavePodcastMutation = (podcast: SearchResult.podcast) =>
   SavePodcast.make(
     ~userId="margaretkru",
     ~tags="",
