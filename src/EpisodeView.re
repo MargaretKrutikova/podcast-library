@@ -7,18 +7,14 @@ module SaveEpisodeMutation =
   ReasonApollo.CreateMutation(SaveToLibrary.SaveEpisode);
 
 [@react.component]
-let make = (~episode: SearchResult.episode) => {
+let make = (~episode: SearchResult.episode, ~isSaved) => {
   let dispatch = AppCore.useDispatch();
-  let isSaved = Hooks.useIsSavedEpisode(episode.listennotesId);
 
-  let handleError = _ => {
+  let handleError = _ =>
     dispatch(ShowNotification({text: "Failed to save", type_: Danger}));
-  };
 
-  let handleSaveDone = _ => {
-    dispatch(SavedEpisode(episode));
+  let handleSaveDone = _ =>
     dispatch(ShowNotification({text: "Saved to library", type_: Info}));
-  };
 
   <SaveEpisodeMutation onError=handleError onCompleted=handleSaveDone>
     ...{(mutation, {result}) => {
@@ -39,7 +35,8 @@ let make = (~episode: SearchResult.episode) => {
                mutation(
                  ~variables=saveEpisodeMutation##variables,
                  ~refetchQueries=
-                   _ => [|Utils.convertToQueryObj(refetchMyLibraryQuery)|],
+                   _ => [|Utils.toQueryObj(refetchMyLibraryQuery)|],
+                 ~update=MyLibrary.addEpisodeIdToCache,
                  (),
                )
                |> resolve;

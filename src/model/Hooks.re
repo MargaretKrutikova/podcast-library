@@ -18,22 +18,6 @@ let useSearchQuery = () => {
   };
 };
 
-let isSavedEpisode = (listennotesId, model: AppModel.model) => {
-  Belt.Array.some(model.libraryIds.episodes, id => id == listennotesId);
-};
-
-let isSavedPodcast = (listennotesId, model: AppModel.model) => {
-  Belt.Array.some(model.libraryIds.podcasts, id => id == listennotesId);
-};
-
-let useIsSavedEpisode = listennotesId => {
-  AppCore.useSelector(isSavedEpisode(listennotesId));
-};
-
-let useIsSavedPodcast = listennotesId => {
-  AppCore.useSelector(isSavedPodcast(listennotesId));
-};
-
 let useSearchDispatch = () => {
   let dispatch = AppCore.useDispatch();
   searchMessage => dispatch(GotSearchMessage(searchMessage));

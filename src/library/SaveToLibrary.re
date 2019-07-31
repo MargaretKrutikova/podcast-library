@@ -43,7 +43,9 @@ module SaveEpisode = [%graphql
           update_columns: [title, description, itunesId, pubDate]
        }) {
         returning {
-          listennotesId
+          myEpisodes {
+            episodeId
+          }
         }
       }
     }
@@ -66,10 +68,12 @@ module SavePodcast = [%graphql
       userId: $userId, tags: $tags,
       podcast: {
         data: {description: $description, genreIds: $genreIds, image: $image, itunesId: $itunesId, title: $title, publisher: $publisher, listennotesId: $listennotesId},
-        on_conflict: {constraint: podcasts_pkey, update_columns: []}
+        on_conflict: {constraint: podcasts_pkey, update_columns: [itunesId]}
       }
     }) {
-      affected_rows
+      returning {
+        podcastId
+      }
     }
   }
 |}

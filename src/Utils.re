@@ -22,9 +22,14 @@ let truncateDescription = description =>
     ? description : description ++ "...";
 
 /** reason apollo */
-let convertToQueryObj = (result): ReasonApolloTypes.queryObj => {
+let toQueryObj = (result): ReasonApolloTypes.queryObj => {
   "query": ApolloClient.gql(. result##query),
   "variables": result##variables,
+};
+
+let toReadQueryOptions = result => {
+  "query": ApolloClient.gql(. result##query),
+  "variables": Js.Nullable.fromOption(Some(result##variables)),
 };
 
 let hasMutationData = (result: ReasonApolloTypes.mutationResponse('a)) => {

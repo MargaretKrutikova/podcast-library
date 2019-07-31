@@ -1,5 +1,3 @@
-open BsReactstrap;
-
 let str = ReasonReact.string;
 
 module GetMyEpisodesQuery = ReasonApollo.CreateQuery(MyLibrary.GetMyEpisodes);

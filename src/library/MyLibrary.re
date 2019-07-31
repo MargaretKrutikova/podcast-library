@@ -125,13 +125,12 @@ let toMyLibrary = queryResponse => {
 
 let getMyLibraryQuery = () => GetMyLibrary.make(~user_id="margaretkru", ());
 
-/** saved ids */
-
 type saveEpisodeData = {
   status,
   tags: string,
 };
 
+/** saved ids */
 module GetMyLibrarySavedIds = [%graphql
   {|
   query($user_id: String!) {
@@ -145,25 +144,110 @@ module GetMyLibrarySavedIds = [%graphql
   |}
 ];
 
-type libraryIds = {
-  episodes: array(string),
-  podcasts: array(string),
+let isEpisodeSaved =
+    (
+      response: ReasonApolloTypes.queryResponse(GetMyLibrarySavedIds.t),
+      episodeId,
+    ) =>
+  switch (response) {
+  | Data(savedIds) =>
+    savedIds##my_episodes
+    ->Belt.Array.some(idObj => idObj##episodeId === episodeId)
+  | _ => false
+  };
+
+let isPodcastSaved =
+    (
+      response: ReasonApolloTypes.queryResponse(GetMyLibrarySavedIds.t),
+      podcastId,
+    ) =>
+  switch (response) {
+  | Data(savedIds) =>
+    savedIds##my_podcasts
+    ->Belt.Array.some(idObj => idObj##podcastId === podcastId)
+  | _ => false
+  };
+
+let makeGetSavedIdsQuery = () =>
+  GetMyLibrarySavedIds.make(~user_id="margaretkru", ());
+
+module GetMyLibrarySavedIdsReadQuery =
+  ApolloClient.ReadQuery(GetMyLibrarySavedIds);
+
+module GetMyLibrarySavedIdsWriteQuery =
+  ApolloClient.WriteQuery(GetMyLibrarySavedIds);
+
+let addEpisodeIdToSaved:
+  ({. "episodeId": string}, Js.Json.t) => GetMyLibrarySavedIds.t = [%bs.raw
+  {|
+      function (episodeId, cache) {
+        return {
+          ...cache,
+          my_episodes: [...cache.my_episodes, episodeId]
+        };
+      }
+    |}
+];
+
+let addPodcastIdToSaved:
+  ({. "podcastId": string}, Js.Json.t) => GetMyLibrarySavedIds.t = [%bs.raw
+  {|
+      function (podcastId, cache) {
+        return {
+          ...cache,
+          my_podcasts: [...cache.my_podcasts, podcastId]
+        };
+      }
+    |}
+];
+
+let updateMyLibrarySavedIds =
+    (client, updateCache: Js.Json.t => GetMyLibrarySavedIds.t) => {
+  let fetchMyLibraryIds = makeGetSavedIdsQuery();
+  let cachedResponse =
+    GetMyLibrarySavedIdsReadQuery.readQuery(
+      client,
+      Utils.toReadQueryOptions(fetchMyLibraryIds),
+    );
+
+  switch (cachedResponse |> Js.Nullable.toOption) {
+  | None => ()
+  | Some(cachedIds) =>
+    let updatedCachedIds = updateCache(cachedIds);
+    GetMyLibrarySavedIdsWriteQuery.make(
+      ~client,
+      ~variables=fetchMyLibraryIds##variables,
+      ~data=updatedCachedIds,
+      (),
+    );
+  };
 };
 
-let getSavedIds = () => {
-  GetMyLibrarySavedIds.make(~user_id="margaretkru", ())
-  |> Graphql.sendQuery
-  |> Js.Promise.then_(result =>
-       {
-         episodes:
-           Belt.Array.map(result##my_episodes, myEpisode =>
-             myEpisode##episodeId
-           ),
-         podcasts:
-           Belt.Array.map(result##my_podcasts, myPodcast =>
-             myPodcast##podcastId
-           ),
-       }
-       |> Js.Promise.resolve
-     );
+let addEpisodeIdToCache = (client, mutationResult) => {
+  let insertedEpisode =
+    mutationResult##data
+    ->Belt.Option.flatMap(result => result##insert_episodes)
+    ->Belt.Option.flatMap(result => result##returning->Belt.Array.get(0))
+    ->Belt.Option.flatMap(result => result##myEpisodes->Belt.Array.get(0));
+
+  switch (insertedEpisode) {
+  | None => ()
+  | Some(episode) =>
+    updateMyLibrarySavedIds(client, addEpisodeIdToSaved(episode))
+  };
+  ();
+};
+
+let addPodcastIdToCache = (client, mutationResult) => {
+  let insertedPodcast =
+    mutationResult##data
+    ->Belt.Option.flatMap(result => result##insert_my_podcasts)
+    ->Belt.Option.flatMap(result => result##returning->Belt.Array.get(0));
+
+  switch (insertedPodcast) {
+  | None => ()
+  | Some(podcast) =>
+    updateMyLibrarySavedIds(client, addPodcastIdToSaved(podcast))
+  };
+  ();
 };

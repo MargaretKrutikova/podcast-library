@@ -7,18 +7,14 @@ module SavePodcastMutation =
   ReasonApollo.CreateMutation(SaveToLibrary.SavePodcast);
 
 [@react.component]
-let make = (~podcast: SearchResult.podcast) => {
+let make = (~podcast: SearchResult.podcast, ~isSaved) => {
   let dispatch = AppCore.useDispatch();
-  let isSaved = Hooks.useIsSavedPodcast(podcast.listennotesId);
 
-  let handleError = _ => {
+  let handleError = _ =>
     dispatch(ShowNotification({text: "Failed to save", type_: Danger}));
-  };
 
-  let handleSaveDone = _ => {
-    dispatch(SavedPodcast(podcast));
+  let handleSaveDone = _ =>
     dispatch(ShowNotification({text: "Saved to library", type_: Info}));
-  };
 
   <SavePodcastMutation onError=handleError onCompleted=handleSaveDone>
     ...{(mutation, {result}) => {
@@ -28,8 +24,8 @@ let make = (~podcast: SearchResult.podcast) => {
       let handleSave = _ =>
         mutation(
           ~variables=savePodcastMutation##variables,
-          ~refetchQueries=
-            _ => [|Utils.convertToQueryObj(refetchMyLibraryQuery)|],
+          ~refetchQueries=_ => [|Utils.toQueryObj(refetchMyLibraryQuery)|],
+          ~update=MyLibrary.addPodcastIdToCache,
           (),
         );
 
