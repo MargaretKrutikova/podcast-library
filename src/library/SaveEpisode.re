@@ -145,3 +145,19 @@ let getEpisodeInsertInfo = (episode: SearchResult.episode) => {
        )
      );
 };
+
+let addEpisodeIdToCache = (client, mutationResult) => {
+  let insertedId = getSavedId(mutationResult);
+
+  switch (insertedId) {
+  | None => ()
+  | Some(idObj) =>
+    let updateCache = cache => {
+      let myEpisodes = cache##my_episodes->Belt.Array.concat([|idObj|]);
+      LibraryCache.mergeCache(~cache, ~myEpisodes, ());
+    };
+
+    LibraryCache.updateMyLibrarySavedIds(client, updateCache);
+  };
+  ();
+};

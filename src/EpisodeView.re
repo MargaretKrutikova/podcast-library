@@ -34,7 +34,7 @@ let make = (~episode: SearchResult.episode, ~isSaved) => {
              ~variables=saveEpisodeMutation##variables,
              ~refetchQueries=
                _ => [|Utils.toQueryObj(refetchMyLibraryQuery)|],
-             ~update=MyLibrary.addEpisodeIdToCache,
+             ~update=SaveEpisode.addEpisodeIdToCache,
              (),
            )
            |> ignore;
@@ -50,19 +50,6 @@ let make = (~episode: SearchResult.episode, ~isSaved) => {
 
   let handleRemoveDone = _ =>
     dispatch(ShowNotification({text: "Removed from library", type_: Info}));
-
-  let handleRemove = (mutation: RemoveContent.EpisodeMutation.apolloMutation) => {
-    let refetchMyLibraryQuery = MyLibrary.getMyLibraryQuery();
-    let removeEpisodeMutation =
-      RemoveContent.makeEpisodeMutation(~episodeId=episode.listennotesId);
-    mutation(
-      ~variables=removeEpisodeMutation##variables,
-      ~refetchQueries=_ => [|Utils.toQueryObj(refetchMyLibraryQuery)|],
-      ~update=MyLibrary.removeEpisodeIdFromCache,
-      (),
-    )
-    |> ignore;
-  };
 
   <SearchCard isSaved>
     <CardBody>
@@ -90,7 +77,12 @@ let make = (~episode: SearchResult.episode, ~isSaved) => {
                    size="sm"
                    color="warning"
                    disabled={result == Loading}
-                   onClick={_ => handleRemove(mutation)}>
+                   onClick={_ =>
+                     RemoveContent.runEpisodeMutation(
+                       mutation,
+                       episode.listennotesId,
+                     )
+                   }>
                    {str("Remove")}
                  </Button>
                }

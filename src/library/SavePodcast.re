@@ -45,3 +45,19 @@ let makeMutation = (podcast: SearchResult.podcast) =>
     ~genreIds=Utils.toApiGenres(podcast.genreIds),
     (),
   );
+
+let addPodcastIdToCache = (client, mutationResult) => {
+  let insertedId = getSavedId(mutationResult);
+
+  switch (insertedId) {
+  | None => ()
+  | Some(idObj) =>
+    let updateCache = cache => {
+      let myPodcasts = cache##my_podcasts->Belt.Array.concat([|idObj|]);
+      LibraryCache.mergeCache(~cache, ~myPodcasts, ());
+    };
+
+    LibraryCache.updateMyLibrarySavedIds(client, updateCache);
+  };
+  ();
+};
