@@ -1,30 +1,10 @@
-type status =
-  | NotListened
-  | Started
-  | Listened;
-
-let statusDecoder = s =>
-  switch (s) {
-  | "NotListened" => NotListened
-  | "Started" => Started
-  | "Listened" => Listened
-  | _ => NotListened
-  };
-
-let statusEncoder = s =>
-  switch (s) {
-  | NotListened => "NotListened"
-  | Started => "Started"
-  | Listened => "Listened"
-  };
-
 /** my episodes */
 module GetMyEpisodes = [%graphql
   {|
 query($userId: String!, $podcastId: String!) {
   my_episodes(where: {episode: {podcast: {listennotesId: {_eq: $podcastId}}}, _and: {userId: {_eq: $userId}}}) {
     episodeId
-    status @bsDecoder(fn: "statusDecoder")
+    status @bsDecoder(fn: "EpisodeStatus.decode")
     tags
     episode {
       listennotesId
@@ -52,13 +32,11 @@ type myEpisode = {
   lengthSec: int,
   itunesId: option(string),
   tags: string,
-  // podcast,
-  status,
+  status: EpisodeStatus.t,
 };
 
 let toMyEpisode = data => {
   let episode = data##episode;
-  //let podcast = episode##podcast;
   {
     listennotesId: episode##listennotesId,
     title: episode##title,
@@ -67,7 +45,6 @@ let toMyEpisode = data => {
     lengthSec: episode##lengthSec,
     itunesId: episode##itunesId,
     tags: data##tags,
-    // podcast,
     status: data##status,
   };
 };
@@ -125,11 +102,6 @@ let toMyLibrary = queryResponse => {
 
 let getMyLibraryQuery = () => GetMyLibrary.make(~user_id="margaretkru", ());
 
-type saveEpisodeData = {
-  status,
-  tags: string,
-};
-
 /** saved ids */
 module GetMyLibrarySavedIds = [%graphql
   {|
@@ -177,32 +149,27 @@ module GetMyLibrarySavedIdsReadQuery =
 module GetMyLibrarySavedIdsWriteQuery =
   ApolloClient.WriteQuery(GetMyLibrarySavedIds);
 
-let addEpisodeIdToSaved:
-  ({. "episodeId": string}, Js.Json.t) => GetMyLibrarySavedIds.t = [%bs.raw
+external toSavedIds: Js.Json.t => GetMyLibrarySavedIds.t = "%identity";
+
+// this is necessary to keep __typename apollo field on the root cache query
+let mergeCacheJs:
+  (GetMyLibrarySavedIds.t, GetMyLibrarySavedIds.t) => GetMyLibrarySavedIds.t = [%bs.raw
   {|
-      function (episodeId, cache) {
-        return {
-          ...cache,
-          my_episodes: [...cache.my_episodes, episodeId]
-        };
+      function (prev, next) {
+        return { ...prev, ...next };
       }
     |}
 ];
 
-let addPodcastIdToSaved:
-  ({. "podcastId": string}, Js.Json.t) => GetMyLibrarySavedIds.t = [%bs.raw
-  {|
-      function (podcastId, cache) {
-        return {
-          ...cache,
-          my_podcasts: [...cache.my_podcasts, podcastId]
-        };
-      }
-    |}
-];
+let mergeCache =
+    (~cache: GetMyLibrarySavedIds.t, ~myPodcasts=?, ~myEpisodes=?, ())
+    : GetMyLibrarySavedIds.t => {
+  "my_podcasts": myPodcasts->Belt.Option.getWithDefault(cache##my_podcasts),
+  "my_episodes": myEpisodes->Belt.Option.getWithDefault(cache##my_episodes),
+};
 
 let updateMyLibrarySavedIds =
-    (client, updateCache: Js.Json.t => GetMyLibrarySavedIds.t) => {
+    (client, updateCache: GetMyLibrarySavedIds.t => GetMyLibrarySavedIds.t) => {
   let fetchMyLibraryIds = makeGetSavedIdsQuery();
   let cachedResponse =
     GetMyLibrarySavedIdsReadQuery.readQuery(
@@ -213,41 +180,79 @@ let updateMyLibrarySavedIds =
   switch (cachedResponse |> Js.Nullable.toOption) {
   | None => ()
   | Some(cachedIds) =>
-    let updatedCachedIds = updateCache(cachedIds);
+    let savedIds = toSavedIds(cachedIds);
+
+    let updatedCachedIds = updateCache(savedIds);
     GetMyLibrarySavedIdsWriteQuery.make(
       ~client,
       ~variables=fetchMyLibraryIds##variables,
-      ~data=updatedCachedIds,
+      ~data=updatedCachedIds |> mergeCacheJs(savedIds),
       (),
     );
   };
 };
 
-let addEpisodeIdToCache = (client, mutationResult) => {
-  let insertedEpisode =
-    mutationResult##data
-    ->Belt.Option.flatMap(result => result##insert_episodes)
-    ->Belt.Option.flatMap(result => result##returning->Belt.Array.get(0))
-    ->Belt.Option.flatMap(result => result##myEpisodes->Belt.Array.get(0));
+let removePodcastIdFromCache = (client, mutationResult) => {
+  let removedId = RemoveContent.getRemovedPodcastId(mutationResult);
 
-  switch (insertedEpisode) {
+  switch (removedId) {
   | None => ()
-  | Some(episode) =>
-    updateMyLibrarySavedIds(client, addEpisodeIdToSaved(episode))
+  | Some(idObj) =>
+    let updateCache = cache => {
+      let myPodcasts =
+        cache##my_podcasts
+        ->Belt.Array.keep(obj => obj##podcastId !== idObj##podcastId);
+      mergeCache(~cache, ~myPodcasts, ());
+    };
+    updateMyLibrarySavedIds(client, updateCache);
+  };
+};
+
+let removeEpisodeIdFromCache = (client, mutationResult) => {
+  let removedId = RemoveContent.getRemovedEpisodeId(mutationResult);
+
+  switch (removedId) {
+  | None => ()
+  | Some(idObj) =>
+    let updateCache = cache => {
+      let myEpisodes =
+        cache##my_episodes
+        ->Belt.Array.keep(obj => obj##episodeId !== idObj##episodeId);
+      mergeCache(~cache, ~myEpisodes, ());
+    };
+
+    updateMyLibrarySavedIds(client, updateCache);
+  };
+};
+
+let addEpisodeIdToCache = (client, mutationResult) => {
+  let insertedId = SaveEpisode.getSavedId(mutationResult);
+
+  switch (insertedId) {
+  | None => ()
+  | Some(idObj) =>
+    let updateCache = cache => {
+      let myEpisodes = cache##my_episodes->Belt.Array.concat([|idObj|]);
+      mergeCache(~cache, ~myEpisodes, ());
+    };
+
+    updateMyLibrarySavedIds(client, updateCache);
   };
   ();
 };
 
 let addPodcastIdToCache = (client, mutationResult) => {
-  let insertedPodcast =
-    mutationResult##data
-    ->Belt.Option.flatMap(result => result##insert_my_podcasts)
-    ->Belt.Option.flatMap(result => result##returning->Belt.Array.get(0));
+  let insertedId = SavePodcast.getSavedId(mutationResult);
 
-  switch (insertedPodcast) {
+  switch (insertedId) {
   | None => ()
-  | Some(podcast) =>
-    updateMyLibrarySavedIds(client, addPodcastIdToSaved(podcast))
+  | Some(idObj) =>
+    let updateCache = cache => {
+      let myPodcasts = cache##my_podcasts->Belt.Array.concat([|idObj|]);
+      mergeCache(~cache, ~myPodcasts, ());
+    };
+
+    updateMyLibrarySavedIds(client, updateCache);
   };
   ();
 };
