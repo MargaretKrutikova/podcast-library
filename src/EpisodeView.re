@@ -3,81 +3,111 @@ open Cards;
 
 let str = ReasonReact.string;
 
-module SaveEpisodeMutation =
-  ReasonApollo.CreateMutation(SaveToLibrary.SaveEpisode);
-
 [@react.component]
 let make = (~episode: SearchResult.episode, ~isSaved) => {
   let dispatch = AppCore.useDispatch();
   let (isFetchingInfo, setIsFetchingInfo) = React.useState(() => false);
 
-  let handleError = _ =>
+  /** save */
+  let handleSaveError = _ =>
     dispatch(ShowNotification({text: "Failed to save", type_: Danger}));
 
   let handleSaveDone = _ =>
     dispatch(ShowNotification({text: "Saved to library", type_: Info}));
 
-  <SaveEpisodeMutation onError=handleError onCompleted=handleSaveDone>
-    ...{(mutation, {result}) => {
-      let refetchMyLibraryQuery = MyLibrary.getMyLibraryQuery();
+  let handleSave = (mutation: SaveEpisode.Mutation.apolloMutation) => {
+    let refetchMyLibraryQuery = MyLibrary.getMyLibraryQuery();
+    setIsFetchingInfo(_ => true);
 
-      let handleSave = _ => {
-        setIsFetchingInfo(_ => true);
+    SaveEpisode.getEpisodeInsertInfo(episode)
+    |> Js.Promise.(
+         then_(episodeInfo => {
+           let saveEpisodeMutation =
+             SaveEpisode.makeMutation(
+               ~episode,
+               ~libraryData={tags: "", status: NotListened},
+               ~episodeInfo,
+             );
 
-        SaveToLibrary.getEpisodeInsertInfo(episode)
-        |> Js.Promise.(
-             then_(episodeInfo => {
-               let saveEpisodeMutation =
-                 SaveToLibrary.makeSaveEpisodeMutation(
-                   ~episode,
-                   ~libraryData={tags: "", status: NotListened},
-                   ~episodeInfo,
-                   (),
-                 );
+           setIsFetchingInfo(_ => false);
+           mutation(
+             ~variables=saveEpisodeMutation##variables,
+             ~refetchQueries=
+               _ => [|Utils.toQueryObj(refetchMyLibraryQuery)|],
+             ~update=MyLibrary.addEpisodeIdToCache,
+             (),
+           )
+           |> ignore;
+           resolve();
+         })
+       )
+    |> Js.Promise.(catch(_ => handleSaveError() |> resolve));
+  };
 
-               setIsFetchingInfo(_ => false);
-               mutation(
-                 ~variables=saveEpisodeMutation##variables,
-                 ~refetchQueries=
-                   _ => [|Utils.toQueryObj(refetchMyLibraryQuery)|],
-                 ~update=MyLibrary.addEpisodeIdToCache,
-                 (),
-               )
-               |> resolve;
-             })
-           );
-      };
+  /** remove */
+  let handleRemoveError = _ =>
+    dispatch(ShowNotification({text: "Failed to remove", type_: Danger}));
 
-      <SearchCard isSaved>
-        <CardBody>
-          <CardTitle> {str(episode.title)} </CardTitle>
-          <LibraryCardSubtitle>
-            {str(episode.podcastTitle ++ ", " ++ episode.pubDate)}
-          </LibraryCardSubtitle>
-          <CardText tag="div">
-            <div
-              dangerouslySetInnerHTML={
-                "__html": Utils.truncateDescription(episode.description),
-              }
-            />
-          </CardText>
-          <BottomActions>
-            <EpisodeItunesLink
-              podcastItunesId={episode.podcastItunesId}
-              episodeName={episode.title}
-            />
-            {!isSaved
-               ? <Button
+  let handleRemoveDone = _ =>
+    dispatch(ShowNotification({text: "Removed from library", type_: Info}));
+
+  let handleRemove = (mutation: RemoveContent.EpisodeMutation.apolloMutation) => {
+    let refetchMyLibraryQuery = MyLibrary.getMyLibraryQuery();
+    let removeEpisodeMutation =
+      RemoveContent.makeEpisodeMutation(~episodeId=episode.listennotesId);
+    mutation(
+      ~variables=removeEpisodeMutation##variables,
+      ~refetchQueries=_ => [|Utils.toQueryObj(refetchMyLibraryQuery)|],
+      ~update=MyLibrary.removeEpisodeIdFromCache,
+      (),
+    )
+    |> ignore;
+  };
+
+  <SearchCard isSaved>
+    <CardBody>
+      <CardTitle> {str(episode.title)} </CardTitle>
+      <LibraryCardSubtitle>
+        {str(episode.podcastTitle ++ ", " ++ episode.pubDate)}
+      </LibraryCardSubtitle>
+      <CardText tag="div">
+        <div
+          dangerouslySetInnerHTML={
+            "__html": Utils.truncateDescription(episode.description),
+          }
+        />
+      </CardText>
+      <BottomActions>
+        <EpisodeItunesLink
+          podcastItunesId={episode.podcastItunesId}
+          episodeName={episode.title}
+        />
+        {isSaved
+           ? <RemoveContent.EpisodeMutation
+               onError=handleRemoveError onCompleted=handleRemoveDone>
+               ...{(mutation, {result}) =>
+                 <Button
+                   size="sm"
+                   color="warning"
+                   disabled={result == Loading}
+                   onClick={_ => handleRemove(mutation)}>
+                   {str("Remove")}
+                 </Button>
+               }
+             </RemoveContent.EpisodeMutation>
+           : <SaveEpisode.Mutation
+               onError=handleSaveError onCompleted=handleSaveDone>
+               ...{(mutation, {result}) =>
+                 <Button
                    size="sm"
                    color="primary"
                    disabled={result == Loading || isFetchingInfo}
-                   onClick=handleSave>
+                   onClick={_ => handleSave(mutation)}>
                    {str("Save")}
                  </Button>
-               : <Button size="sm" color="warning"> {str("Remove")} </Button>}
-          </BottomActions>
-        </CardBody>
-      </SearchCard>;
-    }}
-  </SaveEpisodeMutation>;
+               }
+             </SaveEpisode.Mutation>}
+      </BottomActions>
+    </CardBody>
+  </SearchCard>;
 };
