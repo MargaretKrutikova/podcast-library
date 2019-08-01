@@ -7,6 +7,25 @@ let make = (~podcastId: string) => {
   let myEpisodesQuery =
     MyLibrary.GetMyEpisodes.make(~userId="margaretkru", ~podcastId, ());
 
+  let handleEpisodeRemove =
+      (mutation: RemoveContent.EpisodeMutation.apolloMutation, episodeId) => {
+    let refetchMyLibraryQuery = MyLibrary.getMyLibraryQuery();
+    let removeEpisodeMutation = RemoveContent.makeEpisodeMutation(~episodeId);
+
+    mutation(
+      ~variables=removeEpisodeMutation##variables,
+      ~refetchQueries=
+        _ =>
+          [|
+            Utils.toQueryObj(refetchMyLibraryQuery),
+            Utils.toQueryObj(myEpisodesQuery),
+          |],
+      ~update=RemoveContent.removeEpisodeIdFromCache,
+      (),
+    )
+    |> ignore;
+  };
+
   <>
     <h1> {str("My episodes")} </h1>
     <GetMyEpisodesQuery variables=myEpisodesQuery##variables>
@@ -36,6 +55,7 @@ let make = (~podcastId: string) => {
                    key={episode.listennotesId}
                    episode
                    podcastItunesId
+                   onRemove=handleEpisodeRemove
                  />
                )
              |> ReasonReact.array}
