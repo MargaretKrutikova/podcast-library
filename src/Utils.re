@@ -2,6 +2,7 @@ let setWindowLocation: string => unit = [%bs.raw
   {| function (href) { window.location.href = href; } |}
 ];
 
+/** itunes */
 let itunesBaseUrl = "https://podcasts.apple.com/us/podcast/";
 
 let makePodcastItunesUrl = podcastItunesId =>
@@ -15,6 +16,7 @@ let makeEpisodeItunesUrl = (~podcastItunesId, ~episodeItunesId) =>
   ++ "?i="
   ++ episodeItunesId;
 
+/** UI */
 let maxDescrptionTextLength = 200;
 
 let truncateDescription = description =>
@@ -38,3 +40,6 @@ let hasMutationData = (result: ReasonApolloTypes.mutationResponse('a)) => {
   | _ => false
   };
 };
+
+/** api data */
+let toApiGenres = (arr: array(int)) => Js.Array.joinWith(",", arr);
