@@ -21,6 +21,8 @@ let make = (~episode: SearchResult.episode, ~isSaved) => {
     SaveEpisode.getEpisodeInsertInfo(episode)
     |> Js.Promise.(
          then_(episodeInfo => {
+           let refetchMyLibraryQuery = MyLibrary.makeGetMyLibraryQuery();
+
            let saveEpisodeMutation =
              SaveEpisode.makeMutation(
                ~episode,
@@ -33,6 +35,8 @@ let make = (~episode: SearchResult.episode, ~isSaved) => {
              ~variables=saveEpisodeMutation##variables,
              ~update=
                SaveEpisode.addEpisodeToCache(episode.podcastListennotesId),
+             ~refetchQueries=
+               _ => [|Utils.toQueryObj(refetchMyLibraryQuery)|],
              (),
            )
            |> ignore;
