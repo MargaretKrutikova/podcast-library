@@ -66,6 +66,23 @@ type library = {myPodcasts: array(myPodcast)};
 let fromBigInt = value =>
   value->Js.Json.decodeNumber->Belt.Option.mapWithDefault(0, int_of_float);
 
+let makePositive = number => number < 0 ? 0 : number;
+
+let updatePodcastEpisodeCount = (podcast: 'a, updateCount: int => int): 'a => {
+  let merge: ('a, int) => 'a = [%raw
+    {|
+    function(prev, numberOfEpisodes) {
+      return {...prev, numberOfEpisodes}
+    }
+  |}
+  ];
+
+  let numberOfEpisodes =
+    podcast##numberOfEpisodes |> fromBigInt |> updateCount |> makePositive;
+
+  merge(podcast, numberOfEpisodes);
+};
+
 module GetMyLibrary = [%graphql
   {|
   query($user_id: String!) {
@@ -100,7 +117,8 @@ let toMyLibrary = queryResponse => {
     ->Belt.Array.map(toMyPodcast),
 };
 
-let getMyLibraryQuery = () => GetMyLibrary.make(~user_id="margaretkru", ());
+let makeGetMyLibraryQuery = () =>
+  GetMyLibrary.make(~user_id="margaretkru", ());
 
 /** saved ids */
 module GetMyLibrarySavedIds = [%graphql
@@ -142,9 +160,3 @@ let isPodcastSaved =
 
 let makeGetSavedIdsQuery = () =>
   GetMyLibrarySavedIds.make(~user_id="margaretkru", ());
-
-module GetMyLibrarySavedIdsReadQuery =
-  ApolloClient.ReadQuery(GetMyLibrarySavedIds);
-
-module GetMyLibrarySavedIdsWriteQuery =
-  ApolloClient.WriteQuery(GetMyLibrarySavedIds);
