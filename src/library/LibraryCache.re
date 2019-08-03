@@ -28,24 +28,27 @@ let mergeIdsCache =
 let updateMyLibrarySavedIds =
     (client, updateCache: GetMyLibrarySavedIds.t => GetMyLibrarySavedIds.t) => {
   let fetchMyLibraryIds = makeGetSavedIdsQuery();
-  let cachedResponse =
+  switch (
     GetMyLibrarySavedIdsReadQuery.readQuery(
       client,
       Utils.toReadQueryOptions(fetchMyLibraryIds),
-    );
+    )
+  ) {
+  | exception _ => ()
+  | cachedResponse =>
+    switch (cachedResponse |> Js.Nullable.toOption) {
+    | None => ()
+    | Some(cachedIds) =>
+      let savedIds = cast(cachedIds);
 
-  switch (cachedResponse |> Js.Nullable.toOption) {
-  | None => ()
-  | Some(cachedIds) =>
-    let savedIds = cast(cachedIds);
-
-    let updatedCachedIds = updateCache(savedIds);
-    GetMyLibrarySavedIdsWriteQuery.make(
-      ~client,
-      ~variables=fetchMyLibraryIds##variables,
-      ~data=updatedCachedIds |> mergeIdsCacheJs(savedIds),
-      (),
-    );
+      let updatedCachedIds = updateCache(savedIds);
+      GetMyLibrarySavedIdsWriteQuery.make(
+        ~client,
+        ~variables=fetchMyLibraryIds##variables,
+        ~data=updatedCachedIds |> mergeIdsCacheJs(savedIds),
+        (),
+      );
+    }
   };
 };
 
@@ -64,27 +67,31 @@ let mergeLibraryCacheJs: (GetMyLibrary.t, GetMyLibrary.t) => GetMyLibrary.t = [%
 
 let updateMyLibraryCache = (client, updateCache) => {
   let fetchMyLibrary = makeGetMyLibraryQuery();
-  let cachedResponse =
+  switch (
     GetMyLibraryReadQuery.readQuery(
       client,
       Utils.toReadQueryOptions(fetchMyLibrary),
-    );
+    )
+  ) {
+  | exception _ => ()
+  | cachedResponse =>
+    switch (cachedResponse |> Js.Nullable.toOption) {
+    | None => ()
+    | Some(data) =>
+      let library = cast(data);
 
-  switch (cachedResponse |> Js.Nullable.toOption) {
-  | None => ()
-  | Some(data) =>
-    let library = cast(data);
+      let updatedLibrary = {
+        "get_my_episodes_grouped_by_podcasts":
+          updateCache(library##get_my_episodes_grouped_by_podcasts),
+      };
 
-    let updatedLibrary = {
-      "get_my_episodes_grouped_by_podcasts":
-        updateCache(library##get_my_episodes_grouped_by_podcasts),
-    };
-
-    GetMyLibraryWriteQuery.make(
-      ~client,
-      ~variables=fetchMyLibrary##variables,
-      ~data=updatedLibrary |> mergeLibraryCacheJs(updatedLibrary),
-      (),
-    );
+      GetMyLibraryWriteQuery.make(
+        ~client,
+        ~variables=fetchMyLibrary##variables,
+        ~data=updatedLibrary |> mergeLibraryCacheJs(updatedLibrary),
+        (),
+      );
+    }
   };
+  ();
 };
