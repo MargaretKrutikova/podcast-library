@@ -6,11 +6,12 @@
 }
 
 /** */
-
 .app-notifications-root {
   position: fixed;
   top: 20px;
   left: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
 }
 
 .load-more-button-container {

@@ -4,7 +4,15 @@ open Cards;
 let str = ReasonReact.string;
 
 [@react.component]
-let make = (~episode: MyLibrary.myEpisode, ~podcastItunesId) => {
+let make = (~episode: MyLibrary.myEpisode, ~podcastItunesId, ~onRemove) => {
+  let dispatch = AppCore.useDispatch();
+
+  let handleRemoveError = _ =>
+    dispatch(ShowNotification({text: "Failed to remove", type_: Danger}));
+
+  let handleRemoveDone = _ =>
+    dispatch(ShowNotification({text: "Removed from library", type_: Info}));
+
   <LibraryCard>
     <CardBody>
       <CardTitle> {str(episode.title)} </CardTitle>
@@ -32,10 +40,18 @@ let make = (~episode: MyLibrary.myEpisode, ~podcastItunesId) => {
            </NavLink>
          | (_, _) => ReasonReact.null
          }}
-        <Button size="sm" color="warning">
-          //  disabled=isSaving
-          //  onClick={_ => handlePodcastSave()}
-           {str("Remove")} </Button>
+        <RemoveContent.EpisodeMutation
+          onError=handleRemoveError onCompleted=handleRemoveDone>
+          ...{(mutation, {result}) =>
+            <Button
+              size="sm"
+              color="warning"
+              disabled={result == Loading}
+              onClick={_ => onRemove(mutation, episode.listennotesId)}>
+              {str("Remove")}
+            </Button>
+          }
+        </RemoveContent.EpisodeMutation>
       </BottomActions>
     </CardBody>
   </LibraryCard>;

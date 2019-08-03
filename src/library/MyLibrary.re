@@ -1,30 +1,10 @@
-type status =
-  | NotListened
-  | Started
-  | Listened;
-
-let statusDecoder = s =>
-  switch (s) {
-  | "NotListened" => NotListened
-  | "Started" => Started
-  | "Listened" => Listened
-  | _ => NotListened
-  };
-
-let statusEncoder = s =>
-  switch (s) {
-  | NotListened => "NotListened"
-  | Started => "Started"
-  | Listened => "Listened"
-  };
-
 /** my episodes */
 module GetMyEpisodes = [%graphql
   {|
 query($userId: String!, $podcastId: String!) {
   my_episodes(where: {episode: {podcast: {listennotesId: {_eq: $podcastId}}}, _and: {userId: {_eq: $userId}}}) {
     episodeId
-    status @bsDecoder(fn: "statusDecoder")
+    status @bsDecoder(fn: "EpisodeStatus.decode")
     tags
     episode {
       listennotesId
@@ -52,13 +32,11 @@ type myEpisode = {
   lengthSec: int,
   itunesId: option(string),
   tags: string,
-  // podcast,
-  status,
+  status: EpisodeStatus.t,
 };
 
 let toMyEpisode = data => {
   let episode = data##episode;
-  //let podcast = episode##podcast;
   {
     listennotesId: episode##listennotesId,
     title: episode##title,
@@ -67,7 +45,6 @@ let toMyEpisode = data => {
     lengthSec: episode##lengthSec,
     itunesId: episode##itunesId,
     tags: data##tags,
-    // podcast,
     status: data##status,
   };
 };
@@ -88,6 +65,23 @@ type myPodcast = {
 type library = {myPodcasts: array(myPodcast)};
 let fromBigInt = value =>
   value->Js.Json.decodeNumber->Belt.Option.mapWithDefault(0, int_of_float);
+
+let makePositive = number => number < 0 ? 0 : number;
+
+let updatePodcastEpisodeCount = (podcast: 'a, updateCount: int => int): 'a => {
+  let merge: ('a, int) => 'a = [%raw
+    {|
+    function(prev, numberOfEpisodes) {
+      return {...prev, numberOfEpisodes}
+    }
+  |}
+  ];
+
+  let numberOfEpisodes =
+    podcast##numberOfEpisodes |> fromBigInt |> updateCount |> makePositive;
+
+  merge(podcast, numberOfEpisodes);
+};
 
 module GetMyLibrary = [%graphql
   {|
@@ -123,12 +117,8 @@ let toMyLibrary = queryResponse => {
     ->Belt.Array.map(toMyPodcast),
 };
 
-let getMyLibraryQuery = () => GetMyLibrary.make(~user_id="margaretkru", ());
-
-type saveEpisodeData = {
-  status,
-  tags: string,
-};
+let makeGetMyLibraryQuery = () =>
+  GetMyLibrary.make(~user_id="margaretkru", ());
 
 /** saved ids */
 module GetMyLibrarySavedIds = [%graphql
@@ -170,84 +160,3 @@ let isPodcastSaved =
 
 let makeGetSavedIdsQuery = () =>
   GetMyLibrarySavedIds.make(~user_id="margaretkru", ());
-
-module GetMyLibrarySavedIdsReadQuery =
-  ApolloClient.ReadQuery(GetMyLibrarySavedIds);
-
-module GetMyLibrarySavedIdsWriteQuery =
-  ApolloClient.WriteQuery(GetMyLibrarySavedIds);
-
-let addEpisodeIdToSaved:
-  ({. "episodeId": string}, Js.Json.t) => GetMyLibrarySavedIds.t = [%bs.raw
-  {|
-      function (episodeId, cache) {
-        return {
-          ...cache,
-          my_episodes: [...cache.my_episodes, episodeId]
-        };
-      }
-    |}
-];
-
-let addPodcastIdToSaved:
-  ({. "podcastId": string}, Js.Json.t) => GetMyLibrarySavedIds.t = [%bs.raw
-  {|
-      function (podcastId, cache) {
-        return {
-          ...cache,
-          my_podcasts: [...cache.my_podcasts, podcastId]
-        };
-      }
-    |}
-];
-
-let updateMyLibrarySavedIds =
-    (client, updateCache: Js.Json.t => GetMyLibrarySavedIds.t) => {
-  let fetchMyLibraryIds = makeGetSavedIdsQuery();
-  let cachedResponse =
-    GetMyLibrarySavedIdsReadQuery.readQuery(
-      client,
-      Utils.toReadQueryOptions(fetchMyLibraryIds),
-    );
-
-  switch (cachedResponse |> Js.Nullable.toOption) {
-  | None => ()
-  | Some(cachedIds) =>
-    let updatedCachedIds = updateCache(cachedIds);
-    GetMyLibrarySavedIdsWriteQuery.make(
-      ~client,
-      ~variables=fetchMyLibraryIds##variables,
-      ~data=updatedCachedIds,
-      (),
-    );
-  };
-};
-
-let addEpisodeIdToCache = (client, mutationResult) => {
-  let insertedEpisode =
-    mutationResult##data
-    ->Belt.Option.flatMap(result => result##insert_episodes)
-    ->Belt.Option.flatMap(result => result##returning->Belt.Array.get(0))
-    ->Belt.Option.flatMap(result => result##myEpisodes->Belt.Array.get(0));
-
-  switch (insertedEpisode) {
-  | None => ()
-  | Some(episode) =>
-    updateMyLibrarySavedIds(client, addEpisodeIdToSaved(episode))
-  };
-  ();
-};
-
-let addPodcastIdToCache = (client, mutationResult) => {
-  let insertedPodcast =
-    mutationResult##data
-    ->Belt.Option.flatMap(result => result##insert_my_podcasts)
-    ->Belt.Option.flatMap(result => result##returning->Belt.Array.get(0));
-
-  switch (insertedPodcast) {
-  | None => ()
-  | Some(podcast) =>
-    updateMyLibrarySavedIds(client, addPodcastIdToSaved(podcast))
-  };
-  ();
-};

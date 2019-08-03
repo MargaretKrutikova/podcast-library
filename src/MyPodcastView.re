@@ -6,6 +6,13 @@ let str = ReasonReact.string;
 [@react.component]
 let make = (~podcast: MyLibrary.myPodcast) => {
   let hasSavedEpisodes = podcast.numberOfSavedEpisodes > 0;
+  let dispatch = AppCore.useDispatch();
+
+  let handleRemoveError = _ =>
+    dispatch(ShowNotification({text: "Failed to remove", type_: Danger}));
+
+  let handleRemoveDone = _ =>
+    dispatch(ShowNotification({text: "Removed from library", type_: Info}));
 
   <LibraryCard hasTopActions=true>
     {hasSavedEpisodes
@@ -38,10 +45,25 @@ let make = (~podcast: MyLibrary.myPodcast) => {
         <NavLink href={Utils.makePodcastItunesUrl(podcast.itunesId)}>
           {str("Open in itunes")}
         </NavLink>
-        <Button size="sm" color="warning">
-          //  disabled=isSaving
-          //  onClick={_ => handlePodcastSave()}
-           {str("Remove")} </Button>
+        {!hasSavedEpisodes
+           ? <RemoveContent.PodcastMutation
+               onError=handleRemoveError onCompleted=handleRemoveDone>
+               ...{(mutation, {result}) =>
+                 <Button
+                   size="sm"
+                   color="warning"
+                   disabled={result == Loading}
+                   onClick={_ =>
+                     RemoveContent.runPodcastMutation(
+                       mutation,
+                       podcast.listennotesId,
+                     )
+                   }>
+                   {str("Remove")}
+                 </Button>
+               }
+             </RemoveContent.PodcastMutation>
+           : ReasonReact.null}
       </BottomActions>
     </CardBody>
   </LibraryCard>;
