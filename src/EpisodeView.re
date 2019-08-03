@@ -16,7 +16,6 @@ let make = (~episode: SearchResult.episode, ~isSaved) => {
     dispatch(ShowNotification({text: "Saved to library", type_: Info}));
 
   let handleSave = (mutation: SaveEpisode.Mutation.apolloMutation) => {
-    let refetchMyLibraryQuery = MyLibrary.getMyLibraryQuery();
     setIsFetchingInfo(_ => true);
 
     SaveEpisode.getEpisodeInsertInfo(episode)
@@ -32,9 +31,8 @@ let make = (~episode: SearchResult.episode, ~isSaved) => {
            setIsFetchingInfo(_ => false);
            mutation(
              ~variables=saveEpisodeMutation##variables,
-             ~refetchQueries=
-               _ => [|Utils.toQueryObj(refetchMyLibraryQuery)|],
-             ~update=SaveEpisode.addEpisodeIdToCache,
+             ~update=
+               SaveEpisode.addEpisodeToCache(episode.podcastListennotesId),
              (),
            )
            |> ignore;
@@ -79,8 +77,9 @@ let make = (~episode: SearchResult.episode, ~isSaved) => {
                    disabled={result == Loading}
                    onClick={_ =>
                      RemoveContent.runEpisodeMutation(
-                       mutation,
-                       episode.listennotesId,
+                       ~mutation,
+                       ~episodeId=episode.listennotesId,
+                       ~podcastId=episode.podcastListennotesId,
                      )
                    }>
                    {str("Remove")}

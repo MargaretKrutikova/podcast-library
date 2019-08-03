@@ -54,7 +54,7 @@ let addPodcastIdToCache = (client, mutationResult) => {
   | Some(idObj) =>
     let updateCache = cache => {
       let myPodcasts = cache##my_podcasts->Belt.Array.concat([|idObj|]);
-      LibraryCache.mergeCache(~cache, ~myPodcasts, ());
+      LibraryCache.mergeIdsCache(~cache, ~myPodcasts, ());
     };
 
     LibraryCache.updateMyLibrarySavedIds(client, updateCache);

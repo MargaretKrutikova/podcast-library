@@ -15,7 +15,7 @@ let make = (~podcast: SearchResult.podcast, ~isSaved) => {
     dispatch(ShowNotification({text: "Saved to library", type_: Info}));
 
   let handleSave = (mutation: SavePodcast.Mutation.apolloMutation) => {
-    let refetchMyLibraryQuery = MyLibrary.getMyLibraryQuery();
+    let refetchMyLibraryQuery = MyLibrary.makeGetMyLibraryQuery();
     let savePodcastMutation = SavePodcast.makeMutation(podcast);
 
     mutation(

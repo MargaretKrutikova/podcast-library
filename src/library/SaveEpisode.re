@@ -146,7 +146,7 @@ let getEpisodeInsertInfo = (episode: SearchResult.episode) => {
      );
 };
 
-let addEpisodeIdToCache = (client, mutationResult) => {
+let addEpisodeToCache = (podcastId, client, mutationResult) => {
   let insertedId = getSavedId(mutationResult);
 
   switch (insertedId) {
@@ -154,10 +154,18 @@ let addEpisodeIdToCache = (client, mutationResult) => {
   | Some(idObj) =>
     let updateCache = cache => {
       let myEpisodes = cache##my_episodes->Belt.Array.concat([|idObj|]);
-      LibraryCache.mergeCache(~cache, ~myEpisodes, ());
+      LibraryCache.mergeIdsCache(~cache, ~myEpisodes, ());
     };
 
     LibraryCache.updateMyLibrarySavedIds(client, updateCache);
+
+    // remove from my library
+    let updateLibraryCache = podcasts =>
+      podcasts->Belt.Array.map(obj =>
+        obj##listennotesId !== podcastId
+          ? obj : MyLibrary.updatePodcastEpisodeCount(obj, count => count + 1)
+      );
+    LibraryCache.updateMyLibraryCache(client, updateLibraryCache);
   };
   ();
 };
