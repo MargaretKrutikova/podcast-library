@@ -1,8 +1,15 @@
 open MyLibrary;
-external toSavedIds: Js.Json.t => GetMyLibrarySavedIds.t = "%identity";
+external cast: Js.Json.t => 'a = "%identity";
+
+/** library ids cache */
+module GetMyLibrarySavedIdsReadQuery =
+  ApolloClient.ReadQuery(GetMyLibrarySavedIds);
+
+module GetMyLibrarySavedIdsWriteQuery =
+  ApolloClient.WriteQuery(GetMyLibrarySavedIds);
 
 // this is necessary to keep __typename apollo field on the root cache query
-let mergeCacheJs:
+let mergeIdsCacheJs:
   (GetMyLibrarySavedIds.t, GetMyLibrarySavedIds.t) => GetMyLibrarySavedIds.t = [%bs.raw
   {|
       function (prev, next) {
@@ -11,7 +18,7 @@ let mergeCacheJs:
     |}
 ];
 
-let mergeCache =
+let mergeIdsCache =
     (~cache: GetMyLibrarySavedIds.t, ~myPodcasts=?, ~myEpisodes=?, ())
     : GetMyLibrarySavedIds.t => {
   "my_podcasts": myPodcasts->Belt.Option.getWithDefault(cache##my_podcasts),
@@ -30,13 +37,53 @@ let updateMyLibrarySavedIds =
   switch (cachedResponse |> Js.Nullable.toOption) {
   | None => ()
   | Some(cachedIds) =>
-    let savedIds = toSavedIds(cachedIds);
+    let savedIds = cast(cachedIds);
 
     let updatedCachedIds = updateCache(savedIds);
     GetMyLibrarySavedIdsWriteQuery.make(
       ~client,
       ~variables=fetchMyLibraryIds##variables,
-      ~data=updatedCachedIds |> mergeCacheJs(savedIds),
+      ~data=updatedCachedIds |> mergeIdsCacheJs(savedIds),
+      (),
+    );
+  };
+};
+
+/** my library cache */
+module GetMyLibraryReadQuery = ApolloClient.ReadQuery(GetMyLibrary);
+
+module GetMyLibraryWriteQuery = ApolloClient.WriteQuery(GetMyLibrary);
+
+let mergeLibraryCacheJs: (GetMyLibrary.t, GetMyLibrary.t) => GetMyLibrary.t = [%bs.raw
+  {|
+      function (prev, next) {
+        return { ...prev, ...next };
+      }
+    |}
+];
+
+let updateMyLibraryCache = (client, updateCache) => {
+  let fetchMyLibrary = makeGetMyLibraryQuery();
+  let cachedResponse =
+    GetMyLibraryReadQuery.readQuery(
+      client,
+      Utils.toReadQueryOptions(fetchMyLibrary),
+    );
+
+  switch (cachedResponse |> Js.Nullable.toOption) {
+  | None => ()
+  | Some(data) =>
+    let library = cast(data);
+
+    let updatedLibrary = {
+      "get_my_episodes_grouped_by_podcasts":
+        updateCache(library##get_my_episodes_grouped_by_podcasts),
+    };
+
+    GetMyLibraryWriteQuery.make(
+      ~client,
+      ~variables=fetchMyLibrary##variables,
+      ~data=updatedLibrary |> mergeLibraryCacheJs(updatedLibrary),
       (),
     );
   };
