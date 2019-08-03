@@ -9,18 +9,12 @@ let make = (~podcastId: string) => {
 
   let handleEpisodeRemove =
       (mutation: RemoveContent.EpisodeMutation.apolloMutation, episodeId) => {
-    let refetchMyLibraryQuery = MyLibrary.getMyLibraryQuery();
     let removeEpisodeMutation = RemoveContent.makeEpisodeMutation(~episodeId);
 
     mutation(
       ~variables=removeEpisodeMutation##variables,
-      ~refetchQueries=
-        _ =>
-          [|
-            Utils.toQueryObj(refetchMyLibraryQuery),
-            Utils.toQueryObj(myEpisodesQuery),
-          |],
-      ~update=RemoveContent.removeEpisodeIdFromCache,
+      ~refetchQueries=_ => [|Utils.toQueryObj(myEpisodesQuery)|],
+      ~update=RemoveContent.removeEpisodeFromCache(podcastId),
       (),
     )
     |> ignore;
@@ -28,7 +22,8 @@ let make = (~podcastId: string) => {
 
   <>
     <h1> {str("My episodes")} </h1>
-    <GetMyEpisodesQuery variables=myEpisodesQuery##variables>
+    <GetMyEpisodesQuery
+      variables=myEpisodesQuery##variables fetchPolicy="network-only">
       ...{({result}) =>
         switch (result) {
         | Loading => <div> {str("Loading")} </div>
