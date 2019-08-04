@@ -4,8 +4,7 @@ module GetMyEpisodesQuery = ReasonApollo.CreateQuery(MyLibrary.GetMyEpisodes);
 
 [@react.component]
 let make = (~podcastId: string) => {
-  let myEpisodesQuery =
-    MyLibrary.GetMyEpisodes.make(~userId="margaretkru", ~podcastId, ());
+  let myEpisodesQuery = MyLibrary.makeGetMyEpisodesQuery(~podcastId);
 
   let handleEpisodeRemove =
       (mutation: RemoveContent.EpisodeMutation.apolloMutation, episodeId) => {
@@ -29,6 +28,9 @@ let make = (~podcastId: string) => {
         | Loading => <div> {str("Loading")} </div>
         | Error(_) => <div> {str("Error")} </div>
         | Data(response) =>
+          if (response##my_episodes->Belt.Array.length === 0) {
+            ReasonReactRouter.replace("/my-library");
+          };
           let podcast = response##podcasts->Belt.Array.get(0);
           let podcastItunesId =
             podcast->Belt.Option.mapWithDefault(None, data =>
