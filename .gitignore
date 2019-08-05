@@ -7,3 +7,5 @@ npm-debug.log
 *.bs.js
 .env
 .graphql_ppx_cache
+build
+.netlify
