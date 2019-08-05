@@ -5,16 +5,16 @@ type searchQuery = {
   searchType: ContentType.t,
 };
 
-let useSearchQuery = () => {
-  let baseQuery = AppCore.useSelector(model => model.search.baseQuery);
-  let episodeQuery = AppCore.useSelector(model => model.search.episodeQuery);
-  let searchType = AppCore.useSelector(model => model.search.searchType);
+let getSearchModel = (model: AppCore.model) => model.search;
 
+let useSearchQuery = () => {
+  let searchModel = AppCore.useSelector(getSearchModel);
   {
-    searchTerm: baseQuery.searchTerm,
-    genreIds: Belt.Option.getWithDefault(baseQuery.genreIds, [||]),
-    podcastId: episodeQuery.podcastId,
-    searchType,
+    searchTerm: searchModel.baseQuery.searchTerm,
+    genreIds:
+      Belt.Option.getWithDefault(searchModel.baseQuery.genreIds, [||]),
+    podcastId: searchModel.episodeQuery.podcastId,
+    searchType: searchModel.searchType,
   };
 };
 

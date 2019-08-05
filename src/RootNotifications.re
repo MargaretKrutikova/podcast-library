@@ -1,8 +1,10 @@
 open BsReactstrap;
 
+let getNotifications = (model: AppCore.model) => model.notifications.items;
+
 [@react.component]
 let make = () => {
-  let notifications = AppCore.useSelector(model => model.notifications.items);
+  let notifications = AppCore.useSelector(getNotifications);
 
   <Container className="app-notifications-root">
     {notifications->Belt.Array.map(item =>

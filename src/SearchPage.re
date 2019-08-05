@@ -42,9 +42,11 @@ module SearchResultView = {
   };
 };
 
+let getSearchModel = (model: AppCore.model) => model.search;
+
 [@react.component]
 let make = () => {
-  let searchModel = AppCore.useSelector(s => s.search);
+  let searchModel = AppCore.useSelector(getSearchModel);
 
   let shouldSkipSearch = String.trim(searchModel.baseQuery.searchTerm) === "";
 
