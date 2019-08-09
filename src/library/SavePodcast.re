@@ -32,9 +32,9 @@ let getSavedId = (mutationResult: Mutation.mutationResult) =>
   ->Belt.Option.flatMap(result => result##insert_my_podcasts)
   ->Belt.Option.flatMap(result => result##returning->Belt.Array.get(0));
 
-let makeMutation = (podcast: SearchResult.podcast) =>
+let makeMutation = (~podcast: SearchResult.podcast, ~userId) =>
   SavePodcast.make(
-    ~userId="margaretkru",
+    ~userId,
     ~tags="",
     ~image=podcast.image,
     ~listennotesId=podcast.listennotesId,
@@ -46,7 +46,7 @@ let makeMutation = (podcast: SearchResult.podcast) =>
     (),
   );
 
-let addPodcastIdToCache = (client, mutationResult) => {
+let addPodcastIdToCache = (~userId, client, mutationResult) => {
   let insertedId = getSavedId(mutationResult);
 
   switch (insertedId) {
@@ -57,7 +57,7 @@ let addPodcastIdToCache = (client, mutationResult) => {
       LibraryCache.mergeIdsCache(~cache, ~myPodcasts, ());
     };
 
-    LibraryCache.updateMyLibrarySavedIds(client, updateCache);
+    LibraryCache.updateMyLibrarySavedIds(client, updateCache, userId);
   };
   ();
 };

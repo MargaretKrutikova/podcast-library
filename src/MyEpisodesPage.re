@@ -8,7 +8,8 @@ let make = (~podcastId: string, ~userId) => {
 
   let handleEpisodeRemove =
       (mutation: RemoveContent.EpisodeMutation.apolloMutation, episodeId) => {
-    let removeEpisodeMutation = RemoveContent.makeEpisodeMutation(~episodeId);
+    let removeEpisodeMutation =
+      RemoveContent.makeEpisodeMutation(~episodeId, ~userId);
 
     mutation(
       ~variables=removeEpisodeMutation##variables,
