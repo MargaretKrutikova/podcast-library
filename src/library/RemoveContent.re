@@ -18,10 +18,10 @@ let getRemovedEpisodeId = (mutationResult: EpisodeMutation.mutationResult) =>
   ->Belt.Option.flatMap(result => result##delete_my_episodes)
   ->Belt.Option.flatMap(result => result##returning->Belt.Array.get(0));
 
-let makeEpisodeMutation = (~episodeId) =>
-  RemoveEpisode.make(~userId="margaretkru", ~episodeId, ());
+let makeEpisodeMutation = (~episodeId, ~userId) =>
+  RemoveEpisode.make(~userId, ~episodeId, ());
 
-let removeEpisodeFromCache = (podcastId, client, mutationResult) => {
+let removeEpisodeFromCache = (~podcastId, ~userId, client, mutationResult) => {
   let removedId = getRemovedEpisodeId(mutationResult);
 
   switch (removedId) {
@@ -34,7 +34,7 @@ let removeEpisodeFromCache = (podcastId, client, mutationResult) => {
       LibraryCache.mergeIdsCache(~cache, ~myEpisodes, ());
     };
 
-    LibraryCache.updateMyLibrarySavedIds(client, updateCache);
+    LibraryCache.updateMyLibrarySavedIds(client, updateCache, userId);
 
     // remove from my library
     let updateLibraryCache = podcasts =>
@@ -42,17 +42,22 @@ let removeEpisodeFromCache = (podcastId, client, mutationResult) => {
         obj##listennotesId !== podcastId
           ? obj : MyLibrary.updatePodcastEpisodeCount(obj, count => count - 1)
       );
-    LibraryCache.updateMyLibraryCache(client, updateLibraryCache);
+    LibraryCache.updateMyLibraryCache(client, updateLibraryCache, userId);
   };
 };
 
 let runEpisodeMutation =
-    (~mutation: EpisodeMutation.apolloMutation, ~episodeId, ~podcastId) => {
-  let removeEpisodeMutation = makeEpisodeMutation(~episodeId);
+    (
+      ~mutation: EpisodeMutation.apolloMutation,
+      ~episodeId,
+      ~podcastId,
+      ~userId,
+    ) => {
+  let removeEpisodeMutation = makeEpisodeMutation(~episodeId, ~userId);
 
   mutation(
     ~variables=removeEpisodeMutation##variables,
-    ~update=removeEpisodeFromCache(podcastId),
+    ~update=removeEpisodeFromCache(~podcastId, ~userId),
     (),
   )
   |> ignore;
@@ -73,15 +78,15 @@ module RemovePodcast = [%graphql
 
 module PodcastMutation = ReasonApollo.CreateMutation(RemovePodcast);
 
-let makePodcastMutation = (~podcastId) =>
-  RemovePodcast.make(~userId="margaretkru", ~podcastId, ());
+let makePodcastMutation = (~podcastId, ~userId) =>
+  RemovePodcast.make(~userId, ~podcastId, ());
 
 let getRemovedPodcastId = (mutationResult: PodcastMutation.mutationResult) =>
   mutationResult##data
   ->Belt.Option.flatMap(result => result##delete_my_podcasts)
   ->Belt.Option.flatMap(result => result##returning->Belt.Array.get(0));
 
-let removePodcastFromCache = (client, mutationResult) => {
+let removePodcastFromCache = (~userId, client, mutationResult) => {
   let removedId = getRemovedPodcastId(mutationResult);
 
   switch (removedId) {
@@ -93,23 +98,24 @@ let removePodcastFromCache = (client, mutationResult) => {
         ->Belt.Array.keep(obj => obj##podcastId !== idObj##podcastId);
       LibraryCache.mergeIdsCache(~cache, ~myPodcasts, ());
     };
-    LibraryCache.updateMyLibrarySavedIds(client, updateIdsCache);
+    LibraryCache.updateMyLibrarySavedIds(client, updateIdsCache, userId);
 
     // remove from my library
     let updateLibraryCache = podcasts =>
       podcasts->Belt.Array.keep(obj =>
         obj##listennotesId !== idObj##podcastId
       );
-    LibraryCache.updateMyLibraryCache(client, updateLibraryCache);
+    LibraryCache.updateMyLibraryCache(client, updateLibraryCache, userId);
   };
 };
 
-let runPodcastMutation = (mutation: PodcastMutation.apolloMutation, podcastId) => {
-  let removeEpisodeMutation = makePodcastMutation(~podcastId);
+let runPodcastMutation =
+    (~mutation: PodcastMutation.apolloMutation, ~podcastId, ~userId) => {
+  let removeEpisodeMutation = makePodcastMutation(~podcastId, ~userId);
 
   mutation(
     ~variables=removeEpisodeMutation##variables,
-    ~update=removePodcastFromCache,
+    ~update=removePodcastFromCache(~userId),
     (),
   )
   |> ignore;
