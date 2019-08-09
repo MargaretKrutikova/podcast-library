@@ -1,19 +1,29 @@
 open BsReactstrap;
+open ReactNetlifyIdentityWidget;
 
 let str = ReasonReact.string;
 
 [@react.component]
 let make = () => {
-  let url = ReasonReactRouter.useUrl();
+  let (showDialog, setShowDialog) = React.useState(() => false);
 
+  let url = ReasonReactRouter.useUrl();
+  let identity = useIdentityContext();
+
+  let id = UserIdentity.getUserId(identity);
   let pageToShow =
-    switch (url.path) {
-    | ["my-library"] => <MyLibraryPage />
-    | ["my-library", id, "episodes"] => <MyEpisodesPage podcastId=id />
-    | _ => <SearchPage />
+    switch (url.path, id) {
+    | (["my-library"], Some(userId)) => <MyLibraryPage userId />
+    | (["my-library", id, "episodes"], Some(userId)) =>
+      <MyEpisodesPage podcastId=id userId />
+    | (_, _) => <SearchPage />
     };
 
   <div>
+    <IdentityModal
+      showDialog
+      onCloseDialog={() => setShowDialog(_ => false)}
+    />
     <Navbar>
       <NavbarBrand href="/"> {str("Podcast library")} </NavbarBrand>
       <Nav className="ml-auto">
@@ -23,9 +33,13 @@ let make = () => {
           </RouterLink>
         </NavItem>
         <NavItem>
-          <RouterLink className="nav-link" href="/my-library">
-            {str("My Library")}
-          </RouterLink>
+          {UserIdentity.isLoggedIn(identity)
+             ? <RouterLink className="nav-link" href="/my-library">
+                 {str("My Library")}
+               </RouterLink>
+             : <NavLink href="#" onClick={_ => setShowDialog(_ => true)}>
+                 {str("Log in")}
+               </NavLink>}
         </NavItem>
       </Nav>
     </Navbar>

@@ -2,9 +2,8 @@ let str = ReasonReact.string;
 module GetMyLibraryQuery = ReasonApollo.CreateQuery(MyLibrary.GetMyLibrary);
 
 [@react.component]
-let make = () => {
-  let myLibraryQuery =
-    MyLibrary.GetMyLibrary.make(~user_id="margaretkru", ());
+let make = (~userId) => {
+  let myLibraryQuery = MyLibrary.GetMyLibrary.make(~userId, ());
 
   <>
     <h1> {str("My library")} </h1>
@@ -16,7 +15,7 @@ let make = () => {
           <div>
             {MyLibrary.toMyLibrary(response).myPodcasts
              ->Belt.Array.map(podcast =>
-                 <MyPodcastView key={podcast.listennotesId} podcast />
+                 <MyPodcastView key={podcast.listennotesId} podcast userId />
                )
              |> ReasonReact.array}
           </div>

@@ -3,7 +3,7 @@ let str = ReasonReact.string;
 module GetMyEpisodesQuery = ReasonApollo.CreateQuery(MyLibrary.GetMyEpisodes);
 
 [@react.component]
-let make = (~podcastId: string) => {
+let make = (~podcastId: string, ~userId) => {
   let myEpisodesQuery = MyLibrary.makeGetMyEpisodesQuery(~podcastId);
 
   let handleEpisodeRemove =
@@ -13,7 +13,7 @@ let make = (~podcastId: string) => {
     mutation(
       ~variables=removeEpisodeMutation##variables,
       ~refetchQueries=_ => [|Utils.toQueryObj(myEpisodesQuery)|],
-      ~update=RemoveContent.removeEpisodeFromCache(podcastId),
+      ~update=RemoveContent.removeEpisodeFromCache(~podcastId, ~userId),
       (),
     )
     |> ignore;
