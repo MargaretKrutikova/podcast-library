@@ -16,7 +16,7 @@ let make = () => {
     | (["my-library"], Some(userId)) => <MyLibraryPage userId />
     | (["my-library", id, "episodes"], Some(userId)) =>
       <MyEpisodesPage podcastId=id userId />
-    | (_, _) => <SearchPage />
+    | (_, _) => <SearchPage userId=id />
     };
 
   <div>

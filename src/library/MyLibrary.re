@@ -136,29 +136,5 @@ module GetMyLibrarySavedIds = [%graphql
   |}
 ];
 
-let isEpisodeSaved =
-    (
-      response: ReasonApolloTypes.queryResponse(GetMyLibrarySavedIds.t),
-      episodeId,
-    ) =>
-  switch (response) {
-  | Data(savedIds) =>
-    savedIds##my_episodes
-    ->Belt.Array.some(idObj => idObj##episodeId === episodeId)
-  | _ => false
-  };
-
-let isPodcastSaved =
-    (
-      response: ReasonApolloTypes.queryResponse(GetMyLibrarySavedIds.t),
-      podcastId,
-    ) =>
-  switch (response) {
-  | Data(savedIds) =>
-    savedIds##my_podcasts
-    ->Belt.Array.some(idObj => idObj##podcastId === podcastId)
-  | _ => false
-  };
-
 let makeGetSavedIdsQuery = (~userId) =>
   GetMyLibrarySavedIds.make(~userId, ());
