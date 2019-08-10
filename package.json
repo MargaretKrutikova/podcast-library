@@ -10,6 +10,7 @@
     "webpack:production": "NODE_ENV=production webpack",
     "server": "webpack-dev-server --port 8083 --host 0.0.0.0 --disable-host-check",
     "add_redirects": "echo '/* /index.html 200' >./build/_redirects",
+    "deploy:netlify": "npm run clean && npm run build && npm run webpack:production && npm run add_redirects",
     "deploy": "npm run webpack:production && npm run add_redirects && netlify deploy",
     "introspection": "./node_modules/graphql_ppx/sendIntrospectionQuery.js http://localhost:8080/v1/graphql"
   },
