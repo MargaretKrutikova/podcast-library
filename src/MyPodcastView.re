@@ -4,7 +4,7 @@ open Cards;
 let str = ReasonReact.string;
 
 [@react.component]
-let make = (~podcast: MyLibrary.myPodcast) => {
+let make = (~podcast: MyLibrary.myPodcast, ~userId) => {
   let hasSavedEpisodes = podcast.numberOfSavedEpisodes > 0;
   let dispatch = AppCore.useDispatch();
 
@@ -55,8 +55,9 @@ let make = (~podcast: MyLibrary.myPodcast) => {
                    disabled={result == Loading}
                    onClick={_ =>
                      RemoveContent.runPodcastMutation(
-                       mutation,
-                       podcast.listennotesId,
+                       ~mutation,
+                       ~podcastId=podcast.listennotesId,
+                       ~userId,
                      )
                    }>
                    {str("Remove")}

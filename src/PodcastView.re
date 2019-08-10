@@ -6,6 +6,7 @@ let str = ReasonReact.string;
 [@react.component]
 let make = (~podcast: SearchResult.podcast, ~isSaved) => {
   let dispatch = AppCore.useDispatch();
+  let user = UserIdentity.useLoggedInUser();
 
   /** save */
   let handleSaveError = _ =>
@@ -14,20 +15,40 @@ let make = (~podcast: SearchResult.podcast, ~isSaved) => {
   let handleSaveDone = _ =>
     dispatch(ShowNotification({text: "Saved to library", type_: Info}));
 
-  let handleSave = (mutation: SavePodcast.Mutation.apolloMutation) => {
-    let refetchMyLibraryQuery = MyLibrary.makeGetMyLibraryQuery();
-    let savePodcastMutation = SavePodcast.makeMutation(podcast);
+  let save = (mutation: SavePodcast.Mutation.apolloMutation, userId) => {
+    let refetchMyLibraryQuery = MyLibrary.makeGetMyLibraryQuery(~userId);
+    let savePodcastMutation = SavePodcast.makeMutation(~podcast, ~userId);
 
     mutation(
       ~variables=savePodcastMutation##variables,
       ~refetchQueries=_ => [|Utils.toQueryObj(refetchMyLibraryQuery)|],
-      ~update=SavePodcast.addPodcastIdToCache,
+      ~update=SavePodcast.addPodcastIdToCache(~userId),
       (),
     )
     |> ignore;
   };
 
+  let handleSave = (mutation: SavePodcast.Mutation.apolloMutation) => {
+    switch (user) {
+    | Anonymous => dispatch(OnUnauthorizedAccess)
+    | LoggedIn(id) => save(mutation, id) |> ignore
+    };
+  };
+
   /** remove */
+  let handleRemove = (mutation: RemoveContent.PodcastMutation.apolloMutation) => {
+    switch (user) {
+    | Anonymous => dispatch(OnUnauthorizedAccess)
+    | LoggedIn(userId) =>
+      RemoveContent.runPodcastMutation(
+        ~mutation,
+        ~podcastId=podcast.listennotesId,
+        ~userId,
+      )
+      |> ignore
+    };
+  };
+
   let handleRemoveError = _ =>
     dispatch(ShowNotification({text: "Failed to remove", type_: Danger}));
 
@@ -68,12 +89,7 @@ let make = (~podcast: SearchResult.podcast, ~isSaved) => {
                    size="sm"
                    color="warning"
                    disabled={result == Loading}
-                   onClick={_ =>
-                     RemoveContent.runPodcastMutation(
-                       mutation,
-                       podcast.listennotesId,
-                     )
-                   }>
+                   onClick={_ => handleRemove(mutation)}>
                    {str("Remove")}
                  </Button>
                }

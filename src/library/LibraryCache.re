@@ -26,8 +26,12 @@ let mergeIdsCache =
 };
 
 let updateMyLibrarySavedIds =
-    (client, updateCache: GetMyLibrarySavedIds.t => GetMyLibrarySavedIds.t) => {
-  let fetchMyLibraryIds = makeGetSavedIdsQuery();
+    (
+      client,
+      updateCache: GetMyLibrarySavedIds.t => GetMyLibrarySavedIds.t,
+      userId,
+    ) => {
+  let fetchMyLibraryIds = makeGetSavedIdsQuery(~userId);
   switch (
     GetMyLibrarySavedIdsReadQuery.readQuery(
       client,
@@ -65,8 +69,8 @@ let mergeLibraryCacheJs: (GetMyLibrary.t, GetMyLibrary.t) => GetMyLibrary.t = [%
     |}
 ];
 
-let updateMyLibraryCache = (client, updateCache) => {
-  let fetchMyLibrary = makeGetMyLibraryQuery();
+let updateMyLibraryCache = (client, updateCache, userId) => {
+  let fetchMyLibrary = makeGetMyLibraryQuery(~userId);
   switch (
     GetMyLibraryReadQuery.readQuery(
       client,

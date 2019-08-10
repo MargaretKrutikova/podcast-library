@@ -49,8 +49,8 @@ let toMyEpisode = data => {
   };
 };
 
-let makeGetMyEpisodesQuery = (~podcastId) =>
-  GetMyEpisodes.make(~userId="margaretkru", ~podcastId, ());
+let makeGetMyEpisodesQuery = (~podcastId, ~userId) =>
+  GetMyEpisodes.make(~userId, ~podcastId, ());
 
 /** my library */
 
@@ -88,8 +88,8 @@ let updatePodcastEpisodeCount = (podcast: 'a, updateCount: int => int): 'a => {
 
 module GetMyLibrary = [%graphql
   {|
-  query($user_id: String!) {
-    get_my_episodes_grouped_by_podcasts (args:{userid: $user_id}) {
+  query($userId: String!) {
+    get_my_episodes_grouped_by_podcasts (args:{userid: $userId}) {
         title
         numberOfEpisodes
         lastEpisodeAddedDate
@@ -120,46 +120,21 @@ let toMyLibrary = queryResponse => {
     ->Belt.Array.map(toMyPodcast),
 };
 
-let makeGetMyLibraryQuery = () =>
-  GetMyLibrary.make(~user_id="margaretkru", ());
+let makeGetMyLibraryQuery = (~userId) => GetMyLibrary.make(~userId, ());
 
 /** saved ids */
 module GetMyLibrarySavedIds = [%graphql
   {|
-  query($user_id: String!) {
-    my_episodes (where: {userId: {_eq: $user_id}}) {
+  query($userId: String!) {
+    my_episodes (where: {userId: {_eq: $userId}}) {
       episodeId
     }
-    my_podcasts (where: {userId: {_eq: $user_id}}) {
+    my_podcasts (where: {userId: {_eq: $userId}}) {
       podcastId
     }
   }
   |}
 ];
 
-let isEpisodeSaved =
-    (
-      response: ReasonApolloTypes.queryResponse(GetMyLibrarySavedIds.t),
-      episodeId,
-    ) =>
-  switch (response) {
-  | Data(savedIds) =>
-    savedIds##my_episodes
-    ->Belt.Array.some(idObj => idObj##episodeId === episodeId)
-  | _ => false
-  };
-
-let isPodcastSaved =
-    (
-      response: ReasonApolloTypes.queryResponse(GetMyLibrarySavedIds.t),
-      podcastId,
-    ) =>
-  switch (response) {
-  | Data(savedIds) =>
-    savedIds##my_podcasts
-    ->Belt.Array.some(idObj => idObj##podcastId === podcastId)
-  | _ => false
-  };
-
-let makeGetSavedIdsQuery = () =>
-  GetMyLibrarySavedIds.make(~user_id="margaretkru", ());
+let makeGetSavedIdsQuery = (~userId) =>
+  GetMyLibrarySavedIds.make(~userId, ());

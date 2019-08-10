@@ -13,7 +13,7 @@ let typeToColor = (type_: AppNotifications.type_) =>
   };
 
 let fadeMs = 150;
-let showMs = 2000;
+let showMs = 1500;
 
 [@bs.deriving abstract]
 type transitionProps = {timeout: int};

@@ -73,6 +73,7 @@ type myEpisodeData = {
 
 let makeMutation =
     (
+      ~userId,
       ~episode: SearchResult.episode,
       ~libraryData: myEpisodeData,
       ~episodeInfo,
@@ -92,7 +93,7 @@ let makeMutation =
     ~genreIds=Utils.toApiGenres(episode.genreIds),
     ~podcastItunesId=string_of_int(episode.podcastItunesId),
     ~tags=libraryData.tags,
-    ~userId="margaretkru",
+    ~userId,
     ~publisher=episode.publisher,
     (),
   );
@@ -146,7 +147,7 @@ let getEpisodeInsertInfo = (episode: SearchResult.episode) => {
      );
 };
 
-let addEpisodeToCache = (podcastId, client, mutationResult) => {
+let addEpisodeToCache = (~podcastId, ~userId, client, mutationResult) => {
   let insertedId = getSavedId(mutationResult);
 
   switch (insertedId) {
@@ -157,7 +158,7 @@ let addEpisodeToCache = (podcastId, client, mutationResult) => {
       LibraryCache.mergeIdsCache(~cache, ~myEpisodes, ());
     };
 
-    LibraryCache.updateMyLibrarySavedIds(client, updateCache);
+    LibraryCache.updateMyLibrarySavedIds(client, updateCache, userId);
 
     // remove from my library
     let updateLibraryCache = podcasts =>
@@ -165,7 +166,7 @@ let addEpisodeToCache = (podcastId, client, mutationResult) => {
         obj##listennotesId !== podcastId
           ? obj : MyLibrary.updatePodcastEpisodeCount(obj, count => count + 1)
       );
-    LibraryCache.updateMyLibraryCache(client, updateLibraryCache);
+    LibraryCache.updateMyLibraryCache(client, updateLibraryCache, userId);
   };
   ();
 };

@@ -43,3 +43,28 @@ let hasMutationData = (result: ReasonApolloTypes.mutationResponse('a)) => {
 
 /** api data */
 let toApiGenres = (arr: array(int)) => Js.Array.joinWith(",", arr);
+
+[@bs.val] external scrollTop: float = "document.scrollingElement.scrollTop";
+
+type elementBox = {
+  top: int,
+  left: int,
+  right: int,
+  width: int,
+  height: int,
+};
+let getElRect = element => {
+  let element = ReactDOMRe.domElementToObj(element);
+  let box = element##getBoundingClientRect();
+  {
+    top: box##top,
+    left: box##left,
+    right: box##right,
+    width: box##width,
+    height: box##height,
+  };
+};
+
+let getRectFromRef = elRef => {
+  elRef->React.Ref.current->Js.Nullable.toOption->Belt.Option.map(getElRect);
+};
