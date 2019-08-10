@@ -1,6 +1,6 @@
 [%bs.raw {|require('./styles/identity-widget.css')|}];
 [%bs.raw {|require('bootstrap/dist/css/bootstrap.css')|}];
-[%bs.raw {|require('./styles.css')|}];
+[%bs.raw {|require('./styles/styles.css')|}];
 
 let apolloClient = Graphql.makeApolloClient();
 

@@ -31,21 +31,33 @@ let make = () => {
       <NavbarBrand href="/"> {str("Podcast library")} </NavbarBrand>
       <Nav className="ml-auto">
         <NavItem>
-          <RouterLink className="nav-link" href="/search">
-            {str("Search")}
+          <RouterLink className="nav-link px-2" href="/search">
+            <ReactFeather.SearchIcon />
           </RouterLink>
         </NavItem>
-        <NavItem>
-          {UserIdentity.isLoggedIn(identity)
-             ? <RouterLink className="nav-link" href="/my-library">
-                 {str("My Library")}
-               </RouterLink>
-             : <NavLink
+        {UserIdentity.isLoggedIn(identity)
+           ? <>
+               <NavItem>
+                 <NavLink
+                   className="px-2"
+                   href="#"
+                   onClick={() => dispatch(SetShowIdentityModal(true))}>
+                   <ReactFeather.UserIcon />
+                 </NavLink>
+               </NavItem>
+               <NavItem>
+                 <RouterLink className="nav-link px-2" href="/my-library">
+                   {str("My Library")}
+                 </RouterLink>
+               </NavItem>
+             </>
+           : <NavItem>
+               <NavLink
                  href="#"
                  onClick={() => dispatch(SetShowIdentityModal(true))}>
                  {str("Log in")}
-               </NavLink>}
-        </NavItem>
+               </NavLink>
+             </NavItem>}
       </Nav>
     </Navbar>
     <Container> pageToShow </Container>

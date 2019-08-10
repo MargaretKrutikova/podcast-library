@@ -51,8 +51,10 @@ let make = () => {
           onChange=handleSearchTermChange
         />
         <Button
-          onClick={_ => dispatch(EnteredSearchTerm(searchTerm))} size="sm">
-          {str("Search")}
+          color="info"
+          onClick={_ => dispatch(EnteredSearchTerm(searchTerm))}
+          size="sm">
+          <ReactFeather.SearchIcon />
         </Button>
       </InputGroup>
     </FormGroup>
