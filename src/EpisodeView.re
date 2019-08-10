@@ -6,6 +6,7 @@ let str = ReasonReact.string;
 [@react.component]
 let make = (~episode: SearchResult.episode, ~isSaved) => {
   let dispatch = AppCore.useDispatch();
+  let user = UserIdentity.useLoggedInUser();
   let (isFetchingInfo, setIsFetchingInfo) = React.useState(() => false);
 
   /** save */
@@ -15,16 +16,19 @@ let make = (~episode: SearchResult.episode, ~isSaved) => {
   let handleSaveDone = _ =>
     dispatch(ShowNotification({text: "Saved to library", type_: Info}));
 
-  let handleSave = (mutation: SaveEpisode.Mutation.apolloMutation) => {
+  // TODO: make saving a hook?
+  let save = (mutation: SaveEpisode.Mutation.apolloMutation, userId) => {
     setIsFetchingInfo(_ => true);
 
     SaveEpisode.getEpisodeInsertInfo(episode)
     |> Js.Promise.(
          then_(episodeInfo => {
-           let refetchMyLibraryQuery = MyLibrary.makeGetMyLibraryQuery();
+           let refetchMyLibraryQuery =
+             MyLibrary.GetMyLibrary.make(~userId, ());
 
            let saveEpisodeMutation =
              SaveEpisode.makeMutation(
+               ~userId,
                ~episode,
                ~libraryData={tags: "", status: NotListened},
                ~episodeInfo,
@@ -34,7 +38,10 @@ let make = (~episode: SearchResult.episode, ~isSaved) => {
            mutation(
              ~variables=saveEpisodeMutation##variables,
              ~update=
-               SaveEpisode.addEpisodeToCache(episode.podcastListennotesId),
+               SaveEpisode.addEpisodeToCache(
+                 ~podcastId=episode.podcastListennotesId,
+                 ~userId,
+               ),
              ~refetchQueries=
                _ => [|Utils.toQueryObj(refetchMyLibraryQuery)|],
              (),
@@ -46,7 +53,28 @@ let make = (~episode: SearchResult.episode, ~isSaved) => {
     |> Js.Promise.(catch(_ => handleSaveError() |> resolve));
   };
 
+  let handleSave = (mutation: SaveEpisode.Mutation.apolloMutation) => {
+    switch (user) {
+    | Anonymous => dispatch(OnUnauthorizedAccess)
+    | LoggedIn(id) => save(mutation, id) |> ignore
+    };
+  };
+
   /** remove */
+  let handleRemove = (mutation: RemoveContent.EpisodeMutation.apolloMutation) => {
+    switch (user) {
+    | Anonymous => dispatch(OnUnauthorizedAccess)
+    | LoggedIn(userId) =>
+      RemoveContent.runEpisodeMutation(
+        ~mutation,
+        ~episodeId=episode.listennotesId,
+        ~podcastId=episode.podcastListennotesId,
+        ~userId,
+      )
+      |> ignore
+    };
+  };
+
   let handleRemoveError = _ =>
     dispatch(ShowNotification({text: "Failed to remove", type_: Danger}));
 
@@ -79,13 +107,7 @@ let make = (~episode: SearchResult.episode, ~isSaved) => {
                    size="sm"
                    color="warning"
                    disabled={result == Loading}
-                   onClick={_ =>
-                     RemoveContent.runEpisodeMutation(
-                       ~mutation,
-                       ~episodeId=episode.listennotesId,
-                       ~podcastId=episode.podcastListennotesId,
-                     )
-                   }>
+                   onClick={_ => handleRemove(mutation)}>
                    {str("Remove")}
                  </Button>
                }

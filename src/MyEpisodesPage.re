@@ -4,7 +4,7 @@ module GetMyEpisodesQuery = ReasonApollo.CreateQuery(MyLibrary.GetMyEpisodes);
 
 [@react.component]
 let make = (~podcastId: string, ~userId) => {
-  let myEpisodesQuery = MyLibrary.makeGetMyEpisodesQuery(~podcastId);
+  let myEpisodesQuery = MyLibrary.makeGetMyEpisodesQuery(~podcastId, ~userId);
 
   let handleEpisodeRemove =
       (mutation: RemoveContent.EpisodeMutation.apolloMutation, episodeId) => {

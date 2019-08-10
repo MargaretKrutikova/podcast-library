@@ -49,8 +49,8 @@ let toMyEpisode = data => {
   };
 };
 
-let makeGetMyEpisodesQuery = (~podcastId) =>
-  GetMyEpisodes.make(~userId="margaretkru", ~podcastId, ());
+let makeGetMyEpisodesQuery = (~podcastId, ~userId) =>
+  GetMyEpisodes.make(~userId, ~podcastId, ());
 
 /** my library */
 

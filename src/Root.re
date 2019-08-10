@@ -3,9 +3,12 @@ open ReactNetlifyIdentityWidget;
 
 let str = ReasonReact.string;
 
+let getShowIdentityModal = (model: AppCore.model) => model.showIdentityModal;
+
 [@react.component]
 let make = () => {
-  let (showDialog, setShowDialog) = React.useState(() => false);
+  let showDialog = AppCore.useSelector(getShowIdentityModal);
+  let dispatch = AppCore.useDispatch();
 
   let url = ReasonReactRouter.useUrl();
   let identity = useIdentityContext();
@@ -22,7 +25,7 @@ let make = () => {
   <div>
     <IdentityModal
       showDialog
-      onCloseDialog={() => setShowDialog(_ => false)}
+      onCloseDialog={() => dispatch(SetShowIdentityModal(false))}
     />
     <Navbar>
       <NavbarBrand href="/"> {str("Podcast library")} </NavbarBrand>
@@ -37,7 +40,9 @@ let make = () => {
              ? <RouterLink className="nav-link" href="/my-library">
                  {str("My Library")}
                </RouterLink>
-             : <NavLink href="#" onClick={_ => setShowDialog(_ => true)}>
+             : <NavLink
+                 href="#"
+                 onClick={() => dispatch(SetShowIdentityModal(true))}>
                  {str("Log in")}
                </NavLink>}
         </NavItem>
