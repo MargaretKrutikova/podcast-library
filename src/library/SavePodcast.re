@@ -32,7 +32,7 @@ let getSavedId = (mutationResult: Mutation.mutationResult) =>
   ->Belt.Option.flatMap(result => result##insert_my_podcasts)
   ->Belt.Option.flatMap(result => result##returning->Belt.Array.get(0));
 
-let makeMutation = (~podcast: SearchResult.podcast, ~userId) =>
+let makeMutation = (~podcast: SearchTypes.podcast, ~userId) =>
   SavePodcast.make(
     ~userId,
     ~tags="",

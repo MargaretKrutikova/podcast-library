@@ -1,16 +1,14 @@
 module SearchPodcastsQuery =
-  ReasonApolloHooks.Query.Make(PodcastSearch.SearchPodcasts);
+  ReasonApolloHooks.Query.Make(SearchGraphql.SearchPodcasts);
 
 let getSearchModel = (model: AppCore.model) => model.search;
 
 [@react.component]
 let make = (~savedIds) => {
   let searchModel = AppCore.useSelector(getSearchModel);
-  //let shouldSkipSearch =
-  // String.trim(searchModel.baseQuery.searchTerm) === "";
 
   let getPodcastSearchVariables = (~nextOffset=0, ()): Js.Json.t =>
-    PodcastSearch.makeSearchQuery(searchModel.baseQuery, nextOffset)##variables;
+    SearchGraphql.makeSearchPodcastsQuery(searchModel.baseQuery, nextOffset)##variables;
 
   let (_simple, full) =
     SearchPodcastsQuery.use(
@@ -22,7 +20,7 @@ let make = (~savedIds) => {
   let handleLoadMore = (~nextOffset) => {
     full.fetchMore(
       ~variables=?Some(getPodcastSearchVariables(~nextOffset, ())),
-      ~updateQuery=PodcastSearch.fetchMoreUpdateQuery,
+      ~updateQuery=SearchGraphql.fetchMorePodcasts,
       (),
     )
     |> ignore;

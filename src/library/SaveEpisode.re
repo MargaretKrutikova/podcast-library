@@ -74,7 +74,7 @@ type myEpisodeData = {
 let makeMutation =
     (
       ~userId,
-      ~episode: SearchResult.episode,
+      ~episode: SearchTypes.episode,
       ~libraryData: myEpisodeData,
       ~episodeInfo,
     ) => {
@@ -114,7 +114,7 @@ module GetEpisodeInsertInfo = [%graphql
 |}
 ];
 
-let getEpisodeInsertInfo = (episode: SearchResult.episode) => {
+let getEpisodeInsertInfo = (episode: SearchTypes.episode) => {
   GetEpisodeInsertInfo.make(
     ~podcastItunesId=string_of_int(episode.podcastItunesId),
     ~podcastListennotesId=episode.podcastListennotesId,

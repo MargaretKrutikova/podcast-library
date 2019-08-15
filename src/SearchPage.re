@@ -26,16 +26,12 @@ module LoggedInSearchView = {
       );
 
     switch (full) {
-    | {data: Some(d)} =>
-      <SearchResultsView
-        searchType
-        savedEpisodesIds={
-          d##my_episodes;
-        }
-        savedPodcastsIds={
-          d##my_podcasts;
-        }
-      />
+    | {data: Some(data)} =>
+      let savedEpisodesIds = data##my_episodes;
+      let savedPodcastsIds = data##my_podcasts;
+
+      <SearchResultsView searchType savedEpisodesIds savedPodcastsIds />;
+
     | _ => <SearchResultsView searchType />
     };
   };

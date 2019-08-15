@@ -4,7 +4,7 @@ open Cards;
 let str = ReasonReact.string;
 
 [@react.component]
-let make = (~podcast: SearchResult.podcast, ~isSaved) => {
+let make = (~podcast: SearchTypes.podcast, ~isSaved) => {
   let dispatch = AppCore.useDispatch();
   let user = UserIdentity.useLoggedInUser();
 

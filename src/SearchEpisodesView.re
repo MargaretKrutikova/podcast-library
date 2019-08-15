@@ -1,16 +1,14 @@
 module SearchEpisodesQuery =
-  ReasonApolloHooks.Query.Make(EpisodeSearch.SearchEpisodes);
+  ReasonApolloHooks.Query.Make(SearchGraphql.SearchEpisodes);
 
 let getSearchModel = (model: AppCore.model) => model.search;
 
 [@react.component]
 let make = (~savedIds) => {
   let searchModel = AppCore.useSelector(getSearchModel);
-  // let shouldSkipSearch =
-  // String.trim(searchModel.baseQuery.searchTerm) === "";
 
   let getEpisodeSearchVariables = (~nextOffset=0, ()): Js.Json.t =>
-    EpisodeSearch.makeSearchQuery(
+    SearchGraphql.makeSearchEpisodesQuery(
       searchModel.baseQuery,
       nextOffset,
       searchModel.episodeQuery,
@@ -26,7 +24,7 @@ let make = (~savedIds) => {
   let handleLoadMore = (~nextOffset) => {
     full.fetchMore(
       ~variables=?Some(getEpisodeSearchVariables(~nextOffset, ())),
-      ~updateQuery=EpisodeSearch.fetchMoreUpdateQuery,
+      ~updateQuery=SearchGraphql.fetchMoreEpisodes,
       (),
     )
     |> ignore;

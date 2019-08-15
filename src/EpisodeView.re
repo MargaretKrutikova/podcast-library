@@ -4,7 +4,7 @@ open Cards;
 let str = ReasonReact.string;
 
 [@react.component]
-let make = (~episode: SearchResult.episode, ~isSaved) => {
+let make = (~episode: SearchTypes.episode, ~isSaved) => {
   let dispatch = AppCore.useDispatch();
   let user = UserIdentity.useLoggedInUser();
   let (isFetchingInfo, setIsFetchingInfo) = React.useState(() => false);
