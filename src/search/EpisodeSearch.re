@@ -34,5 +34,5 @@ let makeSearchQuery =
   );
 };
 
-let fetchMoreUpdateQuery: ReasonApolloQuery.updateQueryT =
+let fetchMoreUpdateQuery: ReasonApolloHooks.Query.updateQueryT =
   SearchResult.fetchMoreUpdateQuery("searchEpisodes");

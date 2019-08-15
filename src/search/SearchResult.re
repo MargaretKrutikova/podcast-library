@@ -37,7 +37,7 @@ let fetchMoreUpdateQuery =
     (
       queryName,
       prevResult: Js.Json.t,
-      options: ReasonApolloQuery.updateQueryOptions,
+      options: ReasonApolloHooks.Query.updateQueryOptions,
     ) => {
   let mergeResults: (string, Js.Json.t, option(Js.Json.t)) => Js.Json.t = [%bs.raw
     {|
@@ -58,7 +58,7 @@ let fetchMoreUpdateQuery =
   mergeResults(
     queryName,
     prevResult,
-    options->ReasonApolloQuery.fetchMoreResultGet,
+    options->ReasonApolloHooks.Query.fetchMoreResultGet,
   );
 };
 

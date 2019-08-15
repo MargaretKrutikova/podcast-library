@@ -7,10 +7,12 @@ let apolloClient = Graphql.makeApolloClient();
 ReactDOMRe.renderToElementWithId(
   <AppCore.ElmishProvider>
     <ReasonApollo.Provider client=apolloClient>
-      <ReactNetlifyIdentityWidget.IdentityContextProvider
-        url="https://podcasts.margareta.dev/">
-        <Root />
-      </ReactNetlifyIdentityWidget.IdentityContextProvider>
+      <ReasonApolloHooks.ApolloProvider client=apolloClient>
+        <ReactNetlifyIdentityWidget.IdentityContextProvider
+          url="https://podcasts.margareta.dev/">
+          <Root />
+        </ReactNetlifyIdentityWidget.IdentityContextProvider>
+      </ReasonApolloHooks.ApolloProvider>
     </ReasonApollo.Provider>
   </AppCore.ElmishProvider>,
   "root",

@@ -27,5 +27,5 @@ module SearchPodcasts = [%graphql
 let makeSearchQuery = (baseQuery: baseQuery, offset: int) =>
   SearchPodcasts.make(~input=toSearchInput(~baseQuery, ~offset), ());
 
-let fetchMoreUpdateQuery: ReasonApolloQuery.updateQueryT =
+let fetchMoreUpdateQuery: ReasonApolloHooks.Query.updateQueryT =
   SearchResult.fetchMoreUpdateQuery("searchPodcasts");

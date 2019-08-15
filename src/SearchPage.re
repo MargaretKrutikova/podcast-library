@@ -1,188 +1,58 @@
-open BsReactstrap;
-open SearchResult;
-
-let str = ReasonReact.string;
-
-module SearchEpisodesQuery =
-  ReasonApollo.CreateQuery(EpisodeSearch.SearchEpisodes);
-
-module SearchPodcastsQuery =
-  ReasonApollo.CreateQuery(PodcastSearch.SearchPodcasts);
-
 module GetSavedIdsQuery =
-  ReasonApollo.CreateQuery(MyLibrary.GetMyLibrarySavedIds);
+  ReasonApolloHooks.Query.Make(MyLibrary.GetMyLibrarySavedIds);
 
-module LoadMoreButton = {
-  [@react.component]
-  let make = (~nextOffset, ~total, ~isFetching, ~onClick) => {
-    let hasMore = nextOffset < total;
-
-    hasMore
-      ? <div className="load-more-button-container">
-          <Button color="info" onClick disabled=isFetching>
-            {str("Fetch more")}
-          </Button>
-        </div>
-      : ReasonReact.null;
-  };
-};
-
-module SearchResultView = {
+module SearchResultsView = {
   [@react.component]
   let make =
       (
-        ~result: ReasonApolloTypes.queryResponse('a),
-        ~renderData: 'a => React.element,
+        ~searchType: ContentType.t,
+        ~savedPodcastsIds=[||],
+        ~savedEpisodesIds=[||],
       ) => {
-    switch (result) {
-    | Loading => <div> {ReasonReact.string("Loading")} </div>
-    | Error(error) => <div> {ReasonReact.string(error##message)} </div>
-    | Data(response) => renderData(response)
+    switch (searchType) {
+    | Episode => <SearchEpisodesView savedIds=savedEpisodesIds />
+    | Podcast => <SearchPodcastsView savedIds=savedPodcastsIds />
     };
   };
 };
 
-let getSearchModel = (model: AppCore.model) => model.search;
-
-module SearchView = {
+module LoggedInSearchView = {
   [@react.component]
-  let make = (~savedEpisodeIds, ~savedPodcastIds) => {
-    let searchModel = AppCore.useSelector(getSearchModel);
-    let shouldSkipSearch =
-      String.trim(searchModel.baseQuery.searchTerm) === "";
-
-    /** episode search */
-    let getEpisodeSearchVariables = (~nextOffset=0, ()): Js.Json.t =>
-      EpisodeSearch.makeSearchQuery(
-        searchModel.baseQuery,
-        nextOffset,
-        searchModel.episodeQuery,
-      )##variables;
-
-    let fetchMoreEpisodeResults =
-        (~fetchMore, ~nextOffset): Js.Promise.t(unit) =>
-      fetchMore(
-        ~variables=?Some(getEpisodeSearchVariables(~nextOffset, ())),
-        ~updateQuery=EpisodeSearch.fetchMoreUpdateQuery,
+  let make = (~userId, ~searchType: ContentType.t) => {
+    let (_simple, full) =
+      GetSavedIdsQuery.use(
+        ~variables=MyLibrary.makeGetSavedIdsQuery(~userId)##variables,
         (),
       );
 
-    /** podcast search */
-    let getPodcastSearchVariables = (~nextOffset=0, ()): Js.Json.t =>
-      PodcastSearch.makeSearchQuery(searchModel.baseQuery, nextOffset)##variables;
-
-    let fetchMorePodcastResults =
-        (~fetchMore, ~nextOffset): Js.Promise.t(unit) =>
-      fetchMore(
-        ~variables=?Some(getPodcastSearchVariables(~nextOffset, ())),
-        ~updateQuery=PodcastSearch.fetchMoreUpdateQuery,
-        (),
-      );
-
-    <>
-      <h1> {str("Search library")} </h1>
-      <SearchQueryView />
-      {switch (searchModel.searchType) {
-       | Episode =>
-         <SearchEpisodesQuery
-           variables={getEpisodeSearchVariables()}
-           skip=shouldSkipSearch
-           notifyOnNetworkStatusChange=true>
-           ...{({result, fetchMore, networkStatus}) =>
-             <SearchResultView
-               result
-               renderData={data =>
-                 <div>
-                   {data##searchEpisodes.results
-                    ->Belt.Array.map(episode =>
-                        <EpisodeView
-                          key={episode.listennotesId}
-                          episode
-                          isSaved={
-                            savedEpisodeIds->Belt.Array.some(idObj =>
-                              idObj##episodeId === episode.listennotesId
-                            )
-                          }
-                        />
-                      )
-                    |> ReasonReact.array}
-                   <LoadMoreButton
-                     nextOffset={data##searchEpisodes.nextOffset}
-                     total={data##searchEpisodes.total}
-                     onClick={_ =>
-                       fetchMoreEpisodeResults(
-                         ~fetchMore,
-                         ~nextOffset=data##searchEpisodes.nextOffset,
-                       )
-                     }
-                     isFetching={networkStatus === ReasonApolloTypes.FetchMore}
-                   />
-                 </div>
-               }
-             />
-           }
-         </SearchEpisodesQuery>
-       | Podcast =>
-         <SearchPodcastsQuery
-           variables={getPodcastSearchVariables()}
-           skip=shouldSkipSearch
-           notifyOnNetworkStatusChange=true>
-           ...{({result, fetchMore, networkStatus}) =>
-             <SearchResultView
-               result
-               renderData={data =>
-                 <div>
-                   {data##searchPodcasts.results
-                    ->Belt.Array.map(podcast =>
-                        <PodcastView
-                          key={podcast.listennotesId}
-                          podcast
-                          isSaved={
-                            savedPodcastIds->Belt.Array.some(idObj =>
-                              idObj##podcastId === podcast.listennotesId
-                            )
-                          }
-                        />
-                      )
-                    |> ReasonReact.array}
-                   <LoadMoreButton
-                     nextOffset={data##searchPodcasts.nextOffset}
-                     total={data##searchPodcasts.total}
-                     onClick={_ =>
-                       fetchMorePodcastResults(
-                         ~fetchMore,
-                         ~nextOffset=data##searchPodcasts.nextOffset,
-                       )
-                     }
-                     isFetching={networkStatus === ReasonApolloTypes.FetchMore}
-                   />
-                 </div>
-               }
-             />
-           }
-         </SearchPodcastsQuery>
-       }}
-    </>;
+    switch (full) {
+    | {data: Some(d)} =>
+      <SearchResultsView
+        searchType
+        savedEpisodesIds={
+          d##my_episodes;
+        }
+        savedPodcastsIds={
+          d##my_podcasts;
+        }
+      />
+    | _ => <SearchResultsView searchType />
+    };
   };
 };
 
+let getSearchType = (model: AppCore.model) => model.search.searchType;
+
 [@react.component]
 let make = (~userId) => {
-  switch (userId) {
-  | None => <SearchView savedPodcastIds=[||] savedEpisodeIds=[||] />
-  | Some(id) =>
-    <GetSavedIdsQuery
-      variables=MyLibrary.makeGetSavedIdsQuery(~userId=id)##variables>
-      ...{({result}) =>
-        switch (result) {
-        | Data(savedIds) =>
-          <SearchView
-            savedEpisodeIds=savedIds##my_episodes
-            savedPodcastIds=savedIds##my_podcasts
-          />
-        | _ => <SearchView savedPodcastIds=[||] savedEpisodeIds=[||] />
-        }
-      }
-    </GetSavedIdsQuery>
-  };
+  let searchType = AppCore.useSelector(getSearchType);
+
+  <>
+    <h1> {ReasonReact.string("Search library")} </h1>
+    <SearchQueryView />
+    {switch (userId) {
+     | Some(userId) => <LoggedInSearchView userId searchType />
+     | None => <SearchResultsView searchType />
+     }}
+  </>;
 };
