@@ -4,14 +4,27 @@ open Cards;
 let str = ReasonReact.string;
 
 [@react.component]
-let make = (~episode: MyLibrary.myEpisode, ~podcastItunesId, ~onRemove) => {
-  let dispatch = AppCore.useDispatch();
+let make = (~episode: LibraryTypes.myEpisode, ~userId, ~podcastItunesId) => {
+  let myEpisodesQuery =
+    LibraryQueries.GetMyEpisodes.make(
+      ~podcastId=episode.podcastId,
+      ~userId,
+      (),
+    );
+  let myLibraryQuery = LibraryQueries.GetMyLibrary.make(~userId, ());
 
-  let handleRemoveError = _ =>
-    dispatch(ShowNotification({text: "Failed to remove", type_: Danger}));
+  let refetchQueries = [|
+    Utils.toQueryObj(myEpisodesQuery),
+    Utils.toQueryObj(myLibraryQuery),
+  |];
 
-  let handleRemoveDone = _ =>
-    dispatch(ShowNotification({text: "Removed from library", type_: Info}));
+  let (onRemove, removeResult) =
+    UseRemoveEpisode.useRemoveEpisode(
+      ~userId,
+      ~episodeId=episode.id,
+      ~refetchQueries,
+      (),
+    );
 
   <LibraryCard>
     <CardBody>
@@ -40,18 +53,11 @@ let make = (~episode: MyLibrary.myEpisode, ~podcastItunesId, ~onRemove) => {
            </NavLink>
          | (_, _) => ReasonReact.null
          }}
-        <RemoveContent.EpisodeMutation
-          onError=handleRemoveError onCompleted=handleRemoveDone>
-          ...{(mutation, {result}) =>
-            <Button
-              size="sm"
-              color="warning"
-              disabled={result == Loading}
-              onClick={_ => onRemove(mutation, episode.listennotesId)}>
-              {str("Remove")}
-            </Button>
-          }
-        </RemoveContent.EpisodeMutation>
+        <ActionButton
+          disabled={removeResult === Loading}
+          onClick=onRemove
+          action=ActionButton.Remove
+        />
       </BottomActions>
     </CardBody>
   </LibraryCard>;

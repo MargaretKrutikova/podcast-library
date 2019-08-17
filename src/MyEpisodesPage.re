@@ -1,70 +1,47 @@
-let str = ReasonReact.string;
+module MyEpisodesQuery =
+  ReasonApolloHooks.Query.Make(LibraryQueries.GetMyEpisodes);
 
-module GetMyEpisodesQuery = ReasonApollo.CreateQuery(MyLibrary.GetMyEpisodes);
+let str = ReasonReact.string;
 
 [@react.component]
 let make = (~podcastId: string, ~userId) => {
-  let myEpisodesQuery = MyLibrary.makeGetMyEpisodesQuery(~podcastId, ~userId);
-  let myLibraryQuery = MyLibrary.GetMyLibrary.make(~userId, ());
+  let getMyEpisodes =
+    LibraryQueries.GetMyEpisodes.make(~userId, ~podcastId, ());
 
-  let handleEpisodeRemove =
-      (mutation: RemoveContent.EpisodeMutation.apolloMutation, episodeId) => {
-    let removeEpisodeMutation =
-      RemoveContent.makeEpisodeMutation(~episodeId, ~userId);
-
-    mutation(
-      ~variables=removeEpisodeMutation##variables,
-      ~refetchQueries=
-        _ =>
-          [|
-            Utils.toQueryObj(myEpisodesQuery),
-            Utils.toQueryObj(myLibraryQuery),
-          |],
-      (),
-    )
-    |> ignore;
-  };
+  let (simple, _full) =
+    MyEpisodesQuery.use(~variables=getMyEpisodes##variables, ());
 
   <>
     <h1> {str("My episodes")} </h1>
-    <GetMyEpisodesQuery
-      variables=myEpisodesQuery##variables fetchPolicy="network-only">
-      ...{({result}) =>
-        switch (result) {
-        | Loading => <div> {str("Loading")} </div>
-        | Error(_) => <div> {str("Error")} </div>
-        | Data(response) =>
-          if (response##my_episodes->Belt.Array.length === 0) {
-            ReasonReactRouter.replace("/my-library");
-          };
-          let podcast = response##podcasts->Belt.Array.get(0);
-          let podcastItunesId =
-            podcast->Belt.Option.mapWithDefault(None, data =>
-              Some(data##itunesId)
-            );
+    {switch (simple) {
+     | NoData => React.null
+     | Loading => <div> {str("Loading")} </div>
+     | Error(_) => <div> {str("Error")} </div>
+     | Data(response) =>
+       if (response##my_episodes->Belt.Array.length === 0) {
+         ReasonReactRouter.replace("/my-library");
+       };
+       let podcast = response##podcasts->Belt.Array.get(0);
+       let podcastItunesId =
+         podcast->Belt.Option.mapWithDefault(None, data =>
+           Some(data##itunesId)
+         );
 
-          <>
-            <div>
-              {switch (podcast) {
-               | Some(data) => <h3> {str(data##title)} </h3>
-               | None => ReasonReact.null
-               }}
-              <RouterLink href="/my-library"> {str("Back")} </RouterLink>
-            </div>
-            {response##my_episodes
-             ->Belt.Array.map(MyLibrary.toMyEpisode)
-             ->Belt.Array.map(episode =>
-                 <MyEpisodeView
-                   key={episode.listennotesId}
-                   episode
-                   podcastItunesId
-                   onRemove=handleEpisodeRemove
-                 />
-               )
-             |> ReasonReact.array}
-          </>;
-        }
-      }
-    </GetMyEpisodesQuery>
+       <>
+         <div>
+           {switch (podcast) {
+            | Some(data) => <h3> {str(data##title)} </h3>
+            | None => ReasonReact.null
+            }}
+           <RouterLink href="/my-library"> {str("Back")} </RouterLink>
+         </div>
+         {response##my_episodes
+          ->Belt.Array.map(LibraryTypes.toMyEpisode)
+          ->Belt.Array.map(episode =>
+              <MyEpisodeView key={episode.id} episode podcastItunesId userId />
+            )
+          |> ReasonReact.array}
+       </>;
+     }}
   </>;
 };

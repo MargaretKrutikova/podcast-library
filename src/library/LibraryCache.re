@@ -1,4 +1,4 @@
-open MyLibrary;
+open LibraryQueries;
 external cast: Js.Json.t => 'a = "%identity";
 
 /** library ids cache */
@@ -31,7 +31,7 @@ let updateMyLibrarySavedIds =
       updateCache: GetMyLibrarySavedIds.t => GetMyLibrarySavedIds.t,
       userId,
     ) => {
-  let fetchMyLibraryIds = makeGetSavedIdsQuery(~userId);
+  let fetchMyLibraryIds = GetMyLibrarySavedIds.make(~userId, ());
   switch (
     GetMyLibrarySavedIdsReadQuery.readQuery(
       client,
@@ -70,7 +70,7 @@ let mergeLibraryCacheJs: (GetMyLibrary.t, GetMyLibrary.t) => GetMyLibrary.t = [%
 ];
 
 let updateMyLibraryCache = (client, updateCache, userId) => {
-  let fetchMyLibrary = makeGetMyLibraryQuery(~userId);
+  let fetchMyLibrary = LibraryQueries.GetMyLibrary.make(~userId, ());
   switch (
     GetMyLibraryReadQuery.readQuery(
       client,
@@ -98,4 +98,24 @@ let updateMyLibraryCache = (client, updateCache, userId) => {
     }
   };
   ();
+};
+
+/** my library */
+
+let updatePodcastEpisodeCount = (podcast: 'a, updateCount: int => int): 'a => {
+  let merge: ('a, int) => 'a = [%raw
+    {|
+    function(prev, numberOfEpisodes) {
+      return {...prev, numberOfEpisodes}
+    }
+  |}
+  ];
+
+  let numberOfEpisodes =
+    podcast##numberOfEpisodes
+    |> Utils.fromBigInt
+    |> updateCount
+    |> Utils.makePositive;
+
+  merge(podcast, numberOfEpisodes);
 };

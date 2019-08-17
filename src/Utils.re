@@ -24,7 +24,7 @@ let truncateDescription = description =>
     ? description : description ++ "...";
 
 /** reason apollo */
-let toQueryObj = (result): ReasonApolloTypes.queryObj => {
+let toQueryObj = (result): ApolloClient.queryObj => {
   "query": ApolloClient.gql(. result##query),
   "variables": result##variables,
 };
@@ -68,3 +68,9 @@ let getElRect = element => {
 let getRectFromRef = elRef => {
   elRef->React.Ref.current->Js.Nullable.toOption->Belt.Option.map(getElRect);
 };
+
+/** general */
+let fromBigInt = value =>
+  value->Js.Json.decodeNumber->Belt.Option.mapWithDefault(0, int_of_float);
+
+let makePositive = number => number < 0 ? 0 : number;
