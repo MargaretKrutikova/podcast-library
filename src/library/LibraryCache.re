@@ -8,20 +8,16 @@ module GetMyLibrarySavedIdsWriteQuery =
   ApolloClient.WriteQuery(GetMyLibrarySavedIds);
 
 let mergeIdsCache =
-    (~cache: GetMyLibrarySavedIds.t, ~myPodcasts=?, ~myEpisodes=?, ())
-    : GetMyLibrarySavedIds.t => {
+    (~cache, ~myPodcasts=?, ~myEpisodes=?, ()): GetMyLibrarySavedIds.t => {
   "my_podcasts": myPodcasts->Belt.Option.getWithDefault(cache##my_podcasts),
   "my_episodes": myEpisodes->Belt.Option.getWithDefault(cache##my_episodes),
 };
 
 let updateMyLibrarySavedIds = (client, updateCache, userId) => {
   let fetchMyLibraryIds = GetMyLibrarySavedIds.make(~userId, ());
-  switch (
-    GetMyLibrarySavedIdsReadQuery.readQuery(
-      client,
-      Utils.toReadQueryOptions(fetchMyLibraryIds),
-    )
-  ) {
+  let options = Utils.toReadQueryOptions(fetchMyLibraryIds);
+
+  switch (GetMyLibrarySavedIdsReadQuery.readQuery(client, options)) {
   | exception _ => ()
   | cachedResponse =>
     switch (cachedResponse |> Js.Nullable.toOption) {
@@ -34,11 +30,10 @@ let updateMyLibrarySavedIds = (client, updateCache, userId) => {
         {| function (prev, next) {  return { ...prev, ...next }; } |}
       ];
 
-      let updatedCachedIds = updateCache(prevIds);
       GetMyLibrarySavedIdsWriteQuery.make(
         ~client,
         ~variables=fetchMyLibraryIds##variables,
-        ~data=mergeCacheJs(prevIds, updatedCachedIds),
+        ~data=prevIds |> updateCache |> mergeCacheJs(prevIds),
         (),
       );
     }
@@ -120,5 +115,4 @@ let addPodcastToCache = (~userId, client, result) => {
 
     updateMyLibrarySavedIds(client, updateCache, userId);
   };
-  ();
 };
