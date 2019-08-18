@@ -1,5 +1,3 @@
-open BsReactstrap;
-
 let getNotifications = (model: AppCore.model) => model.notifications.items;
 
 [@react.component]

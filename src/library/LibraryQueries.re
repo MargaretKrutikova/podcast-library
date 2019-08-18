@@ -24,6 +24,30 @@ module GetMyEpisodes = [%graphql
   |}
 ];
 
+module GetAllEpisodes = [%graphql
+  {|
+    query($userId: String!) {
+      my_episodes(where: {userId: {_eq: $userId}}) {
+        episodeId
+        status @bsDecoder(fn: "EpisodeStatus.decode")
+        tags
+        episode {
+          listennotesId
+          podcastListennotesId
+          itunesId
+          title
+          description
+          pubDate
+          lengthSec
+          podcast {
+            itunesId
+          }
+        }
+      }
+    }
+|}
+];
+
 module GetMyLibrary = [%graphql
   {|
   query($userId: String!) {
