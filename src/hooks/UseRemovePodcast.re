@@ -1,7 +1,7 @@
-module RemoveEpisodeMutation =
-  ReasonApolloHooks.Mutation.Make(LibraryMutations.RemoveEpisode);
+module RemovePodcastMutation =
+  ReasonApolloHooks.Mutation.Make(LibraryMutations.RemovePodcast);
 
-let useRemoveEpisode = (~userId, ~episodeId, ~refetchQueries=?, ()) => {
+let useRemovePodcast = (~userId, ~podcastId) => {
   let dispatch = AppCore.useDispatch();
   let handleRemoveError = _ =>
     dispatch(ShowNotification({text: "Failed to remove", type_: Danger}));
@@ -9,15 +9,13 @@ let useRemoveEpisode = (~userId, ~episodeId, ~refetchQueries=?, ()) => {
   let handleRemoveDone = _ =>
     dispatch(ShowNotification({text: "Removed from library", type_: Info}));
 
-  let (removeEpisodeMutation, simple, _full) =
-    RemoveEpisodeMutation.use(
-      ~refetchQueries=?
-        refetchQueries->Belt.Option.map((queries, _) => queries),
+  let (removePodcastMutation, simple, _full) =
+    RemovePodcastMutation.use(
       ~update=
         (client, mutationResult) =>
           mutationResult##data
           ->Belt.Option.map(result =>
-              LibraryCache.removeEpisodeFromCache(~userId, client, result)
+              LibraryCache.removePodcastFromCache(~userId, client, result)
             )
           |> ignore,
       (),
@@ -25,8 +23,8 @@ let useRemoveEpisode = (~userId, ~episodeId, ~refetchQueries=?, ()) => {
 
   let handleRemove = () => {
     let mutation =
-      LibraryMutations.RemoveEpisode.make(~episodeId, ~userId, ());
-    removeEpisodeMutation(~variables=mutation##variables, ())
+      LibraryMutations.RemovePodcast.make(~podcastId, ~userId, ());
+    removePodcastMutation(~variables=mutation##variables, ())
     |> Js.Promise.(then_(_ => handleRemoveDone() |> resolve))
     |> Js.Promise.(catch(_ => handleRemoveError() |> resolve));
   };

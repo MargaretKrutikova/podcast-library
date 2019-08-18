@@ -170,6 +170,20 @@ module SavePodcast = [%graphql
 |}
 ];
 
+let makeSavePodcastMutation = (~podcast: SearchTypes.podcast, ~userId) =>
+  SavePodcast.make(
+    ~userId,
+    ~tags="",
+    ~image=podcast.image,
+    ~listennotesId=podcast.listennotesId,
+    ~title=podcast.title,
+    ~description=podcast.description,
+    ~publisher=podcast.publisher,
+    ~itunesId=string_of_int(podcast.podcastItunesId),
+    ~genreIds=Utils.toApiGenres(podcast.genreIds),
+    (),
+  );
+
 module RemovePodcast = [%graphql
   {|
   mutation($userId: String!, $podcastId: String!) {

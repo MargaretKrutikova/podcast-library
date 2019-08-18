@@ -11,12 +11,8 @@ let make = (~episode: LibraryTypes.myEpisode, ~userId, ~podcastItunesId) => {
       ~userId,
       (),
     );
-  let myLibraryQuery = LibraryQueries.GetMyLibrary.make(~userId, ());
 
-  let refetchQueries = [|
-    Utils.toQueryObj(myEpisodesQuery),
-    Utils.toQueryObj(myLibraryQuery),
-  |];
+  let refetchQueries = [|Utils.toQueryObj(myEpisodesQuery)|];
 
   let (onRemove, removeResult) =
     UseRemoveEpisode.useRemoveEpisode(

@@ -9,7 +9,11 @@ let make = (~podcastId: string, ~userId) => {
     LibraryQueries.GetMyEpisodes.make(~userId, ~podcastId, ());
 
   let (simple, _full) =
-    MyEpisodesQuery.use(~variables=getMyEpisodes##variables, ());
+    MyEpisodesQuery.use(
+      ~variables=getMyEpisodes##variables,
+      ~fetchPolicy=NetworkOnly,
+      (),
+    );
 
   <>
     <h1> {str("My episodes")} </h1>

@@ -4,15 +4,13 @@ open Cards;
 let str = ReasonReact.string;
 
 [@react.component]
-let make = (~podcast: MyLibrary.myPodcast, ~userId) => {
+let make = (~podcast: LibraryTypes.myPodcast, ~userId) => {
   let hasSavedEpisodes = podcast.numberOfSavedEpisodes > 0;
-  let dispatch = AppCore.useDispatch();
-
-  let handleRemoveError = _ =>
-    dispatch(ShowNotification({text: "Failed to remove", type_: Danger}));
-
-  let handleRemoveDone = _ =>
-    dispatch(ShowNotification({text: "Removed from library", type_: Info}));
+  let (onRemove, removeResult) =
+    UseRemovePodcast.useRemovePodcast(
+      ~userId,
+      ~podcastId=podcast.listennotesId,
+    );
 
   <LibraryCard hasTopActions=true>
     {hasSavedEpisodes
@@ -46,24 +44,11 @@ let make = (~podcast: MyLibrary.myPodcast, ~userId) => {
           {str("Open in itunes")}
         </NavLink>
         {!hasSavedEpisodes
-           ? <RemoveContent.PodcastMutation
-               onError=handleRemoveError onCompleted=handleRemoveDone>
-               ...{(mutation, {result}) =>
-                 <Button
-                   size="sm"
-                   color="warning"
-                   disabled={result == Loading}
-                   onClick={_ =>
-                     RemoveContent.runPodcastMutation(
-                       ~mutation,
-                       ~podcastId=podcast.listennotesId,
-                       ~userId,
-                     )
-                   }>
-                   {str("Remove")}
-                 </Button>
-               }
-             </RemoveContent.PodcastMutation>
+           ? <ActionButton
+               disabled={removeResult === Loading}
+               onClick=onRemove
+               action=ActionButton.Remove
+             />
            : ReasonReact.null}
       </BottomActions>
     </CardBody>

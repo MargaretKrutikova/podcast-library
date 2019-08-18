@@ -1,28 +1,6 @@
 module SaveEpisodeMutation =
   ReasonApolloHooks.Mutation.Make(LibraryMutations.SaveEpisode);
 
-let getSavedEpisodeId = (mutationResult: SaveEpisodeMutation.mutationResult) =>
-  mutationResult##data
-  ->Belt.Option.flatMap(result => result##insert_episodes)
-  ->Belt.Option.flatMap(result => result##returning->Belt.Array.get(0))
-  ->Belt.Option.flatMap(result => result##myEpisodes->Belt.Array.get(0));
-
-let addEpisodeToCache = (~userId, client, mutationResult) => {
-  let insertedId = getSavedEpisodeId(mutationResult);
-
-  switch (insertedId) {
-  | None => ()
-  | Some(idObj) =>
-    // update cache with ids
-    let updateCache = cache => {
-      let myEpisodes = cache##my_episodes->Belt.Array.concat([|idObj|]);
-      LibraryCache.mergeIdsCache(~cache, ~myEpisodes, ());
-    };
-
-    LibraryCache.updateMyLibrarySavedIds(client, updateCache, userId);
-  };
-};
-
 type fetchResult =
   | NotCalled
   | Fetching
@@ -47,12 +25,13 @@ let useSaveEpisode = (~userId, ~episode: SearchTypes.episode) => {
 
   let (saveEpisodeMutation, simple, _full) =
     SaveEpisodeMutation.use(
-      ~refetchQueries=
-        _ => {
-          let query = LibraryQueries.GetMyLibrary.make(~userId, ());
-          [|ReasonApolloHooks.Utils.toQueryObj(query)|];
-        },
-      ~update=addEpisodeToCache(~userId),
+      ~update=
+        (client, mutationResult) =>
+          mutationResult##data
+          ->Belt.Option.map(result =>
+              LibraryCache.addEpisodeToCache(~userId, client, result)
+            )
+          |> ignore,
       (),
     );
 

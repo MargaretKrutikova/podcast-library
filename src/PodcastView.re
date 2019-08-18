@@ -3,57 +3,38 @@ open Cards;
 
 let str = ReasonReact.string;
 
+module PodcastLoggedInButton = {
+  [@react.component]
+  let make = (~userId, ~podcast, ~isSaved) => {
+    let (onSave, saveResult) =
+      UseSavePodcast.useSavePodcast(~userId, ~podcast);
+
+    let (onRemove, removeResult) =
+      UseRemovePodcast.useRemovePodcast(
+        ~userId,
+        ~podcastId=podcast.listennotesId,
+      );
+
+    isSaved
+      ? <ActionButton
+          disabled={removeResult === Loading}
+          onClick=onRemove
+          action=ActionButton.Remove
+        />
+      : <ActionButton
+          disabled={saveResult == Loading}
+          onClick=onSave
+          action=ActionButton.Save
+        />;
+  };
+};
+
 [@react.component]
 let make = (~podcast: SearchTypes.podcast, ~isSaved) => {
   let dispatch = AppCore.useDispatch();
   let user = UserIdentity.useLoggedInUser();
 
-  /** save */
-  let handleSaveError = _ =>
-    dispatch(ShowNotification({text: "Failed to save", type_: Danger}));
-
-  let handleSaveDone = _ =>
-    dispatch(ShowNotification({text: "Saved to library", type_: Info}));
-
-  let save = (mutation: SavePodcast.Mutation.apolloMutation, userId) => {
-    let refetchMyLibraryQuery = MyLibrary.makeGetMyLibraryQuery(~userId);
-    let savePodcastMutation = SavePodcast.makeMutation(~podcast, ~userId);
-
-    mutation(
-      ~variables=savePodcastMutation##variables,
-      ~refetchQueries=_ => [|Utils.toQueryObj(refetchMyLibraryQuery)|],
-      ~update=SavePodcast.addPodcastIdToCache(~userId),
-      (),
-    )
-    |> ignore;
-  };
-
-  let handleSave = (mutation: SavePodcast.Mutation.apolloMutation) => {
-    switch (user) {
-    | Anonymous => dispatch(OnUnauthorizedAccess)
-    | LoggedIn(id) => save(mutation, id) |> ignore
-    };
-  };
-
-  /** remove */
-  let handleRemove = (mutation: RemoveContent.PodcastMutation.apolloMutation) => {
-    switch (user) {
-    | Anonymous => dispatch(OnUnauthorizedAccess)
-    | LoggedIn(userId) =>
-      RemoveContent.runPodcastMutation(
-        ~mutation,
-        ~podcastId=podcast.listennotesId,
-        ~userId,
-      )
-      |> ignore
-    };
-  };
-
-  let handleRemoveError = _ =>
-    dispatch(ShowNotification({text: "Failed to remove", type_: Danger}));
-
-  let handleRemoveDone = _ =>
-    dispatch(ShowNotification({text: "Removed from library", type_: Info}));
+  let handleAnonymous = () => dispatch(OnUnauthorizedAccess);
 
   <SearchCard isSaved>
     <CardBody>
@@ -81,31 +62,12 @@ let make = (~podcast: SearchTypes.podcast, ~isSaved) => {
           )}>
           {str("Open in itunes")}
         </NavLink>
-        {isSaved
-           ? <RemoveContent.PodcastMutation
-               onError=handleRemoveError onCompleted=handleRemoveDone>
-               ...{(mutation, {result}) =>
-                 <Button
-                   size="sm"
-                   color="warning"
-                   disabled={result == Loading}
-                   onClick={_ => handleRemove(mutation)}>
-                   {str("Remove")}
-                 </Button>
-               }
-             </RemoveContent.PodcastMutation>
-           : <SavePodcast.Mutation
-               onError=handleSaveError onCompleted=handleSaveDone>
-               ...{(mutation, {result}) =>
-                 <Button
-                   size="sm"
-                   color="primary"
-                   disabled={result == Loading}
-                   onClick={_ => handleSave(mutation)}>
-                   {str("Save")}
-                 </Button>
-               }
-             </SavePodcast.Mutation>}
+        {switch (user) {
+         | Anonymous =>
+           <ActionButton onClick=handleAnonymous action=ActionButton.Save />
+         | LoggedIn(userId) =>
+           <PodcastLoggedInButton userId podcast isSaved />
+         }}
       </BottomActions>
     </CardBody>
   </SearchCard>;
