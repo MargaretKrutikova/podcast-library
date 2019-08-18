@@ -1,101 +1,118 @@
-open MyLibrary;
-external cast: Js.Json.t => 'a = "%identity";
+open LibraryQueries;
+external cast: Js.Json.t => GetMyLibrarySavedIds.t = "%identity";
 
-/** library ids cache */
 module GetMyLibrarySavedIdsReadQuery =
   ApolloClient.ReadQuery(GetMyLibrarySavedIds);
 
 module GetMyLibrarySavedIdsWriteQuery =
   ApolloClient.WriteQuery(GetMyLibrarySavedIds);
 
-// this is necessary to keep __typename apollo field on the root cache query
-let mergeIdsCacheJs:
-  (GetMyLibrarySavedIds.t, GetMyLibrarySavedIds.t) => GetMyLibrarySavedIds.t = [%bs.raw
-  {|
-      function (prev, next) {
-        return { ...prev, ...next };
-      }
-    |}
-];
-
 let mergeIdsCache =
-    (~cache: GetMyLibrarySavedIds.t, ~myPodcasts=?, ~myEpisodes=?, ())
-    : GetMyLibrarySavedIds.t => {
+    (~cache, ~myPodcasts=?, ~myEpisodes=?, ()): GetMyLibrarySavedIds.t => {
   "my_podcasts": myPodcasts->Belt.Option.getWithDefault(cache##my_podcasts),
   "my_episodes": myEpisodes->Belt.Option.getWithDefault(cache##my_episodes),
 };
 
-let updateMyLibrarySavedIds =
-    (
-      client,
-      updateCache: GetMyLibrarySavedIds.t => GetMyLibrarySavedIds.t,
-      userId,
-    ) => {
-  let fetchMyLibraryIds = makeGetSavedIdsQuery(~userId);
-  switch (
-    GetMyLibrarySavedIdsReadQuery.readQuery(
-      client,
-      Utils.toReadQueryOptions(fetchMyLibraryIds),
-    )
-  ) {
+let updateMyLibrarySavedIds = (client, updateCache, userId) => {
+  let fetchMyLibraryIds = GetMyLibrarySavedIds.make(~userId, ());
+  let options = Utils.toReadQueryOptions(fetchMyLibraryIds);
+
+  switch (GetMyLibrarySavedIdsReadQuery.readQuery(client, options)) {
   | exception _ => ()
   | cachedResponse =>
     switch (cachedResponse |> Js.Nullable.toOption) {
     | None => ()
     | Some(cachedIds) =>
-      let savedIds = cast(cachedIds);
+      let prevIds = cast(cachedIds);
 
-      let updatedCachedIds = updateCache(savedIds);
+      // this is necessary to keep __typename apollo field on the root cache query
+      let mergeCacheJs: ('a, 'a) => 'a = [%bs.raw
+        {| function (prev, next) {  return { ...prev, ...next }; } |}
+      ];
+
       GetMyLibrarySavedIdsWriteQuery.make(
         ~client,
         ~variables=fetchMyLibraryIds##variables,
-        ~data=updatedCachedIds |> mergeIdsCacheJs(savedIds),
+        ~data=prevIds |> updateCache |> mergeCacheJs(prevIds),
         (),
       );
     }
   };
 };
 
-/** my library cache */
-module GetMyLibraryReadQuery = ApolloClient.ReadQuery(GetMyLibrary);
+/** episodes */
 
-module GetMyLibraryWriteQuery = ApolloClient.WriteQuery(GetMyLibrary);
+let getSavedEpisodeId = (result: LibraryMutations.SaveEpisode.t) =>
+  result##insert_episodes
+  ->Belt.Option.flatMap(result => result##returning->Belt.Array.get(0))
+  ->Belt.Option.flatMap(result => result##myEpisodes->Belt.Array.get(0));
 
-let mergeLibraryCacheJs: (GetMyLibrary.t, GetMyLibrary.t) => GetMyLibrary.t = [%bs.raw
-  {|
-      function (prev, next) {
-        return { ...prev, ...next };
-      }
-    |}
-];
+let addEpisodeToCache = (~userId, client, result) => {
+  switch (result |> getSavedEpisodeId) {
+  | None => ()
+  | Some(idObj) =>
+    // update cache with ids
+    let updateCache = cache => {
+      let myEpisodes = cache##my_episodes->Belt.Array.concat([|idObj|]);
+      mergeIdsCache(~cache, ~myEpisodes, ());
+    };
 
-let updateMyLibraryCache = (client, updateCache, userId) => {
-  let fetchMyLibrary = makeGetMyLibraryQuery(~userId);
-  switch (
-    GetMyLibraryReadQuery.readQuery(
-      client,
-      Utils.toReadQueryOptions(fetchMyLibrary),
-    )
-  ) {
-  | exception _ => ()
-  | cachedResponse =>
-    switch (cachedResponse |> Js.Nullable.toOption) {
-    | None => ()
-    | Some(data) =>
-      let library = cast(data);
-
-      let updatedLibrary = {
-        "get_my_episodes_grouped_by_podcasts":
-          updateCache(library##get_my_episodes_grouped_by_podcasts),
-      };
-
-      GetMyLibraryWriteQuery.make(
-        ~client,
-        ~variables=fetchMyLibrary##variables,
-        ~data=updatedLibrary |> mergeLibraryCacheJs(updatedLibrary),
-        (),
-      );
-    }
+    updateMyLibrarySavedIds(client, updateCache, userId);
   };
-  ();
+};
+
+let getRemovedEpisodeId = (result: LibraryMutations.RemoveEpisode.t) =>
+  result##delete_my_episodes
+  ->Belt.Option.flatMap(result => result##returning->Belt.Array.get(0));
+
+let removeEpisodeFromCache = (~userId, client, result) => {
+  switch (result |> getRemovedEpisodeId) {
+  | None => ()
+  | Some(idObj) =>
+    let updateCache = cache => {
+      let myEpisodes =
+        cache##my_episodes
+        ->Belt.Array.keep(obj => obj##episodeId !== idObj##episodeId);
+      mergeIdsCache(~cache, ~myEpisodes, ());
+    };
+
+    updateMyLibrarySavedIds(client, updateCache, userId);
+  };
+};
+
+/** podcasts */
+let getRemovedPodcastId = (result: LibraryMutations.RemovePodcast.t) =>
+  result##delete_my_podcasts
+  ->Belt.Option.flatMap(result => result##returning->Belt.Array.get(0));
+
+let removePodcastFromCache = (~userId, client, result) => {
+  switch (result |> getRemovedPodcastId) {
+  | None => ()
+  | Some(idObj) =>
+    let updateIdsCache = cache => {
+      let myPodcasts =
+        cache##my_podcasts
+        ->Belt.Array.keep(obj => obj##podcastId !== idObj##podcastId);
+      mergeIdsCache(~cache, ~myPodcasts, ());
+    };
+
+    updateMyLibrarySavedIds(client, updateIdsCache, userId);
+  };
+};
+
+let getSavedPodcastId = (result: LibraryMutations.SavePodcast.t) =>
+  result##insert_my_podcasts
+  ->Belt.Option.flatMap(result => result##returning->Belt.Array.get(0));
+
+let addPodcastToCache = (~userId, client, result) => {
+  switch (result |> getSavedPodcastId) {
+  | None => ()
+  | Some(idObj) =>
+    let updateCache = cache => {
+      let myPodcasts = cache##my_podcasts->Belt.Array.concat([|idObj|]);
+      mergeIdsCache(~cache, ~myPodcasts, ());
+    };
+
+    updateMyLibrarySavedIds(client, updateCache, userId);
+  };
 };

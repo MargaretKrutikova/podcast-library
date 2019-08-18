@@ -1,5 +1,5 @@
 module GetSavedIdsQuery =
-  ReasonApolloHooks.Query.Make(MyLibrary.GetMyLibrarySavedIds);
+  ReasonApolloHooks.Query.Make(LibraryQueries.GetMyLibrarySavedIds);
 
 module SearchResultsView = {
   [@react.component]
@@ -21,7 +21,8 @@ module LoggedInSearchView = {
   let make = (~userId, ~searchType: ContentType.t) => {
     let (_simple, full) =
       GetSavedIdsQuery.use(
-        ~variables=MyLibrary.makeGetSavedIdsQuery(~userId)##variables,
+        ~variables=
+          LibraryQueries.GetMyLibrarySavedIds.make(~userId, ())##variables,
         (),
       );
 

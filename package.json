@@ -33,8 +33,8 @@
     "react-dom": "^16.8.6",
     "react-feather": "^2.0.3",
     "react-netlify-identity-widget": "^0.1.4",
-    "reason-apollo": "git+https://github.com/MargaretKrutikova/reason-apollo.git#develop",
-    "reason-apollo-hooks": "git+https://github.com/MargaretKrutikova/reason-apollo-hooks.git#refetch-queries-vars",
+    "reason-apollo": "0.17.0",
+    "reason-apollo-hooks": "git+https://github.com/MargaretKrutikova/reason-apollo-hooks.git#fetch-policy",
     "reason-react": "^0.7.0",
     "reason-react-elmish": "git+https://github.com/MargaretKrutikova/reason-react-elmish.git",
     "style-loader": "^0.23.1"
