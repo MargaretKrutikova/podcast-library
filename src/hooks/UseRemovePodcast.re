@@ -1,7 +1,7 @@
 module RemovePodcastMutation =
   ReasonApolloHooks.Mutation.Make(LibraryMutations.RemovePodcast);
 
-let useRemovePodcast = (~userId, ~podcastId) => {
+let useRemovePodcast = (~userId, ~podcastId, ~refetchQueries=?, ()) => {
   let dispatch = AppCore.useDispatch();
   let handleRemoveError = _ =>
     dispatch(ShowNotification({text: "Failed to remove", type_: Danger}));
@@ -11,6 +11,8 @@ let useRemovePodcast = (~userId, ~podcastId) => {
 
   let (removePodcastMutation, simple, _full) =
     RemovePodcastMutation.use(
+      ~refetchQueries=?
+        refetchQueries->Belt.Option.map((queries, _) => queries),
       ~update=
         (client, mutationResult) =>
           mutationResult##data

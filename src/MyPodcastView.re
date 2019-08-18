@@ -6,10 +6,16 @@ let str = ReasonReact.string;
 [@react.component]
 let make = (~podcast: LibraryTypes.myPodcast, ~userId) => {
   let hasSavedEpisodes = podcast.numberOfSavedEpisodes > 0;
+
+  let myLibraryQuery = LibraryQueries.GetMyLibrary.make(~userId, ());
+  let refetchQueries = [|Utils.toQueryObj(myLibraryQuery)|];
+
   let (onRemove, removeResult) =
     UseRemovePodcast.useRemovePodcast(
       ~userId,
       ~podcastId=podcast.listennotesId,
+      ~refetchQueries,
+      (),
     );
 
   <LibraryCard hasTopActions=true>

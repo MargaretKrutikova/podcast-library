@@ -29,7 +29,7 @@ let make = () => {
     />
     <Navbar>
       <RouterLink href="/">
-        <NavbarBrand> {str("Podcast library")} </NavbarBrand>
+        <span className="navbar-brand"> {str("Podcast library")} </span>
       </RouterLink>
       <Nav className="ml-auto">
         <NavItem>

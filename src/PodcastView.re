@@ -13,6 +13,7 @@ module PodcastLoggedInButton = {
       UseRemovePodcast.useRemovePodcast(
         ~userId,
         ~podcastId=podcast.listennotesId,
+        (),
       );
 
     isSaved
