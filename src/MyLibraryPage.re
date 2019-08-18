@@ -1,8 +1,8 @@
 open BsReactstrap;
 let str = ReasonReact.string;
 
-module GetMyLibraryQuery =
-  ReasonApolloHooks.Query.Make(LibraryQueries.GetMyLibrary);
+module GetAllPodcastsQuery =
+  ReasonApolloHooks.Query.Make(LibraryQueries.GetAllPodcasts);
 
 module GetAllEpisodesQuery =
   ReasonApolloHooks.Query.Make(LibraryQueries.GetAllEpisodes);
@@ -12,11 +12,11 @@ let make = (~userId) => {
   let (activeType, setActiveType) = React.useState(() => ContentType.Episode);
   let isActive = type_ => activeType == type_;
 
-  let getMyLibrary = LibraryQueries.GetMyLibrary.make(~userId, ());
+  let getAllPodcats = LibraryQueries.GetAllPodcasts.make(~userId, ());
 
-  let (libraryResponse, _full) =
-    GetMyLibraryQuery.use(
-      ~variables=getMyLibrary##variables,
+  let (podcastsResponse, _full) =
+    GetAllPodcastsQuery.use(
+      ~variables=getAllPodcats##variables,
       ~fetchPolicy=NetworkOnly,
       (),
     );
@@ -24,7 +24,7 @@ let make = (~userId) => {
   let getAllEpisodes = LibraryQueries.GetAllEpisodes.make(~userId, ());
   let (episodesResponse, _full) =
     GetAllEpisodesQuery.use(
-      ~variables=getMyLibrary##variables,
+      ~variables=getAllEpisodes##variables,
       ~fetchPolicy=NetworkOnly,
       (),
     );
@@ -66,14 +66,22 @@ let make = (~userId) => {
        | Error(_) => <div> {React.string("Error")} </div>
        }
      | Podcast =>
-       switch (libraryResponse) {
+       switch (podcastsResponse) {
        | NoData => React.null
        | Loading => <div> {React.string("Loading")} </div>
        | Data(response) =>
          <div>
-           {LibraryTypes.toMyLibrary(response).myPodcasts
-            ->Belt.Array.map(podcast =>
-                <MyPodcastView key={podcast.listennotesId} podcast userId />
+           {response##my_podcasts
+            ->Belt.Array.map(data =>
+                <MyPodcastView
+                  key={data##podcastId}
+                  id={data##podcastId}
+                  description={data##podcast##description}
+                  title={data##podcast##title}
+                  publisher={data##podcast##publisher}
+                  itunesId={data##podcast##itunesId}
+                  userId
+                />
               )
             |> React.array}
          </div>

@@ -5,12 +5,7 @@ let str = ReasonReact.string;
 
 [@react.component]
 let make = (~episode: LibraryTypes.myEpisode, ~userId, ~podcastItunesId) => {
-  let myEpisodesQuery =
-    LibraryQueries.GetMyEpisodes.make(
-      ~podcastId=episode.podcastId,
-      ~userId,
-      (),
-    );
+  let myEpisodesQuery = LibraryQueries.GetAllEpisodes.make(~userId, ());
 
   let refetchQueries = [|Utils.toQueryObj(myEpisodesQuery)|];
 

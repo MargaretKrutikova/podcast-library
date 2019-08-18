@@ -27,10 +27,11 @@ module GetMyEpisodes = [%graphql
 module GetAllEpisodes = [%graphql
   {|
     query($userId: String!) {
-      my_episodes(where: {userId: {_eq: $userId}}) {
+      my_episodes(where: {userId: {_eq: $userId}}, order_by: {addedDate: desc}) {
         episodeId
         status @bsDecoder(fn: "EpisodeStatus.decode")
         tags
+        addedDate
         episode {
           listennotesId
           podcastListennotesId
@@ -42,6 +43,23 @@ module GetAllEpisodes = [%graphql
           podcast {
             itunesId
           }
+        }
+      }
+    }
+|}
+];
+
+module GetAllPodcasts = [%graphql
+  {|
+    query($userId: String!) {
+      my_podcasts(where: {userId: {_eq: $userId}}, order_by: {addedDate: desc}) {
+        podcastId
+        addedDate
+        podcast {
+          description
+          itunesId
+          title
+          publisher
         }
       }
     }
