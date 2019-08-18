@@ -4,16 +4,25 @@ open Cards;
 let str = ReasonReact.string;
 
 [@react.component]
-let make = (~podcast: LibraryTypes.myPodcast, ~userId) => {
-  let hasSavedEpisodes = podcast.numberOfSavedEpisodes > 0;
+let make =
+    (
+      ~id,
+      ~numberOfSavedEpisodes=0,
+      ~description,
+      ~title,
+      ~publisher,
+      ~itunesId,
+      ~userId,
+    ) => {
+  let hasSavedEpisodes = numberOfSavedEpisodes > 0;
 
-  let myLibraryQuery = LibraryQueries.GetMyLibrary.make(~userId, ());
-  let refetchQueries = [|Utils.toQueryObj(myLibraryQuery)|];
+  let myPodcastsQuery = LibraryQueries.GetAllPodcasts.make(~userId, ());
+  let refetchQueries = [|Utils.toQueryObj(myPodcastsQuery)|];
 
   let (onRemove, removeResult) =
     UseRemovePodcast.useRemovePodcast(
       ~userId,
-      ~podcastId=podcast.listennotesId,
+      ~podcastId=id,
       ~refetchQueries,
       (),
     );
@@ -21,32 +30,28 @@ let make = (~podcast: LibraryTypes.myPodcast, ~userId) => {
   <LibraryCard hasTopActions=true>
     {hasSavedEpisodes
        ? <TopActions>
-           <RouterLink
-             href={"/my-library/" ++ podcast.listennotesId ++ "/episodes"}>
+           <RouterLink href={"/my-library/" ++ id ++ "/episodes"}>
              {str("Show episodes")}
            </RouterLink>
          </TopActions>
        : ReasonReact.null}
     <CardBody>
-      <CardTitle> {str(podcast.title)} </CardTitle>
-      <LibraryCardSubtitle> {str(podcast.publisher)} </LibraryCardSubtitle>
+      <CardTitle> {str(title)} </CardTitle>
+      <LibraryCardSubtitle> {str(publisher)} </LibraryCardSubtitle>
       {hasSavedEpisodes
          ? <LibraryCardSubtitle>
-             {str(
-                "Saved episodes: "
-                ++ string_of_int(podcast.numberOfSavedEpisodes),
-              )}
+             {str("Saved episodes: " ++ string_of_int(numberOfSavedEpisodes))}
            </LibraryCardSubtitle>
          : ReasonReact.null}
       <CardText tag="div">
         <div
           dangerouslySetInnerHTML={
-            "__html": Utils.truncateDescription(podcast.description),
+            "__html": Utils.truncateDescription(description),
           }
         />
       </CardText>
       <BottomActions>
-        <NavLink href={Utils.makePodcastItunesUrl(podcast.itunesId)}>
+        <NavLink href={Utils.makePodcastItunesUrl(itunesId)}>
           {str("Open in itunes")}
         </NavLink>
         {!hasSavedEpisodes
