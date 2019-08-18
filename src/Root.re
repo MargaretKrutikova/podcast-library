@@ -28,7 +28,9 @@ let make = () => {
       onCloseDialog={() => dispatch(SetShowIdentityModal(false))}
     />
     <Navbar>
-      <NavbarBrand href="/"> {str("Podcast library")} </NavbarBrand>
+      <RouterLink href="/">
+        <NavbarBrand> {str("Podcast library")} </NavbarBrand>
+      </RouterLink>
       <Nav className="ml-auto">
         <NavItem>
           <RouterLink className="nav-link px-2" href="/search">
