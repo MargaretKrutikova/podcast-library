@@ -1,6 +1,3 @@
-open BsReactstrap;
-open Cards;
-
 let str = ReasonReact.string;
 
 module EpisodeLoggedInButton = {
@@ -19,12 +16,12 @@ module EpisodeLoggedInButton = {
     isSaved
       ? <ActionButton
           disabled={removeResult === Loading}
-          onClick=onRemove
+          onClick={_ => onRemove() |> ignore}
           action=ActionButton.Remove
         />
       : <ActionButton
           disabled={saveResult == Loading}
-          onClick=onSave
+          onClick={_ => onSave() |> ignore}
           action=ActionButton.Save
         />;
   };
@@ -37,31 +34,29 @@ let make = (~episode: SearchTypes.episode, ~isSaved) => {
 
   let handleAnonymous = () => dispatch(OnUnauthorizedAccess);
 
-  <SearchCard isSaved>
-    <CardBody>
-      <CardTitle> {str(episode.title)} </CardTitle>
-      <LibraryCardSubtitle>
+  <Cards.SearchCard isSaved>
+    <MaterialUi_CardContent>
+      <MaterialUi_Typography gutterBottom=true variant=`H6>
+        {str(episode.title)}
+      </MaterialUi_Typography>
+      <MaterialUi_Typography gutterBottom=true variant=`Subtitle1>
         {str(episode.podcastTitle ++ ", " ++ episode.pubDate)}
-      </LibraryCardSubtitle>
-      <CardText tag="div">
-        <div
-          dangerouslySetInnerHTML={
-            "__html": Utils.truncateDescription(episode.description),
-          }
-        />
-      </CardText>
-      <BottomActions>
-        <EpisodeItunesLink
-          podcastItunesId={episode.podcastItunesId}
-          episodeName={episode.title}
-        />
-        {switch (user) {
-         | Anonymous =>
-           <ActionButton onClick=handleAnonymous action=ActionButton.Save />
-         | LoggedIn(userId) =>
-           <EpisodeLoggedInButton userId episode isSaved />
-         }}
-      </BottomActions>
-    </CardBody>
-  </SearchCard>;
+      </MaterialUi_Typography>
+      <Cards.Description description={episode.description} />
+    </MaterialUi_CardContent>
+    <Cards.CardActions>
+      <EpisodeItunesLink
+        podcastItunesId={episode.podcastItunesId}
+        episodeName={episode.title}
+      />
+      {switch (user) {
+       | Anonymous =>
+         <ActionButton
+           onClick={_ => handleAnonymous() |> ignore}
+           action=ActionButton.Save
+         />
+       | LoggedIn(userId) => <EpisodeLoggedInButton userId episode isSaved />
+       }}
+    </Cards.CardActions>
+  </Cards.SearchCard>;
 };

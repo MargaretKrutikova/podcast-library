@@ -1,65 +1,73 @@
-open BsReactstrap;
+let style = ReactDOMRe.Style.make;
+[%mui.withStyles
+  "CardActionsStyles"(theme =>
+    {
+      carrootd: style(~position="relative", ~overflow="initial", ()),
+      root:
+        style(
+          ~padding=theme |> Utils.spacing(2),
+          ~paddingTop="0px",
+          ~justifyContent="flex-end",
+          (),
+        ),
+    }
+  )
+];
 
-let str = ReasonReact.string;
-
-module LibraryCardSubtitle = {
+module CardActions = {
   [@react.component]
   let make = (~children) => {
-    <CardSubtitle className="mb-3"> children </CardSubtitle>;
-  };
-};
-
-module BottomActions = {
-  [@react.component]
-  let make = (~children) => {
-    <div className="mt-2 d-flex justify-content-end align-items-center">
+    let classes = CardActionsStyles.useStyles();
+    <MaterialUi_CardActions className={classes.root}>
       children
-    </div>;
+    </MaterialUi_CardActions>;
   };
 };
 
-module TopActions = {
-  [@react.component]
-  let make = (~children) => {
-    <div className="library-card-top-actions d-flex justify-content-end">
-      children
-    </div>;
-  };
-};
-
-module SearchCardActions = {
-  [@react.component]
-  let make = (~isSaved, ~isSaving, ~onSave, ~children) => {
-    <BottomActions>
-      children
-      {!isSaved
-         ? <Button size="sm" color="primary" disabled=isSaving onClick=onSave>
-             {str("Save")}
-           </Button>
-         : ReasonReact.null}
-    </BottomActions>;
-  };
-};
-
-module LibraryCard = {
-  [@react.component]
-  let make = (~hasTopActions=false, ~children) => {
-    let className = "mt-3 mb-3 " ++ (hasTopActions ? " pt-3" : "");
-
-    <Card className> children </Card>;
-  };
-};
+[%mui.withStyles
+  "SearchCardStyles"(theme =>
+    {
+      card: style(~position="relative", ~overflow="initial", ()),
+      savedIcon:
+        style(
+          ~position="absolute",
+          ~right=theme |> Utils.spacing(1),
+          ~top=theme |> Utils.spacingTransform(1, space => space * (-1)),
+          (),
+        ),
+      searchInput: style(~fontSize="24px", ()),
+    }
+  )
+];
 
 module SearchCard = {
   [@react.component]
   let make = (~isSaved, ~children) => {
-    <LibraryCard hasTopActions=isSaved>
+    let classes = SearchCardStyles.useStyles();
+
+    <MaterialUi_Card className={classes.card}>
       {isSaved
-         ? <TopActions>
-             <Badge color="info"> {str("Saved")} </Badge>
-           </TopActions>
-         : ReasonReact.null}
+         ? <ReactFeather.BookmarkIcon
+             className={classes.savedIcon}
+             fill="#669BBC"
+             color="#29335C"
+           />
+         : React.null}
       children
-    </LibraryCard>;
+    </MaterialUi_Card>;
+  };
+};
+
+module Description = {
+  [@react.component]
+  let make = (~description) => {
+    <MaterialUi_Typography
+      variant=`Body1 color=`TextSecondary component={`String("div")}>
+      <div
+        dangerouslySetInnerHTML={
+          "__html": Utils.truncateDescription(description),
+        }
+      />
+    </MaterialUi_Typography>;
   };
 };

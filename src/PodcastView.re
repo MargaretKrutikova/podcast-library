@@ -1,4 +1,3 @@
-open BsReactstrap;
 open Cards;
 
 let str = ReasonReact.string;
@@ -19,12 +18,12 @@ module PodcastLoggedInButton = {
     isSaved
       ? <ActionButton
           disabled={removeResult === Loading}
-          onClick=onRemove
+          onClick={_ => onRemove() |> ignore}
           action=ActionButton.Remove
         />
       : <ActionButton
           disabled={saveResult == Loading}
-          onClick=onSave
+          onClick={_ => onSave() |> ignore}
           action=ActionButton.Save
         />;
   };
@@ -38,38 +37,39 @@ let make = (~podcast: SearchTypes.podcast, ~isSaved) => {
   let handleAnonymous = () => dispatch(OnUnauthorizedAccess);
 
   <SearchCard isSaved>
-    <CardBody>
-      <CardTitle> {str(podcast.title)} </CardTitle>
-      <LibraryCardSubtitle>
+    <MaterialUi_CardContent>
+      <MaterialUi_Typography gutterBottom=true variant=`H6>
+        {str(podcast.title)}
+      </MaterialUi_Typography>
+      <MaterialUi_Typography variant=`Subtitle1>
+        {str(podcast.publisher)}
+      </MaterialUi_Typography>
+      <MaterialUi_Typography gutterBottom=true variant=`Subtitle2>
         {str(
            "Total: "
            ++ string_of_int(podcast.totalEpisodes)
            ++ ", last published: "
            ++ podcast.latestPubDate,
          )}
-      </LibraryCardSubtitle>
-      <LibraryCardSubtitle> {str(podcast.publisher)} </LibraryCardSubtitle>
-      <CardText tag="div">
-        <div
-          dangerouslySetInnerHTML={
-            "__html": Utils.truncateDescription(podcast.description),
-          }
-        />
-      </CardText>
-      <BottomActions>
-        <NavLink
-          href={Utils.makePodcastItunesUrl(
-            string_of_int(podcast.podcastItunesId),
-          )}>
-          {str("Open in itunes")}
-        </NavLink>
-        {switch (user) {
-         | Anonymous =>
-           <ActionButton onClick=handleAnonymous action=ActionButton.Save />
-         | LoggedIn(userId) =>
-           <PodcastLoggedInButton userId podcast isSaved />
-         }}
-      </BottomActions>
-    </CardBody>
+      </MaterialUi_Typography>
+      <Cards.Description description={podcast.description} />
+    </MaterialUi_CardContent>
+    <Cards.CardActions>
+      <MaterialUi_Button
+        color=`Secondary
+        href={Utils.makePodcastItunesUrl(
+          string_of_int(podcast.podcastItunesId),
+        )}>
+        {str("Open in itunes")}
+      </MaterialUi_Button>
+      {switch (user) {
+       | Anonymous =>
+         <ActionButton
+           onClick={_ => handleAnonymous() |> ignore}
+           action=ActionButton.Save
+         />
+       | LoggedIn(userId) => <PodcastLoggedInButton userId podcast isSaved />
+       }}
+    </Cards.CardActions>
   </SearchCard>;
 };
