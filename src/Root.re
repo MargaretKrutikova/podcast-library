@@ -1,7 +1,13 @@
-open BsReactstrap;
 open ReactNetlifyIdentityWidget;
 
 let str = ReasonReact.string;
+let style = ReactDOMRe.Style.make;
+[%mui.withStyles
+  "RootStyles"({
+    grow: style(~flex="1 1 auto", ()),
+    searchInput: style(~fontSize="24px", ()),
+  })
+];
 
 let getShowIdentityModal = (model: AppCore.model) => model.showIdentityModal;
 
@@ -21,48 +27,45 @@ let make = () => {
       <MyEpisodesPage podcastId=id userId />
     | (_, _) => <SearchPage userId=id />
     };
-
+  let classes = RootStyles.useStyles();
   <div>
     <IdentityModal
       showDialog
       onCloseDialog={() => dispatch(SetShowIdentityModal(false))}
     />
-    <Navbar>
-      <RouterLink href="/">
-        <span className="navbar-brand"> {str("Podcast library")} </span>
-      </RouterLink>
-      <Nav className="ml-auto">
-        <NavItem>
-          <RouterLink className="nav-link px-2" href="/search">
-            <ReactFeather.SearchIcon />
+    // "#A3CEF1"
+    <MaterialUi_AppBar color=`Primary position=`Static>
+      <MaterialUi_Container>
+        <MaterialUi_Toolbar disableGutters=true>
+          <RouterLink variant="h4" href="/" underline=`None>
+            {str("Podcast library")}
           </RouterLink>
-        </NavItem>
-        {UserIdentity.isLoggedIn(identity)
-           ? <>
-               <NavItem>
-                 <NavLink
-                   className="px-2"
-                   href="#"
-                   onClick={() => dispatch(SetShowIdentityModal(true))}>
+          <div className={classes.grow} />
+          <RouterLink href="/search" underline=`None>
+            <MaterialUi_IconButton color=`Inherit>
+              <ReactFeather.SearchIcon />
+            </MaterialUi_IconButton>
+          </RouterLink>
+          {UserIdentity.isLoggedIn(identity)
+             ? <>
+                 <MaterialUi_IconButton
+                   color=`Inherit
+                   onClick={_ => dispatch(SetShowIdentityModal(true))}>
                    <ReactFeather.UserIcon />
-                 </NavLink>
-               </NavItem>
-               <NavItem>
-                 <RouterLink className="nav-link px-2" href="/my-library">
+                 </MaterialUi_IconButton>
+                 <RouterLink href="/my-library">
                    {str("My Library")}
                  </RouterLink>
-               </NavItem>
-             </>
-           : <NavItem>
-               <NavLink
-                 href="#"
-                 onClick={() => dispatch(SetShowIdentityModal(true))}>
+               </>
+             : <MaterialUi_Button
+                 color=`Inherit
+                 onClick={_ => dispatch(SetShowIdentityModal(true))}>
                  {str("Log in")}
-               </NavLink>
-             </NavItem>}
-      </Nav>
-    </Navbar>
-    <Container> pageToShow </Container>
+               </MaterialUi_Button>}
+        </MaterialUi_Toolbar>
+      </MaterialUi_Container>
+    </MaterialUi_AppBar>
+    <MaterialUi_Container> pageToShow </MaterialUi_Container>
     <RootNotifications />
   </div>;
 };
