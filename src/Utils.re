@@ -74,3 +74,13 @@ let fromBigInt = value =>
   value->Js.Json.decodeNumber->Belt.Option.mapWithDefault(0, int_of_float);
 
 let makePositive = number => number < 0 ? 0 : number;
+
+/** material ui */
+let px_of_float = x => x->int_of_float->string_of_int ++ "px";
+let px_of_int = x => x->string_of_int ++ "px";
+
+let spacing = (ind, theme) =>
+  theme->MaterialUi.Theme.Theme.spacingGet(ind)->px_of_int;
+
+let spacingTransform = (ind, transform, theme) =>
+  theme->MaterialUi.Theme.Theme.spacingGet(ind)->transform->px_of_int;

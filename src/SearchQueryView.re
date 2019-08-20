@@ -11,7 +11,6 @@ let style = ReactDOMRe.Style.make;
           (),
         ),
       searchInput: style(~fontSize="24px", ()),
-      contentTabs: style(~marginBottom=theme |> Utils.spacing(3), ()),
     }
   )
 ];
@@ -64,20 +63,9 @@ let make = () => {
         />
       </MaterialUi_FormControl>
     </form>
-    <MaterialUi_Tabs
-      className={classes.contentTabs}
-      value=activeTabValue
-      indicatorColor=`Primary
-      textColor=`Primary
-      variant=`FullWidth>
-      <MaterialUi_Tab
-        onClick={_ => dispatch(SetContentType(Episode))}
-        label={React.string("Episodes")}
-      />
-      <MaterialUi_Tab
-        onClick={_ => dispatch(SetContentType(Podcast))}
-        label={React.string("Podcasts")}
-      />
-    </MaterialUi_Tabs>
+    <ContentTabs
+      activeTab={searchQuery.searchType}
+      onTabChange={contentType => dispatch(SetContentType(contentType))}
+    />
   </>;
 };

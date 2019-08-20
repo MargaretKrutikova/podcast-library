@@ -46,7 +46,7 @@ type baseQuery = {
 };
 
 let createBaseQuery = () => {
-  searchTerm: "Elm",
+  searchTerm: "",
   language: Some("English"),
   genreIds: None,
 };

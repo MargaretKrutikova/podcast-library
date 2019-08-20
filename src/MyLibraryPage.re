@@ -1,4 +1,3 @@
-open BsReactstrap;
 let str = ReasonReact.string;
 
 module GetAllPodcastsQuery =
@@ -10,7 +9,6 @@ module GetAllEpisodesQuery =
 [@react.component]
 let make = (~userId) => {
   let (activeType, setActiveType) = React.useState(() => ContentType.Episode);
-  let isActive = type_ => activeType == type_;
 
   let getAllPodcats = LibraryQueries.GetAllPodcasts.make(~userId, ());
 
@@ -30,23 +28,14 @@ let make = (~userId) => {
     );
 
   <>
-    <h1> {React.string("My library")} </h1>
-    <Nav tabs=true>
-      <NavItem>
-        <NavLink
-          active={isActive(Episode)}
-          onClick={_ => setActiveType(_ => Episode)}>
-          {str("Episodes")}
-        </NavLink>
-      </NavItem>
-      <NavItem>
-        <NavLink
-          active={isActive(Podcast)}
-          onClick={_ => setActiveType(_ => Podcast)}>
-          {str("Podcasts")}
-        </NavLink>
-      </NavItem>
-    </Nav>
+    <MaterialUi_Typography
+      variant=`H3 component={`String("h1")} gutterBottom=true>
+      {React.string("My library")}
+    </MaterialUi_Typography>
+    <ContentTabs
+      activeTab=activeType
+      onTabChange={contentType => setActiveType(_ => contentType)}
+    />
     {switch (activeType) {
      | Episode =>
        switch (episodesResponse) {
