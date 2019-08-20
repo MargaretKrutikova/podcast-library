@@ -1,7 +1,9 @@
 module Container = {
   [@react.component]
   let make = (~children) => {
-    <MaterialUi_Grid container=true spacing=V3> children </MaterialUi_Grid>;
+    <MaterialUi_Grid direction=`Column container=true spacing=V2>
+      children
+    </MaterialUi_Grid>;
   };
 };
 

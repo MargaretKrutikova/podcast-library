@@ -27,3 +27,18 @@ module UserIcon = {
     React.element =
     "User";
 };
+
+module BookmarkIcon = {
+  [@bs.module "react-feather"] [@react.component]
+  external make:
+    (
+      ~color: string=?,
+      ~onClick: 'c=?,
+      ~size: string=?,
+      ~fill: string=?,
+      ~className: string=?,
+      unit
+    ) =>
+    React.element =
+    "Bookmark";
+};

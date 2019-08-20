@@ -60,7 +60,7 @@ let make = (~podcastItunesId, ~episodeName) => {
   };
 
   <MaterialUi_Button
-    color=`Primary
+    color=`Secondary
     onClick={_ => handleItunesLinkClick() |> ignore}
     disabled={itunesId == Fetching}>
     {React.string("Open in itunes")}
