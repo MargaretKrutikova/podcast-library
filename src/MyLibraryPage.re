@@ -42,16 +42,20 @@ let make = (~userId) => {
        | NoData => React.null
        | Loading => <div> {React.string("Loading")} </div>
        | Data(response) =>
-         response##my_episodes
-         ->Belt.Array.map(data =>
-             <MyEpisodeView
-               key={data##episode##listennotesId}
-               episode={LibraryTypes.toMyEpisode(data)}
-               podcastItunesId={Some(data##episode##podcast##itunesId)}
-               userId
-             />
-           )
-         |> ReasonReact.array
+         <LibraryGrid.Container>
+           {response##my_episodes
+            ->Belt.Array.map(data =>
+                <LibraryGrid.Item key={data##episode##listennotesId}>
+                  <MyEpisodeView
+                    episode={LibraryTypes.toMyEpisode(data)}
+                    podcastItunesId={Some(data##episode##podcast##itunesId)}
+                    userId
+                  />
+                </LibraryGrid.Item>
+              )
+            |> ReasonReact.array}
+         </LibraryGrid.Container>
+
        | Error(_) => <div> {React.string("Error")} </div>
        }
      | Podcast =>
@@ -59,21 +63,22 @@ let make = (~userId) => {
        | NoData => React.null
        | Loading => <div> {React.string("Loading")} </div>
        | Data(response) =>
-         <div>
+         <LibraryGrid.Container>
            {response##my_podcasts
             ->Belt.Array.map(data =>
-                <MyPodcastView
-                  key={data##podcastId}
-                  id={data##podcastId}
-                  description={data##podcast##description}
-                  title={data##podcast##title}
-                  publisher={data##podcast##publisher}
-                  itunesId={data##podcast##itunesId}
-                  userId
-                />
+                <LibraryGrid.Item key={data##podcastId}>
+                  <MyPodcastView
+                    id={data##podcastId}
+                    description={data##podcast##description}
+                    title={data##podcast##title}
+                    publisher={data##podcast##publisher}
+                    itunesId={data##podcast##itunesId}
+                    userId
+                  />
+                </LibraryGrid.Item>
               )
             |> React.array}
-         </div>
+         </LibraryGrid.Container>
        | Error(_) => <div> {React.string("Error")} </div>
        }
      }}

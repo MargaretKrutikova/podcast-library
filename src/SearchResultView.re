@@ -1,4 +1,17 @@
-open BsReactstrap;
+let style = ReactDOMRe.Style.make;
+[%mui.withStyles
+  "LoadMoreStyles"(theme =>
+    {
+      root:
+        style(
+          ~marginTop=theme |> Utils.spacing(2),
+          ~display="block",
+          ~margin="0 auto",
+          (),
+        ),
+    }
+  )
+];
 
 [@react.component]
 let make =
@@ -7,26 +20,33 @@ let make =
       ~renderData: 'a => React.element,
     ) => {
   switch (result) {
-  | {loading: true, data: None} => <div> {React.string("Loading")} </div>
+  | {loading: true, data: None} =>
+    <MaterialUi_Typography> {React.string("Loading")} </MaterialUi_Typography>
   | {data: Some(data)} => renderData(data)
   | {error: Some(error)} =>
     <div> {ReasonReact.string(error##message)} </div>
   | {error: None, data: None, loading: false} =>
-    <div> {React.string("Not asked")} </div>
+    <MaterialUi_Typography>
+      {React.string("Not asked")}
+    </MaterialUi_Typography>
   };
 };
 
 module LoadMoreButton = {
   [@react.component]
   let make = (~nextOffset, ~total, ~isFetching, ~onClick) => {
+    let classes = LoadMoreStyles.useStyles();
     let hasMore = nextOffset < total;
 
     hasMore
-      ? <div className="load-more-button-container">
-          <Button color="info" onClick disabled=isFetching>
-            {ReasonReact.string("Fetch more")}
-          </Button>
-        </div>
+      ? <MaterialUi_Button
+          className={classes.root}
+          onClick
+          disabled=isFetching
+          color=`Secondary
+          variant=`Contained>
+          {React.string("Fetch more")}
+        </MaterialUi_Button>
       : ReasonReact.null;
   };
 };

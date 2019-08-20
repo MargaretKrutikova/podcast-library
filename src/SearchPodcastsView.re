@@ -30,19 +30,22 @@ let make = (~savedIds) => {
     result=full
     renderData={data =>
       <>
-        {data##searchPodcasts.results
-         ->Belt.Array.map(podcast =>
-             <PodcastView
-               key={podcast.listennotesId}
-               podcast
-               isSaved={
-                 savedIds->Belt.Array.some(idObj =>
-                   idObj##podcastId === podcast.listennotesId
-                 )
-               }
-             />
-           )
-         |> ReasonReact.array}
+        <LibraryGrid.Container>
+          {data##searchPodcasts.results
+           ->Belt.Array.map(podcast =>
+               <LibraryGrid.Item key={podcast.listennotesId}>
+                 <PodcastView
+                   podcast
+                   isSaved={
+                     savedIds->Belt.Array.some(idObj =>
+                       idObj##podcastId === podcast.listennotesId
+                     )
+                   }
+                 />
+               </LibraryGrid.Item>
+             )
+           |> ReasonReact.array}
+        </LibraryGrid.Container>
         <SearchResultView.LoadMoreButton
           nextOffset={data##searchPodcasts.nextOffset}
           total={data##searchPodcasts.total}
