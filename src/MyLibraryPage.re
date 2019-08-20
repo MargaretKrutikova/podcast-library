@@ -28,10 +28,7 @@ let make = (~userId) => {
     );
 
   <>
-    <MaterialUi_Typography
-      variant=`H3 component={`String("h1")} gutterBottom=true>
-      {React.string("My library")}
-    </MaterialUi_Typography>
+    <PageTitle title="My library" />
     <ContentTabs
       activeTab=activeType
       onTabChange={contentType => setActiveType(_ => contentType)}

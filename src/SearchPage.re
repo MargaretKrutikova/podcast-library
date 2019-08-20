@@ -45,7 +45,7 @@ let make = (~userId) => {
   let searchType = AppCore.useSelector(getSearchType);
 
   <>
-    <h1> {ReasonReact.string("Search library")} </h1>
+    <PageTitle title="Search library" />
     <SearchQueryView />
     {switch (userId) {
      | Some(userId) => <LoggedInSearchView userId searchType />
