@@ -1,21 +1,20 @@
-open BsReactstrap;
-
 let str = ReasonReact.string;
-
-module SearchTypeButton = {
-  [@react.component]
-  let make = (~searchType, ~activeSearchType, ~text) => {
-    let dispatch = Hooks.useSearchDispatch();
-    let isActive = searchType == activeSearchType;
-
-    <Button
-      onClick={_ => dispatch(SetContentType(searchType))}
-      outline={!isActive}
-      color="info">
-      {str(text)}
-    </Button>;
-  };
-};
+let style = ReactDOMRe.Style.make;
+[%mui.withStyles
+  "SearchQueryStyles"(theme =>
+    {
+      searchContainer:
+        style(
+          ~marginBottom=theme |> Utils.spacing(3),
+          ~display="flex",
+          ~flexDirection="row",
+          (),
+        ),
+      searchInput: style(~fontSize="24px", ()),
+      contentTabs: style(~marginBottom=theme |> Utils.spacing(3), ()),
+    }
+  )
+];
 
 [@react.component]
 let make = () => {
@@ -28,8 +27,6 @@ let make = () => {
     setSearchTerm(_ => value);
   };
 
-  let isActive = searchType => searchQuery.searchType == searchType;
-
   React.useEffect1(
     () => {
       setSearchTerm(_ => searchQuery.searchTerm);
@@ -38,41 +35,49 @@ let make = () => {
     [|searchQuery.searchTerm|],
   );
 
-  <Form
-    className="cr-search-form"
-    onSubmit={e => ReactEvent.Form.preventDefault(e)}>
-    <FormGroup>
-      <InputGroup>
-        <Input
-          _type="search"
-          className="cr-search-form__input"
+  let activeTabValue = searchQuery.searchType == Episode ? 0 : 1;
+  let classes = SearchQueryStyles.useStyles();
+
+  <>
+    <form
+      onSubmit={e => {
+        ReactEvent.Form.preventDefault(e);
+        dispatch(EnteredSearchTerm(searchTerm));
+      }}>
+      <MaterialUi_FormControl className={classes.searchContainer}>
+        <MaterialUi_Input
+          type_="search"
           placeholder="Search..."
           value=searchTerm
           onChange=handleSearchTermChange
+          fullWidth=true
+          classes=[Input(classes.searchInput)]
+          endAdornment={
+            <MaterialUi_IconButton
+              color=`Primary
+              type_=`Button
+              onClick={_ => dispatch(EnteredSearchTerm(searchTerm))}
+              size=`Small>
+              <ReactFeather.SearchIcon />
+            </MaterialUi_IconButton>
+          }
         />
-        <Button
-          color="info"
-          onClick={_ => dispatch(EnteredSearchTerm(searchTerm))}
-          size="sm">
-          <ReactFeather.SearchIcon />
-        </Button>
-      </InputGroup>
-    </FormGroup>
-    <Nav tabs=true>
-      <NavItem>
-        <NavLink
-          active={isActive(Episode)}
-          onClick={_ => dispatch(SetContentType(Episode))}>
-          {str("Episodes")}
-        </NavLink>
-      </NavItem>
-      <NavItem>
-        <NavLink
-          active={isActive(Podcast)}
-          onClick={_ => dispatch(SetContentType(Podcast))}>
-          {str("Podcasts")}
-        </NavLink>
-      </NavItem>
-    </Nav>
-  </Form>;
+      </MaterialUi_FormControl>
+    </form>
+    <MaterialUi_Tabs
+      className={classes.contentTabs}
+      value=activeTabValue
+      indicatorColor=`Primary
+      textColor=`Primary
+      variant=`FullWidth>
+      <MaterialUi_Tab
+        onClick={_ => dispatch(SetContentType(Episode))}
+        label={React.string("Episodes")}
+      />
+      <MaterialUi_Tab
+        onClick={_ => dispatch(SetContentType(Podcast))}
+        label={React.string("Podcasts")}
+      />
+    </MaterialUi_Tabs>
+  </>;
 };

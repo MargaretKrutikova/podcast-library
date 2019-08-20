@@ -1,5 +1,3 @@
-open BsReactstrap;
-
 type itunesWebData =
   | Unknown
   | Fetching
@@ -61,10 +59,10 @@ let make = (~podcastItunesId, ~episodeName) => {
     };
   };
 
-  <NavLink
-    onClick=handleItunesLinkClick
-    disabled={itunesId == Fetching}
-    href={createItunesLinkHref(podcastItunesId, itunesId)}>
-    {ReasonReact.string("Open in itunes")}
-  </NavLink>;
+  <MaterialUi_Button
+    color=`Primary
+    onClick={_ => handleItunesLinkClick() |> ignore}
+    disabled={itunesId == Fetching}>
+    {React.string("Open in itunes")}
+  </MaterialUi_Button>;
 };

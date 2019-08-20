@@ -1,3 +1,7 @@
+.MuiButtonBase-root {
+  outline: 0 !important;
+}
+
 /** cards */
 .library-card-top-actions {
   position: absolute;
@@ -19,4 +23,15 @@
   display: flex;
   justify-content: center;
   margin-bottom: 25px;
+}
+
+input[type="search"]::placeholder {
+  font-weight: 300 !important;
+}
+
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+  display: none;
 }
