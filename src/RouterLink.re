@@ -10,6 +10,7 @@ let make =
       ~underline=?,
       ~component=?,
       ~children,
+      ~color=?,
     ) => {
   let handleClick = event =>
     if (!ReactEvent.Mouse.defaultPrevented(event)
@@ -18,13 +19,7 @@ let make =
       ReasonReact.Router.push(href);
     };
   <MuiLink_Extended
-    href
-    className
-    onClick=handleClick
-    color=`Inherit
-    ?underline
-    ?variant
-    ?component>
+    href className onClick=handleClick ?color ?underline ?variant ?component>
     children
   </MuiLink_Extended>;
 };

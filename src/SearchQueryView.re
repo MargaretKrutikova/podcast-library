@@ -34,7 +34,6 @@ let make = () => {
     [|searchQuery.searchTerm|],
   );
 
-  let activeTabValue = searchQuery.searchType == Episode ? 0 : 1;
   let classes = SearchQueryStyles.useStyles();
 
   <>

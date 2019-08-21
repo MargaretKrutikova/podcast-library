@@ -84,3 +84,11 @@ let spacing = (ind, theme) =>
 
 let spacingTransform = (ind, transform, theme) =>
   theme->MaterialUi.Theme.Theme.spacingGet(ind)->transform->px_of_int;
+
+let getPalette = theme => theme->MaterialUi.Theme.Theme.paletteGet;
+
+let getPrimaryColor = theme =>
+  getPalette(theme)->MaterialUi.Theme.Palette.primaryGet;
+
+let getSecondaryColor = theme =>
+  getPalette(theme)->MaterialUi.Theme.Palette.secondaryGet;

@@ -45,7 +45,7 @@ let make = (~userId) => {
   let searchType = AppCore.useSelector(getSearchType);
 
   <>
-    <PageTitle title="Search library" />
+    <PageTitle title="Search" />
     <SearchQueryView />
     {switch (userId) {
      | Some(userId) => <LoggedInSearchView userId searchType />
