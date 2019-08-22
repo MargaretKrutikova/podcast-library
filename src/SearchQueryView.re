@@ -17,12 +17,12 @@ let style = ReactDOMRe.Style.make;
 
 [@react.component]
 let make = () => {
-  let dispatch = Hooks.useSearchDispatch();
+  let dispatch = AppCore.useDispatch();
   let searchQuery = Hooks.useSearchQuery();
 
   let (searchTerm, setSearchTerm) = React.useState(() => "");
   let handleSearchTermChange = e => {
-    let value = ReactEvent.Form.target(e)##value;
+    let value = Utils.getInputValue(e);
     setSearchTerm(_ => value);
   };
 

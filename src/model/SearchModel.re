@@ -10,15 +10,15 @@ let createInitModel = () => {
   episodeQuery: SearchQuery.createEpisodeQuery(),
 };
 
-let updateSearchTerm = (model, searchTerm) => {
+let updateSearchTerm = (searchTerm, model) => {
   ...model,
   baseQuery: {
     ...model.baseQuery,
     searchTerm,
   },
 };
-let updateEpisodeSearchQuery = (model, episodeQuery) => {
+let updateEpisodeSearchQuery = (episodeQuery, model) => {
   ...model,
   episodeQuery,
 };
-let updateSearchType = (model, searchType) => {...model, searchType};
+let updateSearchType = (searchType, model) => {...model, searchType};
