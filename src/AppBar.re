@@ -12,10 +12,19 @@ let style = ReactDOMRe.Style.make;
                 ~flex="1 1 auto",
                 ~display="flex",
                 ~justifyContent="center",
+                ~alignItems="center",
                 (),
               ),
           ),
-      searchInput: style(~maxWidth="400px", ~fontSize="1.3rem", ()),
+      searchInput:
+        style(
+          ~maxWidth="400px",
+          ~fontSize="1.3rem",
+          ~position="absolute",
+          ~left="50%",
+          ~transform="translateX(-50%)",
+          (),
+        ),
       hideDesktop:
         style()
         ->MaterialUi.ThemeHelpers.addBreakpoint(

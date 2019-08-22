@@ -10,7 +10,7 @@ let style = ReactDOMRe.Style.make;
           ~flexDirection="row",
           (),
         ),
-      searchFormControl: style(~maxWidth="600px", ()),
+      searchFormControl: style(~maxWidth="600px", ~margin="0 auto", ()),
       searchInput: style(~fontSize="26px", ()),
     }
   )

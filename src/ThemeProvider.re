@@ -1,4 +1,6 @@
 external styleToString: ReactDOMRe.Style.t => string = "%identity";
+
+let inputBorderColor = "#817B78";
 let theme =
   MaterialUi_Theme.create(
     MaterialUi_ThemeOptions.(
@@ -12,6 +14,31 @@ let theme =
           ),
         ~overrides=
           Overrides.make(
+            ~muiInput=
+              InputClassKey.make(
+                ~root=
+                  ReactDOMRe.Style.combine(
+                    ReactDOMRe.Style.make()
+                    ->ReactDOMRe.Style.unsafeAddProp(
+                        "&:after",
+                        ReactDOMRe.Style.make(
+                          ~borderBottomColor=inputBorderColor ++ "!important",
+                          (),
+                        )
+                        ->styleToString,
+                      ),
+                    ReactDOMRe.Style.make()
+                    ->ReactDOMRe.Style.unsafeAddProp(
+                        "&:before",
+                        ReactDOMRe.Style.make(
+                          ~borderBottomColor=inputBorderColor ++ "!important",
+                          (),
+                        )
+                        ->styleToString,
+                      ),
+                  ),
+                (),
+              ),
             ~muiIconButton=
               IconButtonClassKey.make(
                 ~root=

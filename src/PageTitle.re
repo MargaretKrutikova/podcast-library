@@ -4,7 +4,12 @@ let style = ReactDOMRe.Style.make;
   "PageTitleStyles"(theme =>
     {
       root:
-        style(~fontWeight="100", ~marginTop=theme |> Utils.spacing(3), ()),
+        style(
+          ~fontWeight="100",
+          ~textAlign="center",
+          ~marginTop=theme |> Utils.spacing(3),
+          (),
+        ),
     }
   )
 ];
