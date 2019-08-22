@@ -1,4 +1,4 @@
-type searchQuery = {query: option(string)};
+type searchQuery = {query: string};
 
 type route =
   | MyLibrary
@@ -8,11 +8,11 @@ type route =
 
 let searchQueryFromDict = dict => {
   switch (Js.Dict.get(dict, "q")) {
-  | Some(Url.Query.Single(s)) => {query: Some(s)}
+  | Some(Url.Query.Single(s)) => {query: s}
   | Some(Multiple(array)) when Js.Array.length(array) > 0 => {
-      query: Some(Js.Array.unsafe_get(array, 0)),
+      query: Js.Array.unsafe_get(array, 0),
     }
-  | _ => {query: None}
+  | _ => {query: ""}
   };
 };
 
@@ -27,11 +27,9 @@ let useAppUrl = () => {
   | []
   | ["search"] =>
     switch (url.search) {
-    | "" => Search({query: None})
+    | "" => Search({query: ""})
     | search =>
       let dict = Url.Query.parse(search);
-      Js.log(dict);
-
       Search(searchQueryFromDict(dict));
     }
   | _ => NotFound
@@ -43,7 +41,7 @@ let getUrlFromRoute = route => {
   | MyLibrary => "/my-library"
   | MyEpisodes(id) => {j|my-library/$id/my-episodes|j}
   | Search(query) =>
-    let params = [||] |> Url.Params.addOption("q", query.query);
+    let params = [||] |> Url.Params.add("q", query.query);
     Url.Params.buildUrl("/search", params);
   | _ => "/"
   };
