@@ -10,6 +10,8 @@ let getSearchTerm = (model: AppCore.model) =>
 
 [@react.component]
 let make = () => {
+  let dispatch = AppCore.useDispatch();
+
   let classes = SearchStyles.useStyles();
   let globalSearchTerm = AppCore.useSelector(getSearchTerm);
   let (searchTerm, setSearchTerm) = React.useState(() => "");
@@ -26,8 +28,17 @@ let make = () => {
     let value = Utils.getInputValue(e);
     setSearchTerm(_ => value);
   };
+  let handleSearch = _ => {
+    dispatch(EnteredSearchTerm(searchTerm));
+    Routing.pushRoute(Search({query: searchTerm}));
+  };
 
-  let searchUrl = Routing.getUrlFromRoute(Search({query: searchTerm}));
+  let handleKeyDown = e => {
+    switch (Utils.onKeyDown(e)) {
+    | Enter => handleSearch()
+    | _ => ()
+    };
+  };
 
   <MaterialUi_Input
     type_="search"
@@ -35,11 +46,12 @@ let make = () => {
     value=searchTerm
     onChange=handleSearchChange
     fullWidth=true
+    onKeyDown=handleKeyDown
     className={classes.searchInput}
     endAdornment={
-      <RouterLink href=searchUrl underline=`None>
+      <MaterialUi_IconButton onClick=handleSearch>
         <ReactFeather.SearchIcon />
-      </RouterLink>
+      </MaterialUi_IconButton>
     }
   />;
 };

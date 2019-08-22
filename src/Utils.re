@@ -75,7 +75,22 @@ let fromBigInt = value =>
 
 let makePositive = number => number < 0 ? 0 : number;
 
+/** inputs */
 let getInputValue = (e): string => ReactEvent.Form.target(e)##value;
+
+type keyPressed =
+  | Enter
+  | Escape
+  | Other;
+
+let onKeyDown = event => {
+  let key = ReactEvent.Keyboard.which(event);
+  switch (key) {
+  | 27 => Escape
+  | 13 => Enter
+  | _ => Other
+  };
+};
 
 /** material ui */
 let px_of_float = x => x->int_of_float->string_of_int ++ "px";

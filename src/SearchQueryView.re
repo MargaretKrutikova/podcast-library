@@ -26,6 +26,13 @@ let make = () => {
     setSearchTerm(_ => value);
   };
 
+  let handleKeyDown = e => {
+    switch (Utils.onKeyDown(e)) {
+    | Enter => dispatch(EnteredSearchTerm(searchTerm))
+    | _ => ()
+    };
+  };
+
   React.useEffect1(
     () => {
       setSearchTerm(_ => searchQuery.searchTerm);
@@ -49,6 +56,7 @@ let make = () => {
           value=searchTerm
           onChange=handleSearchTermChange
           fullWidth=true
+          onKeyDown=handleKeyDown
           classes=[Input(classes.searchInput)]
           endAdornment={
             <MaterialUi_IconButton
