@@ -75,6 +75,8 @@ let fromBigInt = value =>
 
 let makePositive = number => number < 0 ? 0 : number;
 
+let getInputValue = (e): string => ReactEvent.Form.target(e)##value;
+
 /** material ui */
 let px_of_float = x => x->int_of_float->string_of_int ++ "px";
 let px_of_int = x => x->string_of_int ++ "px";
