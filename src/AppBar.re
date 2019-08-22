@@ -15,6 +15,7 @@ let style = ReactDOMRe.Style.make;
                 (),
               ),
           ),
+      searchInput: style(~maxWidth="400px", ~fontSize="1.3rem", ()),
       hideDesktop:
         style()
         ->MaterialUi.ThemeHelpers.addBreakpoint(
@@ -42,8 +43,14 @@ let style = ReactDOMRe.Style.make;
   )
 ];
 
+let isSearchPage = page =>
+  switch (page) {
+  | Routing.Search(_) => true
+  | _ => false
+  };
+
 [@react.component]
-let make = (~isLoggedIn) => {
+let make = (~isLoggedIn, ~activePage) => {
   let dispatch = AppCore.useDispatch();
   let classes = RootStyles.useStyles();
 
@@ -55,28 +62,30 @@ let make = (~isLoggedIn) => {
           {React.string("Podcast library")}
           <ReactFeather.MicIcon className={classes.appIcon} />
         </RouterLink>
-        <div className={classes.desktopSearchBar}> <AppBarSearch /> </div>
+        {!isSearchPage(activePage)
+           ? <div className={classes.desktopSearchBar}>
+               <SearchInput className={classes.searchInput} />
+             </div>
+           : React.null}
         <div className={classes.icons}>
-          <MaterialUi_IconButton
-            color=`Inherit
-            type_=`Button
-            size=`Small
-            className={classes.hideDesktop}>
-            <ReactFeather.SearchIcon />
-          </MaterialUi_IconButton>
+          <RouterLink href={Routing.getUrlFromRoute(Search({query: ""}))}>
+            <MaterialUi_IconButton component={`String("span")}>
+              <ReactFeather.SearchIcon />
+            </MaterialUi_IconButton>
+          </RouterLink>
           {isLoggedIn
              ? <>
                  <MaterialUi_IconButton
-                   color=`Inherit
                    onClick={_ => dispatch(SetShowIdentityModal(true))}>
                    <ReactFeather.UserIcon />
                  </MaterialUi_IconButton>
-                 <RouterLink href="/my-library" color=`Inherit>
-                   <ReactFeather.BookmarkIcon />
+                 <RouterLink href={Routing.getUrlFromRoute(MyLibrary)}>
+                   <MaterialUi_IconButton component={`String("span")}>
+                     <ReactFeather.BookmarkIcon />
+                   </MaterialUi_IconButton>
                  </RouterLink>
                </>
              : <MaterialUi_Button
-                 color=`Inherit
                  onClick={_ => dispatch(SetShowIdentityModal(true))}>
                  {React.string("Log in")}
                </MaterialUi_Button>}

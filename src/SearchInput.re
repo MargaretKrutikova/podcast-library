@@ -1,18 +1,10 @@
-let style = ReactDOMRe.Style.make;
-[%mui.withStyles
-  "SearchStyles"(_ =>
-    {searchInput: style(~maxWidth="400px", ~fontSize="1.3rem", ())}
-  )
-];
-
 let getSearchTerm = (model: AppCore.model) =>
   model.search.baseQuery.searchTerm;
 
 [@react.component]
-let make = () => {
+let make = (~className=?, ~classes: option(MaterialUi_Input.Classes.t)=?) => {
   let dispatch = AppCore.useDispatch();
 
-  let classes = SearchStyles.useStyles();
   let globalSearchTerm = AppCore.useSelector(getSearchTerm);
   let (searchTerm, setSearchTerm) = React.useState(() => "");
 
@@ -47,9 +39,10 @@ let make = () => {
     onChange=handleSearchChange
     fullWidth=true
     onKeyDown=handleKeyDown
-    className={classes.searchInput}
+    ?className
+    ?classes
     endAdornment={
-      <MaterialUi_IconButton onClick=handleSearch>
+      <MaterialUi_IconButton type_=`Button onClick=handleSearch size=`Small>
         <ReactFeather.SearchIcon />
       </MaterialUi_IconButton>
     }

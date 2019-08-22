@@ -55,7 +55,7 @@ let make =
     );
 
     <>
-      <PageTitle title="Search" />
+      <PageTitle title="Search results" />
       <SearchQueryView />
       {switch (userId) {
        | Some(userId) => <LoggedInSearchView userId searchType />

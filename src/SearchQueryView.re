@@ -10,7 +10,8 @@ let style = ReactDOMRe.Style.make;
           ~flexDirection="row",
           (),
         ),
-      searchInput: style(~fontSize="24px", ()),
+      searchFormControl: style(~maxWidth="600px", ()),
+      searchInput: style(~fontSize="26px", ()),
     }
   )
 ];
@@ -20,56 +21,17 @@ let make = () => {
   let dispatch = AppCore.useDispatch();
   let searchQuery = Hooks.useSearchQuery();
 
-  let (searchTerm, setSearchTerm) = React.useState(() => "");
-  let handleSearchTermChange = e => {
-    let value = Utils.getInputValue(e);
-    setSearchTerm(_ => value);
-  };
-
-  let handleKeyDown = e => {
-    switch (Utils.onKeyDown(e)) {
-    | Enter => dispatch(EnteredSearchTerm(searchTerm))
-    | _ => ()
-    };
-  };
-
-  React.useEffect1(
-    () => {
-      setSearchTerm(_ => searchQuery.searchTerm);
-      None;
-    },
-    [|searchQuery.searchTerm|],
-  );
-
   let classes = SearchQueryStyles.useStyles();
 
   <>
-    <form
-      onSubmit={e => {
-        ReactEvent.Form.preventDefault(e);
-        dispatch(EnteredSearchTerm(searchTerm));
-      }}>
-      <MaterialUi_FormControl className={classes.searchContainer}>
-        <MaterialUi_Input
-          type_="search"
-          placeholder="Search..."
-          value=searchTerm
-          onChange=handleSearchTermChange
-          fullWidth=true
-          onKeyDown=handleKeyDown
-          classes=[Input(classes.searchInput)]
-          endAdornment={
-            <MaterialUi_IconButton
-              color=`Primary
-              type_=`Button
-              onClick={_ => dispatch(EnteredSearchTerm(searchTerm))}
-              size=`Small>
-              <ReactFeather.SearchIcon />
-            </MaterialUi_IconButton>
-          }
-        />
-      </MaterialUi_FormControl>
-    </form>
+    <MaterialUi_FormControl className={classes.searchContainer}>
+      <SearchInput
+        classes=[
+          Input(classes.searchInput),
+          FormControl(classes.searchFormControl),
+        ]
+      />
+    </MaterialUi_FormControl>
     <ContentTabs
       activeTab={searchQuery.searchType}
       onTabChange={contentType => dispatch(SetContentType(contentType))}

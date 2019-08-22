@@ -32,7 +32,7 @@ let make = () => {
       showDialog
       onCloseDialog={() => dispatch(SetShowIdentityModal(false))}
     />
-    <AppBar isLoggedIn={UserIdentity.isLoggedIn(identity)} />
+    <AppBar isLoggedIn={UserIdentity.isLoggedIn(identity)} activePage=route />
     <MaterialUi_Container> pageToShow </MaterialUi_Container>
     <RootNotifications />
   </div>;

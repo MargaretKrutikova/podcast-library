@@ -12,6 +12,12 @@ let theme =
           ),
         ~overrides=
           Overrides.make(
+            ~muiIconButton=
+              IconButtonClassKey.make(
+                ~root=
+                  ReactDOMRe.Style.make(~padding="8px", ~color="#404040", ()),
+                (),
+              ),
             ~muiLink=
               LinkClassKey.make(
                 ~root=
@@ -29,7 +35,7 @@ let theme =
                   ReactDOMRe.Style.make(
                     ~backgroundColor="#ECE0DB !important",
                     ~boxShadow=
-                      "0px 1px 0px 0px rgba(0,0,0,0.2), 0px 2px 6px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12)",
+                      "0px 2px 6px 0px rgba(0,0,0,0.14), 0px 1px 12px 0px rgba(0,0,0,0.12)",
                     (),
                   ),
                 (),
