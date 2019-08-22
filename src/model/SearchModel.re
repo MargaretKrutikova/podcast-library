@@ -10,24 +10,15 @@ let createInitModel = () => {
   episodeQuery: SearchQuery.createEpisodeQuery(),
 };
 
-type message =
-  | EnteredSearchTerm(string)
-  | SetContentType(ContentType.t);
-
-/** update */
-
-let updateBaseSearchQuery = (model, baseQuery) => {...model, baseQuery};
-
+let updateSearchTerm = (model, searchTerm) => {
+  ...model,
+  baseQuery: {
+    ...model.baseQuery,
+    searchTerm,
+  },
+};
 let updateEpisodeSearchQuery = (model, episodeQuery) => {
   ...model,
   episodeQuery,
 };
-
-let update = (model, message) =>
-  switch (message) {
-  | EnteredSearchTerm(searchTerm) => (
-      updateBaseSearchQuery(model, {...model.baseQuery, searchTerm}),
-      None,
-    )
-  | SetContentType(searchType) => ({...model, searchType}, None)
-  };
+let updateSearchType = (model, searchType) => {...model, searchType};

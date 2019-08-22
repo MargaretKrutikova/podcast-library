@@ -3,9 +3,10 @@ type message =
     ShowNotification(AppNotifications.data)
   | HideNotification(int)
   | RemoveNotification(int)
-  | GotSearchMessage(SearchModel.message)
   | OnUnauthorizedAccess
-  | SetShowIdentityModal(bool);
+  | SetShowIdentityModal(bool)
+  | EnteredSearchTerm(string)
+  | SetContentType(ContentType.t);
 
 type model = {
   search: SearchModel.t,
@@ -23,9 +24,20 @@ let createInitModel = () => {
 
 let update = (model, message) => {
   switch (message) {
-  | GotSearchMessage(subMessage) =>
-    let (search, effect) = SearchModel.update(model.search, subMessage);
-    ({...model, search}, effect);
+  | EnteredSearchTerm(searchTerm) => (
+      {
+        ...model,
+        search: SearchModel.updateSearchTerm(model.search, searchTerm),
+      },
+      None,
+    )
+  | SetContentType(searchType) => (
+      {
+        ...model,
+        search: SearchModel.updateSearchType(model.search, searchType),
+      },
+      None,
+    )
   | OnUnauthorizedAccess => ({...model, showIdentityModal: true}, None)
   | SetShowIdentityModal(showIdentityModal) => (
       {...model, showIdentityModal},
