@@ -16,10 +16,10 @@ type saveEpisodeResult('a) =
 let useSaveEpisode = (~userId, ~episode: SearchTypes.episode) => {
   let dispatch = AppCore.useDispatch();
   let handleSaveError = _ =>
-    dispatch(ShowNotification({text: "Failed to save", type_: Danger}));
+    dispatch(ShowNotification({text: "Failed to save", type_: Error}));
 
   let handleSaveDone = _ =>
-    dispatch(ShowNotification({text: "Saved to library", type_: Info}));
+    dispatch(ShowNotification({text: "Saved to library", type_: Success}));
 
   let (fetchEpisodeResult, setFetchResult) = React.useState(() => NotCalled);
 

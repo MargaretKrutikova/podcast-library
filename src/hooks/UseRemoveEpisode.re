@@ -4,10 +4,12 @@ module RemoveEpisodeMutation =
 let useRemoveEpisode = (~userId, ~episodeId, ~refetchQueries=?, ()) => {
   let dispatch = AppCore.useDispatch();
   let handleRemoveError = _ =>
-    dispatch(ShowNotification({text: "Failed to remove", type_: Danger}));
+    dispatch(ShowNotification({text: "Failed to remove", type_: Error}));
 
   let handleRemoveDone = _ =>
-    dispatch(ShowNotification({text: "Removed from library", type_: Info}));
+    dispatch(
+      ShowNotification({text: "Removed from library", type_: Success}),
+    );
 
   let (removeEpisodeMutation, simple, _full) =
     RemoveEpisodeMutation.use(

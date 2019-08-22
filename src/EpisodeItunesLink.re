@@ -30,7 +30,7 @@ let make = (~podcastItunesId, ~episodeName) => {
     setItunesId(_ => Error);
     dispatch(
       ShowNotification({
-        type_: Danger,
+        type_: Error,
         text: "Couldn't retrieve itunes id :(",
       }),
     );

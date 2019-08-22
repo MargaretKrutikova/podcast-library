@@ -1,7 +1,6 @@
 type message =
   | /** notification  */
     ShowNotification(AppNotifications.data)
-  | HideNotification(int)
   | RemoveNotification(int)
   | OnUnauthorizedAccess
   | SetShowIdentityModal(bool)
@@ -49,12 +48,6 @@ let update = (model, message) => {
   | ShowNotification(data) => (
       model.notifications
       |> AppNotifications.add(data)
-      |> updateNotifications(model),
-      None,
-    )
-  | HideNotification(id) => (
-      model.notifications
-      |> AppNotifications.hide(id)
       |> updateNotifications(model),
       None,
     )

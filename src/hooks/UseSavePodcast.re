@@ -4,10 +4,10 @@ module SavePodcastMutation =
 let useSavePodcast = (~userId, ~podcast) => {
   let dispatch = AppCore.useDispatch();
   let handleSaveError = _ =>
-    dispatch(ShowNotification({text: "Failed to save", type_: Danger}));
+    dispatch(ShowNotification({text: "Failed to save", type_: Error}));
 
   let handleSaveDone = _ =>
-    dispatch(ShowNotification({text: "Saved to library", type_: Info}));
+    dispatch(ShowNotification({text: "Saved to library", type_: Success}));
 
   let (savePodcast, simple, _full) =
     SavePodcastMutation.use(

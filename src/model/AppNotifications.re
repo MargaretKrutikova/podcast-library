@@ -4,7 +4,7 @@ type type_ =
   | Primary
   | Secondary
   | Success
-  | Danger
+  | Error
   | Warning
   | Info
   | Light
@@ -17,7 +17,6 @@ type data = {
 
 type notification = {
   id: int,
-  isShown: bool,
   data,
 };
 
@@ -33,24 +32,11 @@ let remove = (id, notifications) => {
   {...notifications, items};
 };
 
-let hide = (id, notifications) => {
-  {
-    ...notifications,
-    items:
-      Belt.Array.map(notifications.items, item =>
-        item.id == id ? {...item, isShown: false} : item
-      ),
-  };
-};
-
 let add = (data, notifications) => {
   let nextId = notifications.lastId + 1;
 
   let items =
-    Belt.Array.concat(
-      notifications.items,
-      [|{id: nextId, data, isShown: true}|],
-    );
+    Belt.Array.concat(notifications.items, [|{id: nextId, data}|]);
   let numberOfShownItems = Belt.Array.length(items);
 
   let itemsToShow =
