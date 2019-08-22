@@ -54,12 +54,12 @@ let make =
       [|urlQuery|],
     );
 
-    <>
+    <PageContainer>
       <PageTitle title="Search results" />
       <SearchQueryView />
       {switch (userId) {
        | Some(userId) => <LoggedInSearchView userId searchType />
        | None => <SearchResultsView searchType />
        }}
-    </>;
+    </PageContainer>;
   });

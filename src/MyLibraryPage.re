@@ -27,7 +27,7 @@ let make = (~userId) => {
       (),
     );
 
-  <>
+  <PageContainer>
     <PageTitle title="My library" />
     <ContentTabs
       activeTab=activeType
@@ -79,5 +79,5 @@ let make = (~userId) => {
        | Error(_) => <div> {React.string("Error")} </div>
        }
      }}
-  </>;
+  </PageContainer>;
 };

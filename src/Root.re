@@ -26,7 +26,7 @@ let make = () => {
       (route, id),
     );
 
-  <div>
+  <>
     <MaterialUi_CssBaseline />
     <IdentityModal
       showDialog
@@ -35,5 +35,5 @@ let make = () => {
     <AppBar isLoggedIn={UserIdentity.isLoggedIn(identity)} activePage=route />
     <MaterialUi_Container> pageToShow </MaterialUi_Container>
     <RootNotifications />
-  </div>;
+  </>;
 };
