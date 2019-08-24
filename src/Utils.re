@@ -93,6 +93,8 @@ let onKeyDown = event => {
 };
 
 /** material ui */
+external styleToString: ReactDOMRe.Style.t => string = "%identity";
+
 let px_of_float = x => x->int_of_float->string_of_int ++ "px";
 let px_of_int = x => x->string_of_int ++ "px";
 

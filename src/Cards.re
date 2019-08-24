@@ -2,7 +2,6 @@ let style = ReactDOMRe.Style.make;
 [%mui.withStyles
   "CardActionsStyles"(theme =>
     {
-      carrootd: style(~position="relative", ~overflow="initial", ()),
       root:
         style(
           ~padding=theme |> Utils.spacing(2),
@@ -58,11 +57,21 @@ module SearchCard = {
   };
 };
 
+let style = ReactDOMRe.Style.make;
+[%mui.withStyles
+  "CardDescriptionStyles"(_ => {root: style(~overflow="hidden", ())})
+];
+
 module Description = {
   [@react.component]
   let make = (~description) => {
+    let classes = CardDescriptionStyles.useStyles();
+
     <MaterialUi_Typography
-      variant=`Body1 color=`TextSecondary component={`String("div")}>
+      variant=`Body1
+      color=`TextSecondary
+      component={`String("div")}
+      className={classes.root}>
       <div
         dangerouslySetInnerHTML={
           "__html": Utils.truncateDescription(description),

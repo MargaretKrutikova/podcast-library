@@ -41,13 +41,6 @@ let style = ReactDOMRe.Style.make;
             ~style=style(~fontSize="1.7rem", ()),
           ),
       appIcon: style(~marginLeft=theme |> Utils.spacing(1), ()),
-      appBar:
-        style(
-          ~backgroundColor=
-            Utils.getPrimaryColor(theme)
-            |> MaterialUi.Theme.PaletteColor.darkGet,
-          (),
-        ),
     }
   )
 ];
@@ -62,6 +55,7 @@ let isSearchPage = page =>
 let make = (~isLoggedIn, ~activePage) => {
   let dispatch = AppCore.useDispatch();
   let classes = RootStyles.useStyles();
+  let (userMenuAnchor, setUserMenuAnchor) = React.useState(() => None);
 
   <MaterialUi_AppBar color=`Default position=`Static>
     <MaterialUi_Container>
@@ -85,9 +79,16 @@ let make = (~isLoggedIn, ~activePage) => {
           {isLoggedIn
              ? <>
                  <MaterialUi_IconButton
-                   onClick={_ => dispatch(SetShowIdentityModal(true))}>
+                   onClick={e => {
+                     let anchor = e->ReactEvent.Mouse.currentTarget;
+                     setUserMenuAnchor(_ => Some(anchor));
+                   }}>
                    <ReactFeather.UserIcon />
                  </MaterialUi_IconButton>
+                 <UserMenu
+                   anchorEl=userMenuAnchor
+                   onClose={(_, _) => setUserMenuAnchor(_ => None)}
+                 />
                  <RouterLink href={Routing.getUrlFromRoute(MyLibrary)}>
                    <MaterialUi_IconButton component={`String("span")}>
                      <ReactFeather.BookmarkIcon />
