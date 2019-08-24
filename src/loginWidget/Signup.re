@@ -1,12 +1,13 @@
-let style = ReactDOMRe.Style.make;
-let addUnsafe = ReactDOMRe.Style.unsafeAddProp;
-let combine = ReactDOMRe.Style.combine;
+open UserTypes.FormData;
+external promiseErrorToJsObj: Js.Promise.error => Js.t('a) = "%identity";
 
+let style = ReactDOMRe.Style.make;
 [%mui.withStyles
   "SignupStyles"(theme =>
     {
       submitButtonElement: style(~marginTop=theme |> Utils.spacing(1), ()),
       formElement: style(~marginBottom=theme |> Utils.spacing(2), ()),
+      errorMsg: style(~textAlign="center", ~fontSize="16px", ()),
     }
   )
 ];
@@ -16,24 +17,35 @@ let str = ReasonReact.string;
 [@react.component]
 let make = () => {
   let classes = SignupStyles.useStyles();
-  let (email, setEmail) = React.useState(() => "");
-  let (password, setPassword) = React.useState(() => "");
-  let (name, setName) = React.useState(() => "");
-
-  let (loading, setLoading) = React.useState(() => false);
+  let (state, dispatch) = UseReducerSafe.useReducerSafe(reducer, initState);
+  let {email, password, fullName, status} = state;
 
   let identityContext = ReactNetlifyIdentity.useIdentityContext();
 
   let handleSignup = _ => {
-    setLoading(_ => false);
-    identityContext.loginUser(~email, ~password, ~remember=true, ())
-    |> Js.Promise.then_(_ => setLoading(_ => false) |> Js.Promise.resolve)
-    |> Js.Promise.catch(_ => setLoading(_ => false) |> Js.Promise.resolve);
-
-    ignore();
+    dispatch(SubmitRequest);
+    let userMetaData: UserTypes.userMetadata = {
+      "full_name": Js.Nullable.fromOption(Some(fullName)),
+    };
+    identityContext.signupUser(~email, ~password, ~data=userMetaData)
+    |> Js.Promise.then_(_ => dispatch(SubmitSuccess) |> Js.Promise.resolve)
+    |> Js.Promise.catch(error =>
+         dispatch(
+           SubmitError(
+             promiseErrorToJsObj(error)##message
+             |> Js.String.replace("invalid_grant:", ""),
+           ),
+         )
+         |> Js.Promise.resolve
+       )
+    |> ignore;
   };
 
-  <form>
+  <form
+    onSubmit={e => {
+      ReactEvent.Form.preventDefault(e);
+      handleSignup();
+    }}>
     <MaterialUi_FormControl
       fullWidth=true classes=[Root(classes.formElement)]>
       <MaterialUi_FormControl
@@ -41,12 +53,15 @@ let make = () => {
         <MaterialUi_TextField
           autoFocus=true
           label={str("Name")}
+          name="name"
           type_="text"
           fullWidth=true
-          value=name
+          required=true
+          value=fullName
+          disabled={status === Submitting}
           onChange={e => {
             let value = Utils.getInputValue(e);
-            setName(_ => value);
+            dispatch(SetFullName(value));
           }}
         />
       </MaterialUi_FormControl>
@@ -55,9 +70,12 @@ let make = () => {
         type_="email"
         fullWidth=true
         value=email
+        required=true
+        name="email"
+        disabled={status === Submitting}
         onChange={e => {
           let value = Utils.getInputValue(e);
-          setEmail(_ => value);
+          dispatch(SetEmail(value));
         }}
       />
     </MaterialUi_FormControl>
@@ -66,20 +84,38 @@ let make = () => {
       <MaterialUi_TextField
         label={str("Password")}
         type_="password"
+        name="password"
         fullWidth=true
+        required=true
+        disabled={status === Submitting}
         value=password
         onChange={e => {
           let value = Utils.getInputValue(e);
-          setPassword(_ => value);
+          dispatch(SetPassword(value));
         }}
       />
     </MaterialUi_FormControl>
     <MaterialUi_FormControl
-      fullWidth=true className={classes.submitButtonElement}>
+      fullWidth=true
+      className={classes.submitButtonElement}
+      classes=[Root(classes.formElement)]>
       <MaterialUi_Button
-        color=`Primary variant=`Contained fullWidth=true onClick=handleSignup>
+        color=`Primary
+        disabled={status === Submitting}
+        variant=`Contained
+        type_="submit"
+        fullWidth=true>
         {str("Sign up")}
       </MaterialUi_Button>
     </MaterialUi_FormControl>
+    {switch (status) {
+     | Error(msg) =>
+       <MaterialUi_FormControl fullWidth=true error=true>
+         <MaterialUi_FormHelperText className={classes.errorMsg}>
+           {str(msg)}
+         </MaterialUi_FormHelperText>
+       </MaterialUi_FormControl>
+     | _ => React.null
+     }}
   </form>;
 };

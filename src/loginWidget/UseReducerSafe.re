@@ -1,5 +1,5 @@
-let useStateAsync = (initState: unit => 'a) => {
-  let (state, setState) = React.useState(initState);
+let useReducerSafe = (reducer, initState) => {
+  let (state, dispatch) = React.useReducer(reducer, initState);
   let mounted = React.useRef(false);
 
   React.useEffect0(() => {
@@ -7,9 +7,9 @@ let useStateAsync = (initState: unit => 'a) => {
     Some(() => mounted->React.Ref.setCurrent(false));
   });
 
-  let setStateSafe = updateState =>
+  let setStateSafe = (action: 'a) =>
     if (mounted->React.Ref.current) {
-      setState(updateState);
+      dispatch(action);
     };
   (state, setStateSafe);
 };

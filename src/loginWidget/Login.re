@@ -1,3 +1,4 @@
+open UserTypes.FormData;
 external promiseErrorToJsObj: Js.Promise.error => Js.t('a) = "%identity";
 
 let style = ReactDOMRe.Style.make;
@@ -14,47 +15,17 @@ let style = ReactDOMRe.Style.make;
         ),
       loginButton: style(~marginTop=theme |> Utils.spacing(1), ()),
       formElement: style(~marginBottom=theme |> Utils.spacing(2), ()),
-      errorMsg:
-        style(~textAlign="center", ~fontSize="16px", ()),
+      errorMsg: style(~textAlign="center", ~fontSize="16px", ()),
     }
   )
 ];
 
 let str = ReasonReact.string;
-type status =
-  | NotAsked
-  | Submitting
-  | Error(string)
-  | Success;
-
-type state = {
-  email: string,
-  password: string,
-  status,
-};
-
-let initState = {email: "", password: "", status: NotAsked};
-type action =
-  | SetEmail(string)
-  | SetPassword(string)
-  | SubmitRequest
-  | SubmitError(string)
-  | SubmitSuccess;
-
-let reducer = (state, action) => {
-  switch (action) {
-  | SetEmail(email) => {...state, email}
-  | SetPassword(password) => {...state, password}
-  | SubmitRequest => {...state, status: Submitting}
-  | SubmitError(msg) => {...state, status: Error(msg)}
-  | SubmitSuccess => {...state, status: Success}
-  };
-};
 
 [@react.component]
 let make = () => {
   let classes = LoginDialogStyles.useStyles();
-  let (state, dispatch) = React.useReducer(reducer, initState);
+  let (state, dispatch) = UseReducerSafe.useReducerSafe(reducer, initState);
   let identityContext = ReactNetlifyIdentity.useIdentityContext();
 
   let {email, password, status} = state;
@@ -77,7 +48,6 @@ let make = () => {
 
   <form
     onSubmit={e => {
-      Js.log(e);
       ReactEvent.Form.preventDefault(e);
       handleLogin();
     }}>
@@ -90,6 +60,7 @@ let make = () => {
         fullWidth=true
         value=email
         required=true
+        name="email"
         disabled={status === Submitting}
         onChange={e => {
           let value = Utils.getInputValue(e);
@@ -102,6 +73,7 @@ let make = () => {
       <MaterialUi_TextField
         label={str("Password")}
         type_="password"
+        name="password"
         fullWidth=true
         required=true
         disabled={status === Submitting}
@@ -128,8 +100,10 @@ let make = () => {
     {switch (status) {
      | Error(msg) =>
        <MaterialUi_FormControl
-         fullWidth=true className=classes.formElement error=true>
-         <MaterialUi_FormHelperText className=classes.errorMsg> {str(msg)} </MaterialUi_FormHelperText>
+         fullWidth=true className={classes.formElement} error=true>
+         <MaterialUi_FormHelperText className={classes.errorMsg}>
+           {str(msg)}
+         </MaterialUi_FormHelperText>
        </MaterialUi_FormControl>
      | _ => React.null
      }}
