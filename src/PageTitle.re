@@ -1,4 +1,3 @@
-let str = ReasonReact.string;
 let style = ReactDOMRe.Style.make;
 [%mui.withStyles
   "PageTitleStyles"(theme =>

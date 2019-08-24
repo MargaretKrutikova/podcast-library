@@ -19,8 +19,6 @@ let searchQueryFromDict = dict => {
 let useAppUrl = () => {
   let url = ReasonReactRouter.useUrl();
 
-  Js.log(url);
-
   switch (url.path) {
   | ["my-library", podcastId, "episodes"] => MyEpisodes(podcastId)
   | ["my-library"] => MyLibrary

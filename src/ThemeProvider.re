@@ -14,6 +14,12 @@ let theme =
           ),
         ~overrides=
           Overrides.make(
+            ~muiTab=
+              TabClassKey.make(
+                ~root=
+                  ReactDOMRe.Style.make(~borderBottom="2px solid #ddd", ()),
+                (),
+              ),
             ~muiInput=
               InputClassKey.make(
                 ~root=
@@ -48,7 +54,7 @@ let theme =
             ~muiLink=
               LinkClassKey.make(
                 ~root=
-                  ReactDOMRe.Style.make(~textDecoration="none !important", ())
+                  ReactDOMRe.Style.make(~textDecoration="none", ())
                   ->ReactDOMRe.Style.unsafeAddProp(
                       "&:hover",
                       ReactDOMRe.Style.make(~color="#29335C", ())
