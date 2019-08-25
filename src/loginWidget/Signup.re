@@ -1,5 +1,4 @@
 open UserTypes.FormData;
-external promiseErrorToJsObj: Js.Promise.error => Js.t('a) = "%identity";
 
 let style = ReactDOMRe.Style.make;
 [%mui.withStyles
@@ -29,7 +28,9 @@ let make = () => {
     identityContext.signupUser(~email, ~password, ~data=userMetaData)
     |> Js.Promise.then_(_ => dispatch(SubmitSuccess) |> Js.Promise.resolve)
     |> Js.Promise.catch(error =>
-         dispatch(SubmitError(promiseErrorToJsObj(error)##message))
+         dispatch(
+           SubmitError(UserUtils.promiseErrorToJsObj(error)##message),
+         )
          |> Js.Promise.resolve
        )
     |> ignore;

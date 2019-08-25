@@ -1,5 +1,4 @@
 open UserTypes.FormData;
-external promiseErrorToJsObj: Js.Promise.error => Js.t('a) = "%identity";
 
 let style = ReactDOMRe.Style.make;
 [%mui.withStyles
@@ -14,7 +13,7 @@ let style = ReactDOMRe.Style.make;
 let str = ReasonReact.string;
 
 [@react.component]
-let make = (~gotoForgotPassword) => {
+let make = (~gotoForgotPassword, ~onLogin) => {
   let classes = LoginDialogStyles.useStyles();
   let (state, dispatch) = UserUtils.useReducerSafe(reducer, initState);
   let identityContext = ReactNetlifyIdentity.useIdentityContext();
@@ -24,9 +23,14 @@ let make = (~gotoForgotPassword) => {
   let handleLogin = () => {
     dispatch(SubmitRequest);
     identityContext.loginUser(~email, ~password, ~remember=true, ())
-    |> Js.Promise.then_(_ => dispatch(SubmitSuccess) |> Js.Promise.resolve)
+    |> Js.Promise.then_(_ => {
+         dispatch(SubmitSuccess);
+         onLogin() |> Js.Promise.resolve;
+       })
     |> Js.Promise.catch(error =>
-         dispatch(SubmitError(promiseErrorToJsObj(error)##message))
+         dispatch(
+           SubmitError(UserUtils.promiseErrorToJsObj(error)##message),
+         )
          |> Js.Promise.resolve
        )
     |> ignore;
