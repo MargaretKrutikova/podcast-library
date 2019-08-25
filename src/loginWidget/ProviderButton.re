@@ -2,7 +2,7 @@ let style = ReactDOMRe.Style.make;
 let addUnsafe = ReactDOMRe.Style.unsafeAddProp;
 let combine = ReactDOMRe.Style.combine;
 [%mui.withStyles
-  "RootStyles"(_ =>
+  "Styles"(_ =>
     {
       providerButton:
         style(
@@ -124,12 +124,14 @@ let providerToString = (provider: ReactNetlifyIdentity.provider) =>
   };
 
 [@react.component]
-let make = (~provider, ~onClick=?, ~className="") => {
-  let classes = RootStyles.useStyles();
+let make = (~provider, ~className="") => {
+  let classes = Styles.useStyles();
+  let identity = ReactNetlifyIdentity.useIdentityContext();
+  let handleClick = _ => identity.loginProvider(provider);
 
   <MaterialUi_Button
     className={getProviderClass(provider, classes)}
-    ?onClick
+    onClick=handleClick
     fullWidth=true
     classes=[Root(classes.providerButton ++ " " ++ className)]>
     {React.string("Continue with " ++ providerToString(provider))}

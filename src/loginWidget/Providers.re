@@ -1,9 +1,7 @@
 let style = ReactDOMRe.Style.make;
-let addUnsafe = ReactDOMRe.Style.unsafeAddProp;
-let combine = ReactDOMRe.Style.combine;
 
 [%mui.withStyles
-  "LoginDialogStyles"(theme =>
+  "Styles"(theme =>
     {
       divider: style(~flex="1 1 auto", ()),
       providerSection:
@@ -22,7 +20,7 @@ let combine = ReactDOMRe.Style.combine;
 [@react.component]
 let make = () => {
   let identity = ReactNetlifyIdentity.useIdentityContext();
-  let classes = LoginDialogStyles.useStyles();
+  let classes = Styles.useStyles();
 
   <>
     <div className={classes.providerSection}>

@@ -108,7 +108,7 @@ type reactNetlifyIdentityApiJs = {
     {. "data": Js.Json.t} => Js.Promise.t(Js.Nullable.t(userJs)),
   [@bs.meth] "getFreshJWT": unit => Js.Promise.t(string),
   "_url": string,
-  [@bs.meth] "provider": string => unit,
+  [@bs.meth] "loginProvider": string => unit,
   [@bs.meth] "acceptInviteExternalUrl": (string, string) => string,
   "settings": settingsJs,
 };
@@ -129,7 +129,7 @@ type reactNetlifyIdentityApi('a) = {
   updateUser: Js.Json.t => Js.Promise.t(option(user('a))),
   getFreshJWT: unit => Js.Promise.t(string),
   url: string,
-  provider: provider => unit,
+  loginProvider: provider => unit,
   acceptInviteExternalUrl: (~provider: provider, ~token: string) => string,
   settings,
 };
@@ -188,7 +188,8 @@ let useIdentityContext = (): reactNetlifyIdentityApi('a) => {
          ),
     getFreshJWT: () => identity##getFreshJWT(),
     url: identity##_url,
-    provider: provider => identity##provider(providerToString(provider)),
+    loginProvider: provider =>
+      identity##loginProvider(providerToString(provider)),
     acceptInviteExternalUrl: (~provider, ~token) =>
       identity##acceptInviteExternalUrl(providerToString(provider), token),
     settings: fromSettingsJs(identity##settings),
