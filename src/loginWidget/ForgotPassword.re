@@ -1,29 +1,46 @@
-open UserTypes.FormData;
 external promiseErrorToJsObj: Js.Promise.error => Js.t('a) = "%identity";
 
 let style = ReactDOMRe.Style.make;
 [%mui.withStyles
-  "LoginDialogStyles"(theme =>
+  "Styles"(theme =>
     {
-      loginButton: style(~marginTop=theme |> Utils.spacing(1), ()),
+      submitButton: style(~marginTop=theme |> Utils.spacing(1), ()),
       formElement: style(~marginBottom=theme |> Utils.spacing(2), ()),
     }
   )
 ];
 
 let str = ReasonReact.string;
+type state = {
+  email: string,
+  status: UserTypes.FormData.status,
+};
+let initState = {email: "", status: NotAsked};
+type action =
+  | SetEmail(string)
+  | SubmitRequest
+  | SubmitError(string)
+  | SubmitSuccess;
+let reducer = (state, action) => {
+  switch (action) {
+  | SetEmail(email) => {...state, email}
+  | SubmitRequest => {...state, status: Submitting}
+  | SubmitError(msg) => {...state, status: Error(msg)}
+  | SubmitSuccess => {...state, status: Success}
+  };
+};
 
 [@react.component]
-let make = (~gotoForgotPassword) => {
-  let classes = LoginDialogStyles.useStyles();
+let make = (~gotoLogin) => {
+  let classes = Styles.useStyles();
   let (state, dispatch) = UserUtils.useReducerSafe(reducer, initState);
   let identityContext = ReactNetlifyIdentity.useIdentityContext();
 
-  let {email, password, status} = state;
+  let {email, status} = state;
 
-  let handleLogin = () => {
+  let handleRecoverPassword = () => {
     dispatch(SubmitRequest);
-    identityContext.loginUser(~email, ~password, ~remember=true, ())
+    identityContext.requestPasswordRecovery(~email)
     |> Js.Promise.then_(_ => dispatch(SubmitSuccess) |> Js.Promise.resolve)
     |> Js.Promise.catch(error =>
          dispatch(SubmitError(promiseErrorToJsObj(error)##message))
@@ -35,7 +52,7 @@ let make = (~gotoForgotPassword) => {
   <form
     onSubmit={e => {
       ReactEvent.Form.preventDefault(e);
-      handleLogin();
+      handleRecoverPassword();
     }}>
     <MaterialUi_FormControl
       fullWidth=true classes=[Root(classes.formElement)]>
@@ -55,24 +72,8 @@ let make = (~gotoForgotPassword) => {
       />
     </MaterialUi_FormControl>
     <MaterialUi_FormControl
-      fullWidth=true classes=[Root(classes.formElement)]>
-      <MaterialUi_TextField
-        label={str("Password")}
-        type_="password"
-        name="password"
-        fullWidth=true
-        required=true
-        disabled={status === Submitting}
-        value=password
-        onChange={e => {
-          let value = Utils.getInputValue(e);
-          dispatch(SetPassword(value));
-        }}
-      />
-    </MaterialUi_FormControl>
-    <MaterialUi_FormControl
       fullWidth=true
-      className={classes.loginButton}
+      className={classes.submitButton}
       classes=[Root(classes.formElement)]>
       <MaterialUi_Button
         color=`Primary
@@ -80,13 +81,13 @@ let make = (~gotoForgotPassword) => {
         variant=`Contained
         type_="submit"
         fullWidth=true>
-        {str("Log in")}
+        {str("Send recovery email")}
       </MaterialUi_Button>
     </MaterialUi_FormControl>
     {switch (status) {
      | Error(message) => <ErrorMessage message />
      | _ => React.null
      }}
-    <UserLink onClick=gotoForgotPassword> {str("Forgot password")} </UserLink>
+    <UserLink onClick=gotoLogin> {str("Back to login")} </UserLink>
   </form>;
 };

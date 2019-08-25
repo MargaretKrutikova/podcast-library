@@ -7,7 +7,6 @@ let style = ReactDOMRe.Style.make;
     {
       submitButtonElement: style(~marginTop=theme |> Utils.spacing(1), ()),
       formElement: style(~marginBottom=theme |> Utils.spacing(2), ()),
-      errorMsg: style(~textAlign="center", ~fontSize="16px", ()),
     }
   )
 ];
@@ -17,7 +16,7 @@ let str = ReasonReact.string;
 [@react.component]
 let make = () => {
   let classes = SignupStyles.useStyles();
-  let (state, dispatch) = UseReducerSafe.useReducerSafe(reducer, initState);
+  let (state, dispatch) = UserUtils.useReducerSafe(reducer, initState);
   let {email, password, fullName, status} = state;
 
   let identityContext = ReactNetlifyIdentity.useIdentityContext();
@@ -30,12 +29,7 @@ let make = () => {
     identityContext.signupUser(~email, ~password, ~data=userMetaData)
     |> Js.Promise.then_(_ => dispatch(SubmitSuccess) |> Js.Promise.resolve)
     |> Js.Promise.catch(error =>
-         dispatch(
-           SubmitError(
-             promiseErrorToJsObj(error)##message
-             |> Js.String.replace("invalid_grant:", ""),
-           ),
-         )
+         dispatch(SubmitError(promiseErrorToJsObj(error)##message))
          |> Js.Promise.resolve
        )
     |> ignore;
@@ -96,9 +90,7 @@ let make = () => {
       />
     </MaterialUi_FormControl>
     <MaterialUi_FormControl
-      fullWidth=true
-      className={classes.submitButtonElement}
-      classes=[Root(classes.formElement)]>
+      fullWidth=true className={classes.submitButtonElement}>
       <MaterialUi_Button
         color=`Primary
         disabled={status === Submitting}
@@ -109,12 +101,7 @@ let make = () => {
       </MaterialUi_Button>
     </MaterialUi_FormControl>
     {switch (status) {
-     | Error(msg) =>
-       <MaterialUi_FormControl fullWidth=true error=true>
-         <MaterialUi_FormHelperText className={classes.errorMsg}>
-           {str(msg)}
-         </MaterialUi_FormHelperText>
-       </MaterialUi_FormControl>
+     | Error(message) => <ErrorMessage message />
      | _ => React.null
      }}
   </form>;
