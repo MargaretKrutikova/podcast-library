@@ -17,7 +17,7 @@ let make = (~anchorEl, ~onLogout, ~onClose) => {
   let userName =
     identity.user
     ->Belt.Option.flatMap(user => user.metaData)
-    ->Belt.Option.map(data => data.userName);
+    ->Belt.Option.map(data => data.fullName);
 
   let handleLogout = _ => {
     setStatus(_ => Submitting);

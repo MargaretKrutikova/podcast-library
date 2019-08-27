@@ -15,14 +15,14 @@ let str = ReasonReact.string;
 let make = () => {
   let classes = SignupStyles.useStyles();
   let (state, dispatch) = UserUtils.useReducerSafe(reducer, initState);
-  let {email, password, userName, status} = state;
+  let {email, password, fullName, status} = state;
 
   let identity = UserIdentity.Context.useIdentityContext();
 
   let handleSignup = _ => {
     dispatch(SubmitRequest);
     // data is of type UserIdentity.userMetaData
-    identity.signupUser(~email, ~password, ~data={userName: userName})
+    identity.signupUser(~email, ~password, ~data={fullName: fullName})
     |> Js.Promise.then_(_ => dispatch(SubmitSuccess) |> Js.Promise.resolve)
     |> Js.Promise.catch(error =>
          dispatch(
@@ -44,16 +44,16 @@ let make = () => {
         fullWidth=true classes=[Root(classes.formElement)]>
         <MaterialUi_TextField
           autoFocus=true
-          label={str("Username")}
+          label={str("Name")}
           name="name"
           type_="text"
           fullWidth=true
           required=true
-          value={`String(userName)}
+          value={`String(fullName)}
           disabled={status === Submitting}
           onChange={e => {
             let value = Utils.getInputValue(e);
-            dispatch(SetUserName(value));
+            dispatch(SetFullName(value));
           }}
         />
       </MaterialUi_FormControl>

@@ -7,15 +7,15 @@ type status =
 type state = {
   email: string,
   password: string,
-  userName: string,
+  fullName: string,
   status,
 };
 
-let initState = {email: "", password: "", userName: "", status: NotAsked};
+let initState = {email: "", password: "", fullName: "", status: NotAsked};
 type action =
   | SetEmail(string)
   | SetPassword(string)
-  | SetUserName(string)
+  | SetFullName(string)
   | SubmitRequest
   | SubmitError(string)
   | SubmitSuccess;
@@ -24,7 +24,7 @@ let reducer = (state, action) => {
   switch (action) {
   | SetEmail(email) => {...state, email}
   | SetPassword(password) => {...state, password}
-  | SetUserName(userName) => {...state, userName}
+  | SetFullName(fullName) => {...state, fullName}
   | SubmitRequest => {...state, status: Submitting}
   | SubmitError(msg) => {...state, status: Error(msg)}
   | SubmitSuccess => {...state, status: Success}
