@@ -1,5 +1,5 @@
 module SearchIcon = {
-  [@bs.module "react-feather"] [@react.component]
+  [@bs.module "react-feather/dist/icons/search.js"] [@react.component]
   external make:
     (
       ~color: string=?,
@@ -10,11 +10,11 @@ module SearchIcon = {
       unit
     ) =>
     React.element =
-    "Search";
+    "default";
 };
 
 module UserIcon = {
-  [@bs.module "react-feather"] [@react.component]
+  [@bs.module "react-feather/dist/icons/user.js"] [@react.component]
   external make:
     (
       ~color: string=?,
@@ -25,11 +25,11 @@ module UserIcon = {
       unit
     ) =>
     React.element =
-    "User";
+    "default";
 };
 
 module BookmarkIcon = {
-  [@bs.module "react-feather"] [@react.component]
+  [@bs.module "react-feather/dist/icons/bookmark.js"] [@react.component]
   external make:
     (
       ~color: string=?,
@@ -40,11 +40,11 @@ module BookmarkIcon = {
       unit
     ) =>
     React.element =
-    "Bookmark";
+    "default";
 };
 
 module MicIcon = {
-  [@bs.module "react-feather"] [@react.component]
+  [@bs.module "react-feather/dist/icons/mic.js"] [@react.component]
   external make:
     (
       ~color: string=?,
@@ -55,11 +55,11 @@ module MicIcon = {
       unit
     ) =>
     React.element =
-    "Mic";
+    "default";
 };
 
 module CloseIcon = {
-  [@bs.module "react-feather"] [@react.component]
+  [@bs.module "react-feather/dist/icons/x.js"] [@react.component]
   external make:
     (
       ~color: string=?,
@@ -70,11 +70,11 @@ module CloseIcon = {
       unit
     ) =>
     React.element =
-    "X";
+    "default";
 };
 
 module LogoutIcon = {
-  [@bs.module "react-feather"] [@react.component]
+  [@bs.module "react-feather/dist/icons/log-out.js"] [@react.component]
   external make:
     (
       ~color: string=?,
@@ -85,5 +85,5 @@ module LogoutIcon = {
       unit
     ) =>
     React.element =
-    "LogOut";
+    "default";
 };
