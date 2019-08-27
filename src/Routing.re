@@ -4,6 +4,7 @@ type route =
   | MyLibrary
   | MyEpisodes(string)
   | Search(searchQuery)
+  | SearchEmpty
   | NotFound;
 
 let searchQueryFromDict = dict => {
@@ -38,6 +39,7 @@ let getUrlFromRoute = route => {
   switch (route) {
   | MyLibrary => "/my-library"
   | MyEpisodes(id) => {j|my-library/$id/my-episodes|j}
+  | SearchEmpty => "/search"
   | Search(query) =>
     let params = [||] |> Url.Params.add("q", query.query);
     Url.Params.buildUrl("/search", params);

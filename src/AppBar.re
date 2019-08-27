@@ -71,7 +71,7 @@ let make = (~isLoggedIn, ~activePage) => {
              </div>
            : React.null}
         <div className={classes.icons}>
-          <RouterLink href={Routing.getUrlFromRoute(Search({query: ""}))}>
+          <RouterLink href={Routing.getUrlFromRoute(SearchEmpty)}>
             <MaterialUi_IconButton component={`String("span")}>
               <ReactFeather.SearchIcon />
             </MaterialUi_IconButton>
@@ -87,6 +87,7 @@ let make = (~isLoggedIn, ~activePage) => {
                  </MaterialUi_IconButton>
                  <UserMenu
                    anchorEl=userMenuAnchor
+                   onLogout={() => Routing.pushRoute(SearchEmpty)}
                    onClose={(_, _) => setUserMenuAnchor(_ => None)}
                  />
                  <RouterLink href={Routing.getUrlFromRoute(MyLibrary)}>
