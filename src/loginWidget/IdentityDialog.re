@@ -11,19 +11,13 @@ let combine = ReactDOMRe.Style.combine;
           ~margin="10vh auto",
           ~maxWidth="400px!important",
           ~padding=theme |> Utils.spacing(2),
+          ~paddingTop=theme |> Utils.spacing(4),
           (),
         )
         ->MaterialUi.ThemeHelpers.addBreakpoint(
             ~theme,
             ~breakpoint=`MD,
             ~style=style(~width="50vw", ()),
-          ),
-      dialogContent:
-        style()
-        ->addUnsafe(
-            "&:first-child",
-            style(~paddingTop=theme |> Utils.spacing(1), ())
-            ->Utils.styleToString,
           ),
       tab:
         style(
@@ -33,6 +27,13 @@ let combine = ReactDOMRe.Style.combine;
           (),
         ),
       title: style(~paddingLeft="0", ()),
+      closeButton:
+        style(
+          ~position="absolute",
+          ~right=theme |> Utils.spacing(1),
+          ~top=theme |> Utils.spacing(1),
+          (),
+        ),
       tabRoot:
         style(
           ~marginBottom=theme |> Utils.spacing(2),
@@ -75,7 +76,11 @@ let make = (~open_, ~onLogin, ~onClose) => {
     onClose={(_, _) => onClose()}
     scroll=`Body
     classes=[PaperScrollBody(classes.root)]>
-    <MaterialUi_DialogContent className={classes.dialogContent}>
+    <MaterialUi_IconButton
+      className={classes.closeButton} color=`Inherit onClick={_ => onClose()}>
+      <ReactFeather.CloseIcon />
+    </MaterialUi_IconButton>
+    <MaterialUi_DialogContent>
       {switch (activeView) {
        | ForgotPassword =>
          <>
@@ -93,10 +98,12 @@ let make = (~open_, ~onLogin, ~onClose) => {
              classes=[Root(classes.tabRoot)]
              variant=`FullWidth>
              <MaterialUi_Tab
+               className={classes.tab}
                onClick={_ => setActiveView(_ => Login)}
                label={React.string("Log in")}
              />
              <MaterialUi_Tab
+               className={classes.tab}
                label={React.string("Sign up")}
                onClick={_ => setActiveView(_ => Signup)}
              />
