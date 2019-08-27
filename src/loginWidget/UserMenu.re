@@ -1,8 +1,6 @@
-open UserTypes;
-
 let style = ReactDOMRe.Style.make;
 [%mui.withStyles
-  "RootStyles"(theme =>
+  "Styles"(_ =>
     {
       userName: style(~fontWeight="500", ~width="100%", ()),
       userListItem: style(~flexWrap="wrap", ()),
@@ -11,19 +9,31 @@ let style = ReactDOMRe.Style.make;
 ];
 
 [@react.component]
-let make = (~anchorEl, ~onClose) => {
-  let identity = ReactNetlifyIdentity.useIdentityContext();
-  let fullName =
+let make = (~anchorEl, ~onLogout, ~onClose) => {
+  let identity = UserIdentity.Context.useIdentityContext();
+
+  let (status, setStatus) = UserUtils.useStateSafe(() => FormData.NotAsked);
+
+  let userName =
     identity.user
     ->Belt.Option.flatMap(user => user.metaData)
-    ->Belt.Option.map(data => data##full_name);
+    ->Belt.Option.map(data => data.userName);
 
   let handleLogout = _ => {
-    identity.logoutUser();
-    ignore();
+    setStatus(_ => Submitting);
+    identity.logoutUser()
+    |> Js.Promise.then_(_ => {
+         setStatus(_ => Success);
+         onLogout() |> Js.Promise.resolve;
+       })
+    |> Js.Promise.catch(error =>
+         setStatus(_ => Error(UserUtils.promiseErrorToJsObj(error)##message))
+         |> Js.Promise.resolve
+       )
+    |> ignore;
   };
 
-  let classes = RootStyles.useStyles();
+  let classes = Styles.useStyles();
 
   <MaterialUi_Menu
     anchorEl
@@ -38,7 +48,7 @@ let make = (~anchorEl, ~onClose) => {
       ~horizontal=`Enum(`Center),
       ~vertical=`Enum(`Top),
     )}>
-    {switch (fullName) {
+    {switch (userName) {
      | None => React.null
      | Some(name) =>
        <MaterialUi_MenuItem className={classes.userListItem}>
@@ -52,7 +62,7 @@ let make = (~anchorEl, ~onClose) => {
        </MaterialUi_MenuItem>
      }}
     <MaterialUi_Divider variant=`FullWidth />
-    <MaterialUi_MenuItem onClick=handleLogout>
+    <MaterialUi_MenuItem onClick=handleLogout disabled={status === Submitting}>
       <MaterialUi_ListItemIcon>
         <ReactFeather.LogoutIcon />
       </MaterialUi_ListItemIcon>

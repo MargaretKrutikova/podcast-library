@@ -1,5 +1,4 @@
-open UserTypes.FormData;
-
+open FormData;
 let style = ReactDOMRe.Style.make;
 [%mui.withStyles
   "SignupStyles"(theme =>
@@ -16,16 +15,14 @@ let str = ReasonReact.string;
 let make = () => {
   let classes = SignupStyles.useStyles();
   let (state, dispatch) = UserUtils.useReducerSafe(reducer, initState);
-  let {email, password, fullName, status} = state;
+  let {email, password, userName, status} = state;
 
-  let identityContext = ReactNetlifyIdentity.useIdentityContext();
+  let identity = UserIdentity.Context.useIdentityContext();
 
   let handleSignup = _ => {
     dispatch(SubmitRequest);
-    let userMetaData: UserTypes.userMetadata = {
-      "full_name": Js.Nullable.fromOption(Some(fullName)),
-    };
-    identityContext.signupUser(~email, ~password, ~data=userMetaData)
+    // data is of type UserIdentity.userMetaData
+    identity.signupUser(~email, ~password, ~data={userName: userName})
     |> Js.Promise.then_(_ => dispatch(SubmitSuccess) |> Js.Promise.resolve)
     |> Js.Promise.catch(error =>
          dispatch(
@@ -47,16 +44,16 @@ let make = () => {
         fullWidth=true classes=[Root(classes.formElement)]>
         <MaterialUi_TextField
           autoFocus=true
-          label={str("Name")}
+          label={str("Username")}
           name="name"
           type_="text"
           fullWidth=true
           required=true
-          value=fullName
+          value={`String(userName)}
           disabled={status === Submitting}
           onChange={e => {
             let value = Utils.getInputValue(e);
-            dispatch(SetFullName(value));
+            dispatch(SetUserName(value));
           }}
         />
       </MaterialUi_FormControl>
@@ -64,7 +61,7 @@ let make = () => {
         label={str("Email Address")}
         type_="email"
         fullWidth=true
-        value=email
+        value={`String(email)}
         required=true
         name="email"
         disabled={status === Submitting}
@@ -79,11 +76,11 @@ let make = () => {
       <MaterialUi_TextField
         label={str("Password")}
         type_="password"
+        value={`String(password)}
         name="password"
         fullWidth=true
         required=true
         disabled={status === Submitting}
-        value=password
         onChange={e => {
           let value = Utils.getInputValue(e);
           dispatch(SetPassword(value));

@@ -1,5 +1,4 @@
-external promiseErrorToJsObj: Js.Promise.error => Js.t('a) = "%identity";
-
+let str = ReasonReact.string;
 let style = ReactDOMRe.Style.make;
 [%mui.withStyles
   "Styles"(theme =>
@@ -10,17 +9,19 @@ let style = ReactDOMRe.Style.make;
   )
 ];
 
-let str = ReasonReact.string;
 type state = {
   email: string,
-  status: UserTypes.FormData.status,
+  status: FormData.status,
 };
+
 let initState = {email: "", status: NotAsked};
+
 type action =
   | SetEmail(string)
   | SubmitRequest
   | SubmitError(string)
   | SubmitSuccess;
+
 let reducer = (state, action) => {
   switch (action) {
   | SetEmail(email) => {...state, email}
@@ -34,7 +35,7 @@ let reducer = (state, action) => {
 let make = (~gotoLogin) => {
   let classes = Styles.useStyles();
   let (state, dispatch) = UserUtils.useReducerSafe(reducer, initState);
-  let identityContext = ReactNetlifyIdentity.useIdentityContext();
+  let identityContext = UserIdentity.Context.useIdentityContext();
 
   let {email, status} = state;
 
@@ -43,7 +44,9 @@ let make = (~gotoLogin) => {
     identityContext.requestPasswordRecovery(~email)
     |> Js.Promise.then_(_ => dispatch(SubmitSuccess) |> Js.Promise.resolve)
     |> Js.Promise.catch(error =>
-         dispatch(SubmitError(promiseErrorToJsObj(error)##message))
+         dispatch(
+           SubmitError(UserUtils.promiseErrorToJsObj(error)##message),
+         )
          |> Js.Promise.resolve
        )
     |> ignore;
@@ -58,10 +61,10 @@ let make = (~gotoLogin) => {
       fullWidth=true classes=[Root(classes.formElement)]>
       <MaterialUi_TextField
         autoFocus=true
-        label={str("Email Address")}
+        label={str("Email address")}
         type_="email"
         fullWidth=true
-        value=email
+        value={`String(email)}
         required=true
         name="email"
         disabled={status === Submitting}

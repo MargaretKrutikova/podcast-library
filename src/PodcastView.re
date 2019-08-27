@@ -32,7 +32,9 @@ module PodcastLoggedInButton = {
 [@react.component]
 let make = (~podcast: SearchTypes.podcast, ~isSaved) => {
   let dispatch = AppCore.useDispatch();
-  let user = UserIdentity.useLoggedInUser();
+  let identity = UserIdentity.Context.useIdentityContext();
+
+  let user = UserIdentity.getLoggedInUser(identity);
 
   let handleAnonymous = () => dispatch(OnUnauthorizedAccess);
 

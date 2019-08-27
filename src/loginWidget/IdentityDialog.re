@@ -18,6 +18,13 @@ let combine = ReactDOMRe.Style.combine;
             ~breakpoint=`MD,
             ~style=style(~width="50vw", ()),
           ),
+      dialogContent:
+        style()
+        ->addUnsafe(
+            "&:first-child",
+            style(~paddingTop=theme |> Utils.spacing(1), ())
+            ->Utils.styleToString,
+          ),
       tab:
         style(
           ~minHeight=
@@ -25,6 +32,7 @@ let combine = ReactDOMRe.Style.combine;
             ->Utils.px_of_int,
           (),
         ),
+      title: style(~paddingLeft="0", ()),
       tabRoot:
         style(
           ~marginBottom=theme |> Utils.spacing(2),
@@ -37,44 +45,71 @@ let combine = ReactDOMRe.Style.combine;
   )
 ];
 
+type activeView =
+  | Login
+  | Signup
+  | ForgotPassword;
+
 let str = ReasonReact.string;
 
 [@react.component]
-let make = (~open_, ~onClose: unit => unit) => {
+let make = (~open_, ~onLogin, ~onClose) => {
   let classes = LoginDialogStyles.useStyles();
-  let (activeTab, setActiveTab) = React.useState(() => 0);
-  let identity = ReactNetlifyIdentity.useIdentityContext();
+  let (activeView, setActiveView) = React.useState(() => Login);
+  let identity = UserIdentity.Context.useIdentityContext();
+
+  React.useLayoutEffect1(
+    () => {
+      if (open_) {
+        setActiveView(_ => Login);
+      };
+      None;
+    },
+    [|open_|],
+  );
+
+  let hasProviders = identity.settings.providers->Belt.Array.length > 0;
 
   <MaterialUi_Dialog
     open_
     onClose={(_, _) => onClose()}
     scroll=`Body
     classes=[PaperScrollBody(classes.root)]>
-    <MaterialUi_DialogContent>
-      {identity.isLoggedIn
-         ? <Logout />
-         : <>
-             <MaterialUi_Tabs
-               value=activeTab
-               indicatorColor=`Primary
-               textColor=`Primary
-               classes=[Root(classes.tabRoot)]
-               variant=`FullWidth>
-               <MaterialUi_Tab
-                 onClick={_ => setActiveTab(_ => 0)}
-                 className={classes.tab}
-                 label={React.string("Log in")}
-               />
-               <MaterialUi_Tab
-                 label={React.string("Sign up")}
-                 onClick={_ => setActiveTab(_ => 1)}
-                 className={classes.tab}
-               />
-             </MaterialUi_Tabs>
-             {activeTab === 0 ? <Login /> : <Signup />}
-           </>}
-      {identity.settings.providers->Belt.Array.length === 0
-         ? React.null : <Providers />}
+    <MaterialUi_DialogContent className={classes.dialogContent}>
+      {switch (activeView) {
+       | ForgotPassword =>
+         <>
+           <MaterialUi_DialogTitle className={classes.title}>
+             {str("Recover password")}
+           </MaterialUi_DialogTitle>
+           <ForgotPassword gotoLogin={_ => setActiveView(_ => Login)} />
+         </>
+       | other =>
+         <>
+           <MaterialUi_Tabs
+             value=activeView
+             indicatorColor=`Primary
+             textColor=`Primary
+             classes=[Root(classes.tabRoot)]
+             variant=`FullWidth>
+             <MaterialUi_Tab
+               onClick={_ => setActiveView(_ => Login)}
+               label={React.string("Log in")}
+             />
+             <MaterialUi_Tab
+               label={React.string("Sign up")}
+               onClick={_ => setActiveView(_ => Signup)}
+             />
+           </MaterialUi_Tabs>
+           {other === Login
+              ? <Login
+                  onLogin
+                  gotoForgotPassword={_ => setActiveView(_ => ForgotPassword)}
+                />
+              : <Signup />}
+           {hasProviders ? <Providers /> : React.null}
+         </>
+       }}
     </MaterialUi_DialogContent>
   </MaterialUi_Dialog>;
 };

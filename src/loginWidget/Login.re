@@ -1,4 +1,4 @@
-open UserTypes.FormData;
+open FormData;
 
 let style = ReactDOMRe.Style.make;
 [%mui.withStyles
@@ -15,14 +15,15 @@ let str = ReasonReact.string;
 [@react.component]
 let make = (~gotoForgotPassword, ~onLogin) => {
   let classes = LoginDialogStyles.useStyles();
-  let (state, dispatch) = UserUtils.useReducerSafe(reducer, initState);
-  let identityContext = ReactNetlifyIdentity.useIdentityContext();
+  let (state, dispatch) =
+    UserUtils.useReducerSafe(FormData.reducer, FormData.initState);
+  let identity = UserIdentity.Context.useIdentityContext();
 
   let {email, password, status} = state;
 
   let handleLogin = () => {
     dispatch(SubmitRequest);
-    identityContext.loginUser(~email, ~password, ~remember=true, ())
+    identity.loginUser(~email, ~password, ~remember=true, ())
     |> Js.Promise.then_(_ => {
          dispatch(SubmitSuccess);
          onLogin() |> Js.Promise.resolve;
@@ -48,7 +49,7 @@ let make = (~gotoForgotPassword, ~onLogin) => {
         label={str("Email Address")}
         type_="email"
         fullWidth=true
-        value=email
+        value={`String(email)}
         required=true
         name="email"
         disabled={status === Submitting}
@@ -67,7 +68,7 @@ let make = (~gotoForgotPassword, ~onLogin) => {
         fullWidth=true
         required=true
         disabled={status === Submitting}
-        value=password
+        value={`String(password)}
         onChange={e => {
           let value = Utils.getInputValue(e);
           dispatch(SetPassword(value));

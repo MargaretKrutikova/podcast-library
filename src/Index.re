@@ -8,10 +8,10 @@ ReactDOMRe.renderToElementWithId(
   <AppCore.ElmishProvider>
     <ReasonApollo.Provider client=apolloClient>
       <ReasonApolloHooks.ApolloProvider client=apolloClient>
-        <ReactNetlifyIdentityWidget.IdentityContextProvider
+        <ReactNetlifyIdentity.IdentityContextProvider
           url="https://podcasts.margareta.dev/">
           <ThemeProvider> <Root /> </ThemeProvider>
-        </ReactNetlifyIdentityWidget.IdentityContextProvider>
+        </ReactNetlifyIdentity.IdentityContextProvider>
       </ReasonApolloHooks.ApolloProvider>
     </ReasonApollo.Provider>
   </AppCore.ElmishProvider>,

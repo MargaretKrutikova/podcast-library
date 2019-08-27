@@ -1,5 +1,3 @@
-open ReactNetlifyIdentityWidget;
-
 let str = ReasonReact.string;
 
 let getShowIdentityModal = (model: AppCore.model) => model.showIdentityModal;
@@ -10,8 +8,9 @@ let make = () => {
   let dispatch = AppCore.useDispatch();
 
   let route = Routing.useAppUrl();
-  let identity = useIdentityContext();
-  let id = UserIdentity.getUserId(identity);
+  let identity = UserIdentity.Context.useIdentityContext();
+
+  let id = identity.user->Belt.Option.map(u => u.id);
 
   let pageToShow =
     React.useMemo2(
@@ -25,14 +24,17 @@ let make = () => {
         },
       (route, id),
     );
-
+  let closeDialog = () => {
+    dispatch(SetShowIdentityModal(false));
+  };
+  let handleLogin = () => {
+    closeDialog();
+    Routing.pushRoute(MyLibrary);
+  };
   <>
     <MaterialUi_CssBaseline />
-    <IdentityModal
-      showDialog
-      onCloseDialog={() => dispatch(SetShowIdentityModal(false))}
-    />
-    <AppBar isLoggedIn={UserIdentity.isLoggedIn(identity)} activePage=route />
+    <IdentityDialog open_=showDialog onLogin=handleLogin onClose=closeDialog />
+    <AppBar isLoggedIn={identity.isLoggedIn} activePage=route />
     <MaterialUi_Container> pageToShow </MaterialUi_Container>
     <RootNotifications />
   </>;

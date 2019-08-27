@@ -27,7 +27,8 @@
     "reason-apollo-hooks",
     "reason-react-elmish",
     "@ahrefs/bs-reactstrap",
-    "@jsiebern/bs-material-ui"
+    "@jsiebern/bs-material-ui",
+    "bs-react-netlify-identity"
   ],
   "refmt": 3
 }
