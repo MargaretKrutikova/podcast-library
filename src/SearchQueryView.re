@@ -1,27 +1,11 @@
 let str = ReasonReact.string;
-let style = ReactDOMRe.Style.make;
-[%mui.withStyles
-  "SearchQueryStyles"(theme =>
-    {
-      searchContainer:
-        style(
-          ~marginBottom=theme |> Utils.spacing(3),
-          ~display="flex",
-          ~flexDirection="row",
-          (),
-        ),
-      searchFormControl: style(~maxWidth="600px", ~margin="0 auto", ()),
-      searchInput: style(~fontSize="26px", ()),
-    }
-  )
-];
 
 [@react.component]
 let make = () => {
   let dispatch = AppCore.useDispatch();
   let searchQuery = Hooks.useSearchQuery();
 
-  let classes = SearchQueryStyles.useStyles();
+  let classes = AppStyles.AppStyles.useStyles();
 
   <>
     <MaterialUi_FormControl className={classes.searchContainer}>

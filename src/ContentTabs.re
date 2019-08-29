@@ -1,22 +1,6 @@
-let style = ReactDOMRe.Style.make;
-[%mui.withStyles
-  "ContentTabsStyles"(theme =>
-    {
-      contentTabs: style(~marginBottom=theme |> Utils.spacing(2), ()),
-      contentTab:
-        style(~flex="1 1 0", ~maxWidth="none", ())
-        ->MaterialUi.ThemeHelpers.addBreakpoint(
-            ~theme,
-            ~breakpoint=`MD,
-            ~style=style(~flex="0", ()),
-          ),
-    }
-  )
-];
-
 [@react.component]
 let make = (~activeTab, ~onTabChange) => {
-  let classes = ContentTabsStyles.useStyles();
+  let classes = AppStyles.AppStyles.useStyles();
 
   <MaterialUi_Tabs
     className={classes.contentTabs}

@@ -1,34 +1,11 @@
-let style = ReactDOMRe.Style.make;
-[%mui.withStyles
-  "RootStyles"(theme =>
-    {
-      success: style(~backgroundColor=MaterialUi_Color_Green.c700, ()),
-      error:
-        style(
-          ~backgroundColor=
-            theme
-            ->MaterialUi.Theme.Theme.paletteGet
-            ->MaterialUi.Theme.Palette.errorGet
-            ->MaterialUi.Theme.PaletteColor.mainGet,
-          (),
-        ),
-      snackbarRoot:
-        style(
-          ~paddingLeft=theme |> Utils.spacing(1),
-          ~paddingRight=theme |> Utils.spacing(1),
-          (),
-        ),
-      snackbarContent: style(~flexGrow="0", ()),
-    }
-  )
-];
+open AppStyles;
 
 let typeToClassName = (type_: AppNotifications.type_, classes) =>
   switch (type_) {
   | Primary => "primary"
   | Secondary => "secondary"
-  | Success => classes.success
-  | Error => classes.error
+  | Success => classes.successNotification
+  | Error => classes.errorNotification
   | Warning => "warning"
   | Info => "info"
   | Light => "light"
@@ -50,7 +27,7 @@ let make = (~type_, ~id, ~style=?, ~children) => {
     if (reason !== "clickaway") {
       setOpen(_ => false);
     };
-  let classes = RootStyles.useStyles();
+  let classes = AppStyles.useStyles();
 
   <MaterialUi_Snackbar
     open_

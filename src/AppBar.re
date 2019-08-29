@@ -1,50 +1,3 @@
-let style = ReactDOMRe.Style.make;
-[%mui.withStyles
-  "RootStyles"(theme =>
-    {
-      desktopSearchBar:
-        style(~display="none", ())
-        ->MaterialUi.ThemeHelpers.addBreakpoint(
-            ~theme,
-            ~breakpoint=`MD,
-            ~style=
-              style(
-                ~flex="1 1 auto",
-                ~display="flex",
-                ~justifyContent="center",
-                ~alignItems="center",
-                (),
-              ),
-          ),
-      searchInput:
-        style(
-          ~maxWidth="400px",
-          ~fontSize="1.3rem",
-          ~position="absolute",
-          ~left="50%",
-          ~transform="translateX(-50%)",
-          (),
-        ),
-      hideDesktop:
-        style()
-        ->MaterialUi.ThemeHelpers.addBreakpoint(
-            ~theme,
-            ~breakpoint=`MD,
-            ~style=style(~display="none", ()),
-          ),
-      icons: style(~marginLeft="auto", ()),
-      appName:
-        style(~fontWeight="100", ~fontSize="1.5rem", ())
-        ->MaterialUi.ThemeHelpers.addBreakpoint(
-            ~theme,
-            ~breakpoint=`MD,
-            ~style=style(~fontSize="1.7rem", ()),
-          ),
-      appIcon: style(~marginLeft=theme |> Utils.spacing(1), ()),
-    }
-  )
-];
-
 let isSearchPage = page =>
   switch (page) {
   | Routing.Search(_) => true
@@ -54,7 +7,7 @@ let isSearchPage = page =>
 [@react.component]
 let make = (~isLoggedIn, ~activePage) => {
   let dispatch = AppCore.useDispatch();
-  let classes = RootStyles.useStyles();
+  let classes = AppStyles.AppStyles.useStyles();
   let (userMenuAnchor, setUserMenuAnchor) = React.useState(() => None);
 
   <MaterialUi_AppBar color=`Default position=`Static>
@@ -67,10 +20,10 @@ let make = (~isLoggedIn, ~activePage) => {
         </RouterLink>
         {!isSearchPage(activePage)
            ? <div className={classes.desktopSearchBar}>
-               <SearchInput className={classes.searchInput} />
+               <SearchInput className={classes.appBarSearchInput} />
              </div>
            : React.null}
-        <div className={classes.icons}>
+        <div className={classes.appBarIcons}>
           <RouterLink href={Routing.getUrlFromRoute(SearchEmpty)}>
             <MaterialUi_IconButton component={`String("span")}>
               <ReactFeather.SearchIcon />

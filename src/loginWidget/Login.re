@@ -1,20 +1,11 @@
 open FormData;
 
-let style = ReactDOMRe.Style.make;
-[%mui.withStyles
-  "LoginDialogStyles"(theme =>
-    {
-      loginButton: style(~marginTop=theme |> Utils.spacing(1), ()),
-      formElement: style(~marginBottom=theme |> Utils.spacing(2), ()),
-    }
-  )
-];
-
 let str = ReasonReact.string;
 
 [@react.component]
 let make = (~gotoForgotPassword, ~onLogin) => {
-  let classes = LoginDialogStyles.useStyles();
+  let classes = IdentityDialogStyles.IdentityDialogStyles.useStyles();
+
   let (state, dispatch) =
     UserUtils.useReducerSafe(FormData.reducer, FormData.initState);
   let identity = UserIdentity.Context.useIdentityContext();
@@ -77,7 +68,7 @@ let make = (~gotoForgotPassword, ~onLogin) => {
     </MaterialUi_FormControl>
     <MaterialUi_FormControl
       fullWidth=true
-      className={classes.loginButton}
+      className={classes.submitButton}
       classes=[Root(classes.formElement)]>
       <MaterialUi_Button
         color=`Primary

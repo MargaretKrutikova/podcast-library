@@ -1,13 +1,3 @@
-let style = ReactDOMRe.Style.make;
-[%mui.withStyles
-  "Styles"(_ =>
-    {
-      userName: style(~fontWeight="500", ~width="100%", ()),
-      userListItem: style(~flexWrap="wrap", ()),
-    }
-  )
-];
-
 [@react.component]
 let make = (~anchorEl, ~onLogout, ~onClose) => {
   let identity = UserIdentity.Context.useIdentityContext();
@@ -33,7 +23,7 @@ let make = (~anchorEl, ~onLogout, ~onClose) => {
     |> ignore;
   };
 
-  let classes = Styles.useStyles();
+  let classes = IdentityDialogStyles.IdentityDialogStyles.useStyles();
 
   <MaterialUi_Menu
     anchorEl

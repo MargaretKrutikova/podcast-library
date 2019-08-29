@@ -1,13 +1,4 @@
 let str = ReasonReact.string;
-let style = ReactDOMRe.Style.make;
-[%mui.withStyles
-  "Styles"(theme =>
-    {
-      submitButton: style(~marginTop=theme |> Utils.spacing(1), ()),
-      formElement: style(~marginBottom=theme |> Utils.spacing(2), ()),
-    }
-  )
-];
 
 type state = {
   email: string,
@@ -33,7 +24,8 @@ let reducer = (state, action) => {
 
 [@react.component]
 let make = (~gotoLogin) => {
-  let classes = Styles.useStyles();
+  let classes = IdentityDialogStyles.IdentityDialogStyles.useStyles();
+
   let (state, dispatch) = UserUtils.useReducerSafe(reducer, initState);
   let identityContext = UserIdentity.Context.useIdentityContext();
 

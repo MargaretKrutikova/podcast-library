@@ -1,51 +1,3 @@
-let style = ReactDOMRe.Style.make;
-let addUnsafe = ReactDOMRe.Style.unsafeAddProp;
-let combine = ReactDOMRe.Style.combine;
-
-[%mui.withStyles
-  "LoginDialogStyles"(theme =>
-    {
-      root:
-        style(
-          ~width="90vw",
-          ~margin="10vh auto",
-          ~maxWidth="400px!important",
-          ~padding=theme |> Utils.spacing(2),
-          ~paddingTop=theme |> Utils.spacing(4),
-          (),
-        )
-        ->MaterialUi.ThemeHelpers.addBreakpoint(
-            ~theme,
-            ~breakpoint=`MD,
-            ~style=style(~width="50vw", ()),
-          ),
-      tab:
-        style(
-          ~minHeight=
-            (theme->MaterialUi.Theme.Theme.spacingGet(1) * 3)
-            ->Utils.px_of_int,
-          (),
-        ),
-      title: style(~paddingLeft="0", ()),
-      closeButton:
-        style(
-          ~position="absolute",
-          ~right=theme |> Utils.spacing(1),
-          ~top=theme |> Utils.spacing(1),
-          (),
-        ),
-      tabRoot:
-        style(
-          ~marginBottom=theme |> Utils.spacing(2),
-          ~minHeight=
-            (theme->MaterialUi.Theme.Theme.spacingGet(1) * 3)
-            ->Utils.px_of_int,
-          (),
-        ),
-    }
-  )
-];
-
 type activeView =
   | Login
   | Signup
@@ -55,7 +7,7 @@ let str = ReasonReact.string;
 
 [@react.component]
 let make = (~open_, ~onLogin, ~onClose) => {
-  let classes = LoginDialogStyles.useStyles();
+  let classes = IdentityDialogStyles.IdentityDialogStyles.useStyles();
   let (activeView, setActiveView) = React.useState(() => Login);
   let identity = UserIdentity.Context.useIdentityContext();
 
@@ -75,7 +27,7 @@ let make = (~open_, ~onLogin, ~onClose) => {
     open_
     onClose={(_, _) => onClose()}
     scroll=`Body
-    classes=[PaperScrollBody(classes.root)]>
+    classes=[PaperScrollBody(classes.identityDialog)]>
     <MaterialUi_IconButton
       className={classes.closeButton} color=`Inherit onClick={_ => onClose()}>
       <ReactFeather.CloseIcon />

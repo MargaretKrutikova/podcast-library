@@ -1,19 +1,11 @@
 open FormData;
-let style = ReactDOMRe.Style.make;
-[%mui.withStyles
-  "SignupStyles"(theme =>
-    {
-      submitButtonElement: style(~marginTop=theme |> Utils.spacing(1), ()),
-      formElement: style(~marginBottom=theme |> Utils.spacing(2), ()),
-    }
-  )
-];
 
 let str = ReasonReact.string;
 
 [@react.component]
 let make = () => {
-  let classes = SignupStyles.useStyles();
+  let classes = IdentityDialogStyles.IdentityDialogStyles.useStyles();
+
   let (state, dispatch) = UserUtils.useReducerSafe(reducer, initState);
   let {email, password, fullName, status} = state;
 
@@ -87,8 +79,7 @@ let make = () => {
         }}
       />
     </MaterialUi_FormControl>
-    <MaterialUi_FormControl
-      fullWidth=true className={classes.submitButtonElement}>
+    <MaterialUi_FormControl fullWidth=true className={classes.submitButton}>
       <MaterialUi_Button
         color=`Primary
         disabled={status === Submitting}

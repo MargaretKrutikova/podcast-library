@@ -1,18 +1,3 @@
-let style = ReactDOMRe.Style.make;
-[%mui.withStyles
-  "LoadMoreStyles"(theme =>
-    {
-      root:
-        style(
-          ~marginTop=theme |> Utils.spacing(2),
-          ~display="block",
-          ~margin="0 auto",
-          (),
-        ),
-    }
-  )
-];
-
 [@react.component]
 let make =
     (
@@ -35,12 +20,12 @@ let make =
 module LoadMoreButton = {
   [@react.component]
   let make = (~nextOffset, ~total, ~isFetching, ~onClick) => {
-    let classes = LoadMoreStyles.useStyles();
+    let classes = AppStyles.AppStyles.useStyles();
     let hasMore = nextOffset < total;
 
     hasMore
       ? <MaterialUi_Button
-          className={classes.root}
+          className={classes.cardLoadMoreBtn}
           onClick
           disabled=isFetching
           color=`Secondary
