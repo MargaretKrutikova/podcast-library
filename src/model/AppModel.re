@@ -1,11 +1,12 @@
 type message =
   | /** notification  */
     ShowNotification(AppNotifications.data)
-  | HideNotification(int)
   | RemoveNotification(int)
-  | GotSearchMessage(SearchModel.message)
   | OnUnauthorizedAccess
-  | SetShowIdentityModal(bool);
+  | SetShowIdentityModal(bool)
+  | EnteredSearchTerm(string)
+  | SetContentType(ContentType.t)
+  | SetSearchModelFromQuery(Routing.searchQuery);
 
 type model = {
   search: SearchModel.t,
@@ -19,30 +20,35 @@ let createInitModel = () => {
   showIdentityModal: false,
 };
 
-/** notifications */
+let updateSearchModel = (model, search) => {...model, search};
+let updateNotifications = (model, notifications) => {
+  ...model,
+  notifications,
+};
 
 let update = (model, message) => {
   switch (message) {
-  | GotSearchMessage(subMessage) =>
-    let (search, effect) = SearchModel.update(model.search, subMessage);
-    ({...model, search}, effect);
+  | EnteredSearchTerm(searchTerm) => (
+      model.search
+      |> SearchModel.updateSearchTerm(searchTerm)
+      |> updateSearchModel(model),
+      None,
+    )
+  | SetContentType(searchType) => (
+      model.search
+      |> SearchModel.updateSearchType(searchType)
+      |> updateSearchModel(model),
+      None,
+    )
   | OnUnauthorizedAccess => ({...model, showIdentityModal: true}, None)
   | SetShowIdentityModal(showIdentityModal) => (
       {...model, showIdentityModal},
       None,
     )
   | ShowNotification(data) => (
-      {
-        ...model,
-        notifications: model.notifications |> AppNotifications.add(data),
-      },
-      None,
-    )
-  | HideNotification(id) => (
-      {
-        ...model,
-        notifications: model.notifications |> AppNotifications.hide(id),
-      },
+      model.notifications
+      |> AppNotifications.add(data)
+      |> updateNotifications(model),
       None,
     )
   | RemoveNotification(id) => (
@@ -52,6 +58,14 @@ let update = (model, message) => {
       },
       None,
     )
+  | SetSearchModelFromQuery({query}) =>
+    let updatedModel =
+      query !== model.search.baseQuery.searchTerm
+        ? model.search
+          |> SearchModel.updateSearchTerm(query)
+          |> updateSearchModel(model)
+        : model;
+    (updatedModel, None);
   };
 };
 

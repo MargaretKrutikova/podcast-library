@@ -9,11 +9,14 @@
   },
   "package-specs": [
     {
-      "module": "commonjs",
+      "module": "es6",
       "in-source": true
     }
   ],
-  "ppx-flags": ["graphql_ppx/ppx"],
+  "ppx-flags": [
+    "graphql_ppx/ppx",
+    "./node_modules/@jsiebern/bs-material-ui-ppx/ppx"
+  ],
   "suffix": ".bs.js",
   "namespace": true,
   "bs-dependencies": [
@@ -23,7 +26,8 @@
     "reason-apollo",
     "reason-apollo-hooks",
     "reason-react-elmish",
-    "@ahrefs/bs-reactstrap"
+    "@jsiebern/bs-material-ui",
+    "bs-react-netlify-identity"
   ],
   "refmt": 3
 }

@@ -1,5 +1,3 @@
-open BsReactstrap;
-
 type action =
   | Save
   | Remove;
@@ -8,12 +6,14 @@ type action =
 let make = (~disabled=false, ~onClick, ~action) => {
   switch (action) {
   | Save =>
-    <Button size="sm" color="primary" disabled onClick>
+    <MaterialUi_Button
+      size=`Small variant=`Contained color=`Primary disabled onClick>
       {React.string("Save")}
-    </Button>
+    </MaterialUi_Button>
   | Remove =>
-    <Button size="sm" color="warning" disabled onClick>
+    <MaterialUi_Button
+      size=`Small color=`Primary variant=`Outlined disabled onClick>
       {React.string("Remove")}
-    </Button>
+    </MaterialUi_Button>
   };
 };

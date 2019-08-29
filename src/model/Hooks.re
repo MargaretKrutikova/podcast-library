@@ -17,8 +17,3 @@ let useSearchQuery = () => {
     searchType: searchModel.searchType,
   };
 };
-
-let useSearchDispatch = () => {
-  let dispatch = AppCore.useDispatch();
-  searchMessage => dispatch(GotSearchMessage(searchMessage));
-};

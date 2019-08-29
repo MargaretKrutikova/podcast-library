@@ -1,6 +1,3 @@
-open BsReactstrap;
-open Cards;
-
 let str = ReasonReact.string;
 
 [@react.component]
@@ -27,41 +24,38 @@ let make =
       (),
     );
 
-  <LibraryCard hasTopActions=true>
+  <MaterialUi_Card>
     {hasSavedEpisodes
-       ? <TopActions>
-           <RouterLink href={"/my-library/" ++ id ++ "/episodes"}>
-             {str("Show episodes")}
-           </RouterLink>
-         </TopActions>
+       ? <RouterLink href={"/my-library/" ++ id ++ "/episodes"}>
+           {str("Show episodes")}
+         </RouterLink>
        : ReasonReact.null}
-    <CardBody>
-      <CardTitle> {str(title)} </CardTitle>
-      <LibraryCardSubtitle> {str(publisher)} </LibraryCardSubtitle>
+    <MaterialUi_CardContent>
+      <MaterialUi_Typography gutterBottom=true variant=`H6>
+        {str(title)}
+      </MaterialUi_Typography>
+      <MaterialUi_Typography gutterBottom=true variant=`Subtitle1>
+        {str(publisher)}
+      </MaterialUi_Typography>
       {hasSavedEpisodes
-         ? <LibraryCardSubtitle>
+         ? <MaterialUi_Typography gutterBottom=true variant=`Subtitle1>
              {str("Saved episodes: " ++ string_of_int(numberOfSavedEpisodes))}
-           </LibraryCardSubtitle>
+           </MaterialUi_Typography>
          : ReasonReact.null}
-      <CardText tag="div">
-        <div
-          dangerouslySetInnerHTML={
-            "__html": Utils.truncateDescription(description),
-          }
-        />
-      </CardText>
-      <BottomActions>
-        <NavLink href={Utils.makePodcastItunesUrl(itunesId)}>
-          {str("Open in itunes")}
-        </NavLink>
-        {!hasSavedEpisodes
-           ? <ActionButton
-               disabled={removeResult === Loading}
-               onClick=onRemove
-               action=ActionButton.Remove
-             />
-           : ReasonReact.null}
-      </BottomActions>
-    </CardBody>
-  </LibraryCard>;
+      <Cards.Description description />
+    </MaterialUi_CardContent>
+    <Cards.CardActions>
+      <MaterialUi_Button
+        color=`Secondary href={Utils.makePodcastItunesUrl(itunesId)}>
+        {str("Open in itunes")}
+      </MaterialUi_Button>
+      {!hasSavedEpisodes
+         ? <ActionButton
+             disabled={removeResult === Loading}
+             onClick={_ => onRemove() |> ignore}
+             action=ActionButton.Remove
+           />
+         : ReasonReact.null}
+    </Cards.CardActions>
+  </MaterialUi_Card>;
 };

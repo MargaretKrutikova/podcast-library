@@ -41,15 +41,25 @@ module LoggedInSearchView = {
 let getSearchType = (model: AppCore.model) => model.search.searchType;
 
 [@react.component]
-let make = (~userId) => {
-  let searchType = AppCore.useSelector(getSearchType);
+let make =
+  React.memo((~userId, ~urlQuery: Routing.searchQuery) => {
+    let searchType = AppCore.useSelector(getSearchType);
+    let dispatch = AppCore.useDispatch();
 
-  <>
-    <h1> {ReasonReact.string("Search library")} </h1>
-    <SearchQueryView />
-    {switch (userId) {
-     | Some(userId) => <LoggedInSearchView userId searchType />
-     | None => <SearchResultsView searchType />
-     }}
-  </>;
-};
+    React.useEffect1(
+      () => {
+        dispatch(SetSearchModelFromQuery(urlQuery));
+        None;
+      },
+      [|urlQuery|],
+    );
+
+    <PageContainer>
+      <PageTitle title="Search results" />
+      <SearchQueryView />
+      {switch (userId) {
+       | Some(userId) => <LoggedInSearchView userId searchType />
+       | None => <SearchResultsView searchType />
+       }}
+    </PageContainer>;
+  });

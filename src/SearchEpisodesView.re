@@ -34,19 +34,22 @@ let make = (~savedIds) => {
     result=full
     renderData={data =>
       <>
-        {data##searchEpisodes.results
-         ->Belt.Array.map(episode =>
-             <EpisodeView
-               key={episode.listennotesId}
-               episode
-               isSaved={
-                 savedIds->Belt.Array.some(idObj =>
-                   idObj##episodeId === episode.listennotesId
-                 )
-               }
-             />
-           )
-         |> ReasonReact.array}
+        <LibraryGrid.Container>
+          {data##searchEpisodes.results
+           ->Belt.Array.map(episode =>
+               <LibraryGrid.Item key={episode.listennotesId}>
+                 <EpisodeView
+                   episode
+                   isSaved={
+                     savedIds->Belt.Array.some(idObj =>
+                       idObj##episodeId === episode.listennotesId
+                     )
+                   }
+                 />
+               </LibraryGrid.Item>
+             )
+           |> ReasonReact.array}
+        </LibraryGrid.Container>
         <SearchResultView.LoadMoreButton
           nextOffset={data##searchEpisodes.nextOffset}
           total={data##searchEpisodes.total}

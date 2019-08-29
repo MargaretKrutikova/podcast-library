@@ -1,6 +1,3 @@
-open BsReactstrap;
-open Cards;
-
 let str = ReasonReact.string;
 
 [@react.component]
@@ -17,39 +14,46 @@ let make = (~episode: LibraryTypes.myEpisode, ~userId, ~podcastItunesId) => {
       (),
     );
 
-  <LibraryCard>
-    <CardBody>
-      <CardTitle> {str(episode.title)} </CardTitle>
-      <LibraryCardSubtitle>
+  <MaterialUi_Card>
+    <MaterialUi_CardContent>
+      <MaterialUi_Typography gutterBottom=true variant=`H6>
+        {str(episode.title)}
+      </MaterialUi_Typography>
+      <MaterialUi_Typography gutterBottom=true variant=`Subtitle1>
         {str(
            episode.pubDate ++ ", length: " ++ string_of_int(episode.lengthSec),
          )}
-      </LibraryCardSubtitle>
-      <CardText tag="div">
+      </MaterialUi_Typography>
+      <MaterialUi_Typography
+        variant=`Body1 color=`TextSecondary component={`String("div")}>
         <div
           dangerouslySetInnerHTML={
             "__html": Utils.truncateDescription(episode.description),
           }
         />
-      </CardText>
-      <BottomActions>
-        {switch (episode.itunesId, podcastItunesId) {
-         | (Some(episodeItunesId), Some(podcastId)) =>
-           <NavLink
-             href={Utils.makeEpisodeItunesUrl(
-               ~podcastItunesId=podcastId,
-               ~episodeItunesId,
-             )}>
-             {str("Open in itunes")}
-           </NavLink>
-         | (_, _) => ReasonReact.null
-         }}
-        <ActionButton
-          disabled={removeResult === Loading}
-          onClick=onRemove
-          action=ActionButton.Remove
-        />
-      </BottomActions>
-    </CardBody>
-  </LibraryCard>;
+      </MaterialUi_Typography>
+    </MaterialUi_CardContent>
+    <Cards.CardActions>
+      {switch (episode.itunesId, podcastItunesId) {
+       | (Some(episodeItunesId), Some(podcastId)) =>
+         <MaterialUi_Button
+           color=`Secondary
+           href={Utils.makeEpisodeItunesUrl(
+             ~podcastItunesId=podcastId,
+             ~episodeItunesId,
+           )}>
+           {str("Open in itunes")}
+         </MaterialUi_Button>
+       | (_, _) => ReasonReact.null
+       }}
+      <MaterialUi_Button
+        size=`Small
+        color=`Primary
+        variant=`Contained
+        disabled={removeResult === Loading}
+        onClick={_ => onRemove() |> ignore}>
+        {React.string("Remove")}
+      </MaterialUi_Button>
+    </Cards.CardActions>
+  </MaterialUi_Card>;
 };

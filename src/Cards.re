@@ -1,65 +1,48 @@
-open BsReactstrap;
+open AppStyles;
 
-let str = ReasonReact.string;
-
-module LibraryCardSubtitle = {
+module CardActions = {
   [@react.component]
   let make = (~children) => {
-    <CardSubtitle className="mb-3"> children </CardSubtitle>;
-  };
-};
-
-module BottomActions = {
-  [@react.component]
-  let make = (~children) => {
-    <div className="mt-2 d-flex justify-content-end align-items-center">
+    let classes = AppStyles.useStyles();
+    <MaterialUi_CardActions className={classes.cardActions}>
       children
-    </div>;
-  };
-};
-
-module TopActions = {
-  [@react.component]
-  let make = (~children) => {
-    <div className="library-card-top-actions d-flex justify-content-end">
-      children
-    </div>;
-  };
-};
-
-module SearchCardActions = {
-  [@react.component]
-  let make = (~isSaved, ~isSaving, ~onSave, ~children) => {
-    <BottomActions>
-      children
-      {!isSaved
-         ? <Button size="sm" color="primary" disabled=isSaving onClick=onSave>
-             {str("Save")}
-           </Button>
-         : ReasonReact.null}
-    </BottomActions>;
-  };
-};
-
-module LibraryCard = {
-  [@react.component]
-  let make = (~hasTopActions=false, ~children) => {
-    let className = "mt-3 mb-3 " ++ (hasTopActions ? " pt-3" : "");
-
-    <Card className> children </Card>;
+    </MaterialUi_CardActions>;
   };
 };
 
 module SearchCard = {
   [@react.component]
   let make = (~isSaved, ~children) => {
-    <LibraryCard hasTopActions=isSaved>
+    let classes = AppStyles.useStyles();
+
+    <MaterialUi_Card className={classes.searchCard}>
       {isSaved
-         ? <TopActions>
-             <Badge color="info"> {str("Saved")} </Badge>
-           </TopActions>
-         : ReasonReact.null}
+         ? <ReactFeather.BookmarkIcon
+             className={classes.cardSavedIcon}
+             fill="#669BBC"
+             color="#29335C"
+           />
+         : React.null}
       children
-    </LibraryCard>;
+    </MaterialUi_Card>;
+  };
+};
+
+module Description = {
+  [@react.component]
+  let make = (~description) => {
+    let classes = AppStyles.useStyles();
+
+    <MaterialUi_Typography
+      variant=`Body1
+      color=`TextSecondary
+      component={`String("div")}
+      className={classes.cardDescription}>
+      <div
+        dangerouslySetInnerHTML={
+          "__html": Utils.truncateDescription(description),
+        }
+      />
+    </MaterialUi_Typography>;
   };
 };

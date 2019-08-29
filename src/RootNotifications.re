@@ -5,26 +5,27 @@ let make = () => {
   let notifications = AppCore.useSelector(getNotifications);
   let containerRef = React.useRef(Js.Nullable.null);
 
-  let style =
+  let getTopScroll = () => int_of_float(Utils.scrollTop) < 10 ? 75 : 20;
+
+  let makeStyle = ind =>
     ReactDOMRe.Style.make(
-      ~top=int_of_float(Utils.scrollTop) < 10 ? "55px" : "20px",
+      ~top=
+        ind === 0
+          ? string_of_int(getTopScroll()) ++ "px"
+          : string_of_int(ind * 65 + getTopScroll()) ++ "px",
       (),
     );
 
   <div ref={ReactDOMRe.Ref.domRef(containerRef)}>
-    <div
-      style
-      className="container app-notifications-root col-lg-4 col-md-6 col-sm-8 col-xs-12">
-      {notifications->Belt.Array.map(item =>
-         <Notification
-           key={string_of_int(item.id)}
-           id={item.id}
-           isShown={item.isShown}
-           type_={item.data.type_}>
-           {ReasonReact.string(item.data.text)}
-         </Notification>
-       )
-       |> ReasonReact.array}
-    </div>
+    {notifications->Belt.Array.mapWithIndex((ind, item) =>
+       <Notification
+         key={string_of_int(item.id)}
+         id={item.id}
+         type_={item.data.type_}
+         style={makeStyle(ind)}>
+         {ReasonReact.string(item.data.text)}
+       </Notification>
+     )
+     |> ReasonReact.array}
   </div>;
 };

@@ -12,6 +12,7 @@ module.exports = {
     path: outputDir,
     filename: "Index.js"
   },
+  devtool: "source-map",
   plugins: [
     new HtmlWebpackPlugin({
       template: "src/index.html",

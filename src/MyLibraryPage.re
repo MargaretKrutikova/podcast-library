@@ -1,4 +1,3 @@
-open BsReactstrap;
 let str = ReasonReact.string;
 
 module GetAllPodcastsQuery =
@@ -10,7 +9,6 @@ module GetAllEpisodesQuery =
 [@react.component]
 let make = (~userId) => {
   let (activeType, setActiveType) = React.useState(() => ContentType.Episode);
-  let isActive = type_ => activeType == type_;
 
   let getAllPodcats = LibraryQueries.GetAllPodcasts.make(~userId, ());
 
@@ -29,40 +27,32 @@ let make = (~userId) => {
       (),
     );
 
-  <>
-    <h1> {React.string("My library")} </h1>
-    <Nav tabs=true>
-      <NavItem>
-        <NavLink
-          active={isActive(Episode)}
-          onClick={_ => setActiveType(_ => Episode)}>
-          {str("Episodes")}
-        </NavLink>
-      </NavItem>
-      <NavItem>
-        <NavLink
-          active={isActive(Podcast)}
-          onClick={_ => setActiveType(_ => Podcast)}>
-          {str("Podcasts")}
-        </NavLink>
-      </NavItem>
-    </Nav>
+  <PageContainer>
+    <PageTitle title="My library" />
+    <ContentTabs
+      activeTab=activeType
+      onTabChange={contentType => setActiveType(_ => contentType)}
+    />
     {switch (activeType) {
      | Episode =>
        switch (episodesResponse) {
        | NoData => React.null
        | Loading => <div> {React.string("Loading")} </div>
        | Data(response) =>
-         response##my_episodes
-         ->Belt.Array.map(data =>
-             <MyEpisodeView
-               key={data##episode##listennotesId}
-               episode={LibraryTypes.toMyEpisode(data)}
-               podcastItunesId={Some(data##episode##podcast##itunesId)}
-               userId
-             />
-           )
-         |> ReasonReact.array
+         <LibraryGrid.Container>
+           {response##my_episodes
+            ->Belt.Array.map(data =>
+                <LibraryGrid.Item key={data##episode##listennotesId}>
+                  <MyEpisodeView
+                    episode={LibraryTypes.toMyEpisode(data)}
+                    podcastItunesId={Some(data##episode##podcast##itunesId)}
+                    userId
+                  />
+                </LibraryGrid.Item>
+              )
+            |> ReasonReact.array}
+         </LibraryGrid.Container>
+
        | Error(_) => <div> {React.string("Error")} </div>
        }
      | Podcast =>
@@ -70,23 +60,24 @@ let make = (~userId) => {
        | NoData => React.null
        | Loading => <div> {React.string("Loading")} </div>
        | Data(response) =>
-         <div>
+         <LibraryGrid.Container>
            {response##my_podcasts
             ->Belt.Array.map(data =>
-                <MyPodcastView
-                  key={data##podcastId}
-                  id={data##podcastId}
-                  description={data##podcast##description}
-                  title={data##podcast##title}
-                  publisher={data##podcast##publisher}
-                  itunesId={data##podcast##itunesId}
-                  userId
-                />
+                <LibraryGrid.Item key={data##podcastId}>
+                  <MyPodcastView
+                    id={data##podcastId}
+                    description={data##podcast##description}
+                    title={data##podcast##title}
+                    publisher={data##podcast##publisher}
+                    itunesId={data##podcast##itunesId}
+                    userId
+                  />
+                </LibraryGrid.Item>
               )
             |> React.array}
-         </div>
+         </LibraryGrid.Container>
        | Error(_) => <div> {React.string("Error")} </div>
        }
      }}
-  </>;
+  </PageContainer>;
 };

@@ -74,3 +74,40 @@ let fromBigInt = value =>
   value->Js.Json.decodeNumber->Belt.Option.mapWithDefault(0, int_of_float);
 
 let makePositive = number => number < 0 ? 0 : number;
+
+/** inputs */
+let getInputValue = (e): string => ReactEvent.Form.target(e)##value;
+
+type keyPressed =
+  | Enter
+  | Escape
+  | Other;
+
+let onKeyDown = event => {
+  let key = ReactEvent.Keyboard.which(event);
+  switch (key) {
+  | 27 => Escape
+  | 13 => Enter
+  | _ => Other
+  };
+};
+
+/** material ui */
+external styleToString: ReactDOMRe.Style.t => string = "%identity";
+
+let px_of_float = x => x->int_of_float->string_of_int ++ "px";
+let px_of_int = x => x->string_of_int ++ "px";
+
+let spacing = (ind, theme) =>
+  theme->MaterialUi.Theme.Theme.spacingGet(ind)->px_of_int;
+
+let spacingTransform = (ind, transform, theme) =>
+  theme->MaterialUi.Theme.Theme.spacingGet(ind)->transform->px_of_int;
+
+let getPalette = theme => theme->MaterialUi.Theme.Theme.paletteGet;
+
+let getPrimaryColor = theme =>
+  getPalette(theme)->MaterialUi.Theme.Palette.primaryGet;
+
+let getSecondaryColor = theme =>
+  getPalette(theme)->MaterialUi.Theme.Palette.secondaryGet;

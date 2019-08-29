@@ -31,7 +31,7 @@ let make = (~podcastId: string, ~userId) => {
            Some(data##itunesId)
          );
 
-       <>
+       <PageContainer>
          <div>
            {switch (podcast) {
             | Some(data) => <h3> {str(data##title)} </h3>
@@ -45,7 +45,7 @@ let make = (~podcastId: string, ~userId) => {
               <MyEpisodeView key={episode.id} episode podcastItunesId userId />
             )
           |> ReasonReact.array}
-       </>;
+       </PageContainer>;
      }}
   </>;
 };
