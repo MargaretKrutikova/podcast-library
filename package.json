@@ -33,17 +33,17 @@
     "reason-apollo-hooks": "git+https://github.com/MargaretKrutikova/reason-apollo-hooks.git#fetch-policy",
     "reason-react": "^0.7.0",
     "reason-react-elmish": "git+https://github.com/MargaretKrutikova/reason-react-elmish.git",
-    "style-loader": "^0.23.1"
-  },
-  "devDependencies": {
-    "@jsiebern/bs-material-ui-ppx": "^1.0.4",
+    "style-loader": "^0.23.1",
     "@material-ui/core": "^4.3.2",
-    "bs-platform": "^5.0.6",
-    "dotenv-webpack": "^1.7.0",
-    "graphql_ppx": "^0.2.8",
     "html-webpack-plugin": "^3.2.0",
     "webpack": "^4.0.1",
     "webpack-cli": "^3.1.1",
-    "webpack-dev-server": "^3.1.8"
+    "webpack-dev-server": "^3.1.8",
+    "bs-platform": "^5.0.6",
+    "dotenv-webpack": "^1.7.0"
+  },
+  "devDependencies": {
+    "@jsiebern/bs-material-ui-ppx": "^1.0.4",
+    "graphql_ppx": "^0.2.8"
   }
 }
