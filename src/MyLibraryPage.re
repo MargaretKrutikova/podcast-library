@@ -43,7 +43,7 @@ let make = (~userId) => {
            {response##my_episodes
             ->Belt.Array.map(data =>
                 <LibraryGrid.Item key={data##episode##listennotesId}>
-                  <MyEpisodeView
+                  <MyEpisodeCard
                     episode={LibraryTypes.toMyEpisode(data)}
                     podcastItunesId={Some(data##episode##podcast##itunesId)}
                     userId
@@ -64,7 +64,7 @@ let make = (~userId) => {
            {response##my_podcasts
             ->Belt.Array.map(data =>
                 <LibraryGrid.Item key={data##podcastId}>
-                  <MyPodcastView
+                  <MyPodcastCard
                     id={data##podcastId}
                     description={data##podcast##description}
                     title={data##podcast##title}

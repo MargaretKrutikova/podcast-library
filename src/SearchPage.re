@@ -10,8 +10,8 @@ module SearchResultsView = {
         ~savedEpisodesIds=[||],
       ) => {
     switch (searchType) {
-    | Episode => <SearchEpisodesView savedIds=savedEpisodesIds />
-    | Podcast => <SearchPodcastsView savedIds=savedPodcastsIds />
+    | Episode => <SearchEpisodeResult savedIds=savedEpisodesIds />
+    | Podcast => <SearchPodcastResult savedIds=savedPodcastsIds />
     };
   };
 };
@@ -56,7 +56,7 @@ let make =
 
     <PageContainer>
       <PageTitle title="Search results" />
-      <SearchQueryView />
+      <SearchForm />
       {switch (userId) {
        | Some(userId) => <LoggedInSearchView userId searchType />
        | None => <SearchResultsView searchType />

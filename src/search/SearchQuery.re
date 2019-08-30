@@ -39,10 +39,6 @@ type baseQuery = {
   searchTerm: string,
   language: option(string),
   genreIds: option(array(int)),
-  // sort,
-  // searchFields: option(array(searchField)),
-  // publishedAfterDate: option(Js.Date.t),
-  // publishedBeforeDate: option(Js.Date.t),
 };
 
 let createBaseQuery = () => {

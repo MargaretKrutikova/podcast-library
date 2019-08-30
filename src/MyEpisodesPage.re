@@ -42,7 +42,7 @@ let make = (~podcastId: string, ~userId) => {
          {response##my_episodes
           ->Belt.Array.map(LibraryTypes.toMyEpisode)
           ->Belt.Array.map(episode =>
-              <MyEpisodeView key={episode.id} episode podcastItunesId userId />
+              <MyEpisodeCard key={episode.id} episode podcastItunesId userId />
             )
           |> ReasonReact.array}
        </PageContainer>;

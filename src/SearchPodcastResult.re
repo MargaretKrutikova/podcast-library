@@ -26,7 +26,7 @@ let make = (~savedIds) => {
     |> ignore;
   };
 
-  <SearchResultView
+  <SearchResultContainer
     result=full
     renderData={data =>
       <>
@@ -34,7 +34,7 @@ let make = (~savedIds) => {
           {data##searchPodcasts.results
            ->Belt.Array.map(podcast =>
                <LibraryGrid.Item key={podcast.listennotesId}>
-                 <PodcastView
+                 <PodcastCard
                    podcast
                    isSaved={
                      savedIds->Belt.Array.some(idObj =>
@@ -46,7 +46,7 @@ let make = (~savedIds) => {
              )
            |> ReasonReact.array}
         </LibraryGrid.Container>
-        <SearchResultView.LoadMoreButton
+        <SearchResultContainer.LoadMoreButton
           nextOffset={data##searchPodcasts.nextOffset}
           total={data##searchPodcasts.total}
           onClick={_ =>

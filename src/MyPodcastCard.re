@@ -14,7 +14,9 @@ let make =
   let hasSavedEpisodes = numberOfSavedEpisodes > 0;
 
   let myPodcastsQuery = LibraryQueries.GetAllPodcasts.make(~userId, ());
-  let refetchQueries = [|Utils.toQueryObj(myPodcastsQuery)|];
+  let refetchQueries = [|
+    ReasonApolloHooks.Utils.toQueryObj(myPodcastsQuery),
+  |];
 
   let (onRemove, removeResult) =
     UseRemovePodcast.useRemovePodcast(

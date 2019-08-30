@@ -4,7 +4,9 @@ let str = ReasonReact.string;
 let make = (~episode: LibraryTypes.myEpisode, ~userId, ~podcastItunesId) => {
   let myEpisodesQuery = LibraryQueries.GetAllEpisodes.make(~userId, ());
 
-  let refetchQueries = [|Utils.toQueryObj(myEpisodesQuery)|];
+  let refetchQueries = [|
+    ReasonApolloHooks.Utils.toQueryObj(myEpisodesQuery),
+  |];
 
   let (onRemove, removeResult) =
     UseRemoveEpisode.useRemoveEpisode(
