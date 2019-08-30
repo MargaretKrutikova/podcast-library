@@ -19,7 +19,7 @@ let make = (~podcastId: string, ~userId) => {
     <h1> {str("My episodes")} </h1>
     {switch (simple) {
      | NoData => React.null
-     | Loading => <div> {str("Loading")} </div>
+     | Loading => <Spinner />
      | Error(_) => <div> {str("Error")} </div>
      | Data(response) =>
        if (response##my_episodes->Belt.Array.length === 0) {

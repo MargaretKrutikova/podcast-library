@@ -37,19 +37,19 @@ let combine = ReactDOMRe.Style.combine;
           ~margin="0 auto",
           (),
         ),
-      pageTitle:
-        style(
-          ~fontWeight="100",
-          ~textAlign="center",
-          ~marginTop=theme |> Utils.spacing(3),
-          (),
-        ),
+      pageTitle: style(~fontWeight="100", ~textAlign="center", ()),
       pageContainer:
-        style()
+        style(~marginTop=theme |> Utils.spacing(4), ())
         ->MaterialUi.ThemeHelpers.addBreakpoint(
             ~theme,
             ~breakpoint=`MD,
-            ~style=style(~maxWidth="800px", ~margin="0 auto", ()),
+            ~style=
+              style(
+                ~maxWidth="800px",
+                ~marginLeft="auto",
+                ~marginRight="auto",
+                (),
+              ),
           ),
       /*** notifications */
       successNotification:

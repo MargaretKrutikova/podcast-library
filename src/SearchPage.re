@@ -39,11 +39,15 @@ module LoggedInSearchView = {
 };
 
 let getSearchType = (model: AppCore.model) => model.search.searchType;
+let hasSearchTerm = (model: AppCore.model) =>
+  model.search.baseQuery.searchTerm->Js.String.length > 0;
 
 [@react.component]
 let make =
   React.memo((~userId, ~urlQuery: Routing.searchQuery) => {
     let searchType = AppCore.useSelector(getSearchType);
+    let hasSearchTerm = AppCore.useSelector(hasSearchTerm);
+
     let dispatch = AppCore.useDispatch();
 
     React.useEffect1(
@@ -55,11 +59,12 @@ let make =
     );
 
     <PageContainer>
-      <PageTitle title="Search results" />
       <SearchForm />
-      {switch (userId) {
-       | Some(userId) => <LoggedInSearchView userId searchType />
-       | None => <SearchResultsView searchType />
-       }}
+      {hasSearchTerm
+         ? switch (userId) {
+           | Some(userId) => <LoggedInSearchView userId searchType />
+           | None => <SearchResultsView searchType />
+           }
+         : React.null}
     </PageContainer>;
   });

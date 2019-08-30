@@ -37,7 +37,7 @@ let make = (~userId) => {
      | Episode =>
        switch (episodesResponse) {
        | NoData => React.null
-       | Loading => <div> {React.string("Loading")} </div>
+       | Loading => <Spinner />
        | Data(response) =>
          <LibraryGrid.Container>
            {response##my_episodes
@@ -58,7 +58,7 @@ let make = (~userId) => {
      | Podcast =>
        switch (podcastsResponse) {
        | NoData => React.null
-       | Loading => <div> {React.string("Loading")} </div>
+       | Loading => <Spinner />
        | Data(response) =>
          <LibraryGrid.Container>
            {response##my_podcasts

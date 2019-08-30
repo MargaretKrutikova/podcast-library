@@ -5,8 +5,7 @@ let make =
       ~renderData: 'a => React.element,
     ) => {
   switch (result) {
-  | {loading: true, data: None} =>
-    <MaterialUi_Typography> {React.string("Loading")} </MaterialUi_Typography>
+  | {loading: true, data: None} => <Spinner />
   | {data: Some(data)} => renderData(data)
   | {error: Some(error)} =>
     <div> {ReasonReact.string(error##message)} </div>
