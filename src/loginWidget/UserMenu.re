@@ -59,11 +59,13 @@ let make = (~anchorEl, ~onLogout, ~onClose) => {
       <MaterialUi_ListItemText primary={React.string("Log out")} />
     </MaterialUi_MenuItem>
     <MaterialUi_Divider variant=`FullWidth />
-    <MaterialUi_MenuItem>
-      <MaterialUi_ListItemIcon>
-        <ReactFeather.BookmarkIcon />
-      </MaterialUi_ListItemIcon>
-      <MaterialUi_ListItemText primary={React.string("My Library")} />
-    </MaterialUi_MenuItem>
+    <RouterLink href={Routing.getUrlFromRoute(MyLibrary)}>
+      <MaterialUi_MenuItem>
+        <MaterialUi_ListItemIcon>
+          <ReactFeather.BookmarkIcon />
+        </MaterialUi_ListItemIcon>
+        <MaterialUi_ListItemText primary={React.string("My Library")} />
+      </MaterialUi_MenuItem>
+    </RouterLink>
   </MaterialUi_Menu>;
 };
