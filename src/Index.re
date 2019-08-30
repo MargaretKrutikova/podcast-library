@@ -1,4 +1,4 @@
-[%bs.raw {|require('./styles/styles.css')|}];
+[%bs.raw {|require('./styles.css')|}];
 
 let apolloClient = Graphql.makeApolloClient();
 

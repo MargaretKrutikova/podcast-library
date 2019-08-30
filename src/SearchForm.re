@@ -1,10 +1,13 @@
 let str = ReasonReact.string;
 
+let getSearchType = (model: AppCore.model) => model.search.searchType;
+let getSearchTerm = (model: AppCore.model) =>
+  model.search.baseQuery.searchTerm;
+
 [@react.component]
 let make = () => {
   let dispatch = AppCore.useDispatch();
-  let searchQuery = Hooks.useSearchQuery();
-
+  let searchType = AppCore.useSelector(getSearchType);
   let classes = AppStyles.AppStyles.useStyles();
 
   <>
@@ -17,7 +20,7 @@ let make = () => {
       />
     </MaterialUi_FormControl>
     <ContentTabs
-      activeTab={searchQuery.searchType}
+      activeTab=searchType
       onTabChange={contentType => dispatch(SetContentType(contentType))}
     />
   </>;
