@@ -15,7 +15,7 @@ let mergeIdsCache =
 
 let updateMyLibrarySavedIds = (client, updateCache, userId) => {
   let fetchMyLibraryIds = GetMyLibrarySavedIds.make(~userId, ());
-  let options = Utils.toReadQueryOptions(fetchMyLibraryIds);
+  let options = ReasonApolloHooks.Utils.toReadQueryOptions(fetchMyLibraryIds);
 
   switch (GetMyLibrarySavedIdsReadQuery.readQuery(client, options)) {
   | exception _ => ()
@@ -25,16 +25,12 @@ let updateMyLibrarySavedIds = (client, updateCache, userId) => {
     | Some(cachedIds) =>
       let prevIds = cast(cachedIds);
 
-      // this is necessary to keep __typename apollo field on the root cache query
-      let mergeCacheJs: ('a, 'a) => 'a = [%bs.raw
-        {| function (prev, next) {  return { ...prev, ...next }; } |}
-      ];
-
-      GetMyLibrarySavedIdsWriteQuery.make(
-        ~client,
-        ~variables=fetchMyLibraryIds##variables,
-        ~data=prevIds |> updateCache |> mergeCacheJs(prevIds),
-        (),
+      GetMyLibrarySavedIdsWriteQuery.writeQuery(
+        client,
+        Utils.toWriteQueryOptions(
+          ~query=fetchMyLibraryIds,
+          ~data=updateCache(prevIds),
+        ),
       );
     }
   };
