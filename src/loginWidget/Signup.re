@@ -1,10 +1,11 @@
+open IdentityDialogStyles;
 open FormData;
 
 let str = ReasonReact.string;
 
 [@react.component]
 let make = () => {
-  let classes = IdentityDialogStyles.IdentityDialogStyles.useStyles();
+  let theme = Mui_Theme.useTheme();
 
   let (state, dispatch) = UserUtils.useReducerSafe(reducer, initState);
   let {email, password, fullName, status} = state;
@@ -31,9 +32,9 @@ let make = () => {
       handleSignup();
     }}>
     <MaterialUi_FormControl
-      fullWidth=true classes=[Root(classes.formElement)]>
+      fullWidth=true classes=[Root(Styles.formElement(theme))]>
       <MaterialUi_FormControl
-        fullWidth=true classes=[Root(classes.formElement)]>
+        fullWidth=true classes=[Root(Styles.formElement(theme))]>
         <MaterialUi_TextField
           autoFocus=true
           label={str("Name")}
@@ -64,7 +65,7 @@ let make = () => {
       />
     </MaterialUi_FormControl>
     <MaterialUi_FormControl
-      fullWidth=true classes=[Root(classes.formElement)]>
+      fullWidth=true classes=[Root(Styles.formElement(theme))]>
       <MaterialUi_TextField
         label={str("Password")}
         type_="password"
@@ -79,7 +80,8 @@ let make = () => {
         }}
       />
     </MaterialUi_FormControl>
-    <MaterialUi_FormControl fullWidth=true className={classes.submitButton}>
+    <MaterialUi_FormControl
+      fullWidth=true className={Styles.submitButton(theme)}>
       <MaterialUi_Button
         color=`Primary
         disabled={status === Submitting}

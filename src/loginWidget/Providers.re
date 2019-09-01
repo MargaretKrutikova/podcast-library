@@ -1,17 +1,18 @@
+open IdentityDialogStyles;
 let style = ReactDOMRe.Style.make;
 
 [@react.component]
 let make = () => {
   let identity = UserIdentity.Context.useIdentityContext();
-  let classes = IdentityDialogStyles.IdentityDialogStyles.useStyles();
+  let theme = Mui_Theme.useTheme();
 
   <>
-    <div className={classes.providerSection}>
-      <MaterialUi_Divider variant=`Middle className={classes.divider} />
+    <div className={Styles.providerSection(theme)}>
+      <MaterialUi_Divider variant=`Middle className=Styles.divider />
       <MaterialUi_Typography variant=`Body2>
         {React.string("OR")}
       </MaterialUi_Typography>
-      <MaterialUi_Divider variant=`Middle className={classes.divider} />
+      <MaterialUi_Divider variant=`Middle className=Styles.divider />
     </div>
     <div id="providers">
       {identity.settings.providers
@@ -19,7 +20,7 @@ let make = () => {
            <ProviderButton
              key={ReactNetlifyIdentity.providerToString(provider)}
              provider
-             className={classes.formElement}
+             className={Styles.formElement(theme)}
            />
          )
        |> React.array}

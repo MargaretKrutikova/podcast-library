@@ -1,3 +1,4 @@
+open IdentityDialogStyles;
 let str = ReasonReact.string;
 
 type state = {
@@ -24,8 +25,7 @@ let reducer = (state, action) => {
 
 [@react.component]
 let make = (~gotoLogin) => {
-  let classes = IdentityDialogStyles.IdentityDialogStyles.useStyles();
-
+  let theme = Mui_Theme.useTheme();
   let (state, dispatch) = UserUtils.useReducerSafe(reducer, initState);
   let identityContext = UserIdentity.Context.useIdentityContext();
 
@@ -50,7 +50,7 @@ let make = (~gotoLogin) => {
       handleRecoverPassword();
     }}>
     <MaterialUi_FormControl
-      fullWidth=true classes=[Root(classes.formElement)]>
+      fullWidth=true classes=[Root(Styles.formElement(theme))]>
       <MaterialUi_TextField
         autoFocus=true
         label={str("Email address")}
@@ -68,8 +68,8 @@ let make = (~gotoLogin) => {
     </MaterialUi_FormControl>
     <MaterialUi_FormControl
       fullWidth=true
-      className={classes.submitButton}
-      classes=[Root(classes.formElement)]>
+      className={Styles.submitButton(theme)}
+      classes=[Root(Styles.formElement(theme))]>
       <MaterialUi_Button
         color=`Primary
         disabled={status === Submitting}

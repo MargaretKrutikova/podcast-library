@@ -23,8 +23,6 @@ let make = (~anchorEl, ~onLogout, ~onClose) => {
     |> ignore;
   };
 
-  let classes = IdentityDialogStyles.IdentityDialogStyles.useStyles();
-
   <MaterialUi_Menu
     anchorEl
     open_={Belt.Option.isSome(anchorEl)}
@@ -41,12 +39,15 @@ let make = (~anchorEl, ~onLogout, ~onClose) => {
     {switch (userName) {
      | None => React.null
      | Some(name) =>
-       <MaterialUi_MenuItem className={classes.userListItem}>
+       <MaterialUi_MenuItem className=Css.(style([flexWrap(`wrap)]))>
          <MaterialUi_Typography component={`String("div")}>
            {React.string("Logged in as:")}
          </MaterialUi_Typography>
          <MaterialUi_Typography
-           component={`String("div")} className={classes.userName}>
+           component={`String("div")}
+           className=Css.(
+             style([fontWeight(`num(500)), width(pct(100.0))])
+           )>
            {React.string(name)}
          </MaterialUi_Typography>
        </MaterialUi_MenuItem>

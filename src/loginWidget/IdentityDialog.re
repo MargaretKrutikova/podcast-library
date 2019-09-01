@@ -5,9 +5,40 @@ type activeView =
 
 let str = ReasonReact.string;
 
+module Styles = {
+  open Css;
+
+  let dialog = theme =>
+    style([
+      width(vw(90.0)),
+      margin2(~v=vh(10.0), ~h=`auto),
+      maxWidth(px(400)) |> important,
+      padding(px(theme |> Utils.spacingPx(2))),
+      paddingTop(px(theme |> Utils.spacingPx(4))),
+      media(Utils.getBreakpoint(`MD, theme), [width(vw(50.0))]),
+    ]);
+
+  let tab = theme => style([minHeight(px(Utils.spacingPx(1, theme) * 3))]);
+
+  let title = style([paddingLeft(px(0))]);
+
+  let tabRoot = theme =>
+    style([
+      marginBottom(px(theme |> Utils.spacingPx(2))),
+      minHeight(px(Utils.spacingPx(1, theme) * 3)),
+    ]);
+
+  let closeButton = theme =>
+    style([
+      position(`absolute),
+      right(px(theme |> Utils.spacingPx(1))),
+      top(px(theme |> Utils.spacingPx(1))),
+    ]);
+};
+
 [@react.component]
 let make = (~open_, ~onLogin, ~onClose) => {
-  let classes = IdentityDialogStyles.IdentityDialogStyles.useStyles();
+  let theme = Mui_Theme.useTheme();
   let (activeView, setActiveView) = React.useState(() => Login);
   let identity = UserIdentity.Context.useIdentityContext();
 
@@ -27,16 +58,18 @@ let make = (~open_, ~onLogin, ~onClose) => {
     open_
     onClose={(_, _) => onClose()}
     scroll=`Body
-    classes=[PaperScrollBody(classes.identityDialog)]>
+    classes=[PaperScrollBody(Styles.dialog(theme))]>
     <MaterialUi_IconButton
-      className={classes.closeButton} color=`Inherit onClick={_ => onClose()}>
+      className={Styles.closeButton(theme)}
+      color=`Inherit
+      onClick={_ => onClose()}>
       <ReactFeather.CloseIcon />
     </MaterialUi_IconButton>
     <MaterialUi_DialogContent>
       {switch (activeView) {
        | ForgotPassword =>
          <>
-           <MaterialUi_DialogTitle className={classes.title}>
+           <MaterialUi_DialogTitle className=Styles.title>
              {str("Recover password")}
            </MaterialUi_DialogTitle>
            <ForgotPassword gotoLogin={_ => setActiveView(_ => Login)} />
@@ -47,15 +80,15 @@ let make = (~open_, ~onLogin, ~onClose) => {
              value=activeView
              indicatorColor=`Primary
              textColor=`Primary
-             classes=[Root(classes.tabRoot)]
+             classes=[Root(Styles.tabRoot(theme))]
              variant=`FullWidth>
              <MaterialUi_Tab
-               className={classes.tab}
+               className={Styles.tab(theme)}
                onClick={_ => setActiveView(_ => Login)}
                label={React.string("Log in")}
              />
              <MaterialUi_Tab
-               className={classes.tab}
+               className={Styles.tab(theme)}
                label={React.string("Sign up")}
                onClick={_ => setActiveView(_ => Signup)}
              />
