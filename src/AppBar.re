@@ -4,26 +4,73 @@ let isSearchPage = page =>
   | _ => false
   };
 
+module Styles = {
+  open Css;
+
+  let desktopSearchBar = theme =>
+    style([
+      display(`none),
+      media(
+        Utils.getBreakpoint(`MD, theme),
+        [
+          display(`flex),
+          flexGrow(1.0),
+          flexShrink(1.0),
+          flexBasis(`auto),
+          justifyContent(`center),
+          alignItems(`center),
+        ],
+      ),
+    ]);
+
+  let appBarSearchInput =
+    style([
+      maxWidth(px(400)),
+      fontSize(rem(1.3)),
+      position(`absolute),
+      left(pct(50.0)),
+      transform(translateX(pct(-50.0))),
+    ]);
+
+  let hideDesktop = theme =>
+    style([media(Utils.getBreakpoint(`MD, theme), [display(`none)])]);
+
+  let appBarIcons = style([marginLeft(`auto)]);
+  let appName = theme =>
+    style([
+      fontWeight(`num(100)),
+      fontSize(rem(1.5)),
+      media(Utils.getBreakpoint(`MD, theme), [fontSize(rem(1.75))]),
+    ]);
+  let appIcon = theme =>
+    style([marginLeft(px(theme |> Utils.spacingPx(1)))]);
+};
+
 [@react.component]
 let make = (~isLoggedIn, ~activePage) => {
   let dispatch = AppCore.useDispatch();
-  let classes = AppStyles.AppStyles.useStyles();
+  let theme = Mui_Theme.useTheme();
   let (userMenuAnchor, setUserMenuAnchor) = React.useState(() => None);
+
+  Js.log(Utils.getBreakpoint(`MD, theme));
 
   <MaterialUi_AppBar color=`Default position=`Static>
     <MaterialUi_Container>
       <MaterialUi_Toolbar disableGutters=true>
         <RouterLink
-          variant="h4" href="/" color=`Inherit className={classes.appName}>
+          variant="h4"
+          href="/"
+          color=`Inherit
+          className={Styles.appName(theme)}>
           {React.string("Podcast library")}
-          <ReactFeather.MicIcon className={classes.appIcon} />
+          <ReactFeather.MicIcon className={Styles.appIcon(theme)} />
         </RouterLink>
         {!isSearchPage(activePage)
-           ? <div className={classes.desktopSearchBar}>
-               <SearchInput className={classes.appBarSearchInput} />
+           ? <div className={Styles.desktopSearchBar(theme)}>
+               <SearchInput className=Styles.appBarSearchInput />
              </div>
            : React.null}
-        <div className={classes.appBarIcons}>
+        <div className=Styles.appBarIcons>
           <RouterLink href={Routing.getUrlFromRoute(SearchEmpty)}>
             <MaterialUi_IconButton component={`String("span")}>
               <ReactFeather.SearchIcon />

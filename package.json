@@ -24,6 +24,7 @@
     "@glennsl/bs-json": "^4.0.0",
     "@jsiebern/bs-material-ui": "1.1.0-hooks.8",
     "bs-axios": "0.0.42",
+    "bs-css": "^9.0.1",
     "bs-react-netlify-identity": "^1.0.3",
     "css-loader": "^3.0.0",
     "react": "^16.8.6",
