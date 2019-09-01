@@ -8,7 +8,9 @@ ReactDOMRe.renderToElementWithId(
       <ReasonApolloHooks.ApolloProvider client=apolloClient>
         <ReactNetlifyIdentity.IdentityContextProvider
           url="https://podcasts.margareta.dev/">
-          <ThemeProvider> <Root /> </ThemeProvider>
+          <ThemeProvider>
+            <Jss.JssProvider> <Root /> </Jss.JssProvider>
+          </ThemeProvider>
         </ReactNetlifyIdentity.IdentityContextProvider>
       </ReasonApolloHooks.ApolloProvider>
     </ReasonApollo.Provider>
