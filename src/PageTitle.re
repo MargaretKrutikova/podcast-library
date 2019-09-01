@@ -1,9 +1,7 @@
 [@react.component]
 let make = (~title) => {
-  let classes = AppStyles.AppStyles.useStyles();
-  
   <MaterialUi_Typography
-    className={classes.pageTitle}
+    className=Css.(style([fontWeight(`num(100)), textAlign(center)]))
     variant=`H3
     component={`String("h1")}
     gutterBottom=true>

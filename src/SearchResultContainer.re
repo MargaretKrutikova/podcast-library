@@ -19,12 +19,18 @@ let make =
 module LoadMoreButton = {
   [@react.component]
   let make = (~nextOffset, ~total, ~isFetching, ~onClick) => {
-    let classes = AppStyles.AppStyles.useStyles();
+    let theme = Mui_Theme.useTheme();
     let hasMore = nextOffset < total;
 
     hasMore
       ? <MaterialUi_Button
-          className={classes.cardLoadMoreBtn}
+          className=Css.(
+            style([
+              marginTop(px(theme |> Utils.spacingPx(2))),
+              display(`block),
+              margin2(~v=zero, ~h=auto),
+            ])
+          )
           onClick
           disabled=isFetching
           color=`Secondary
