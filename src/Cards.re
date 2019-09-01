@@ -2,9 +2,6 @@ module Styles = {
   open Css;
 
   let cardActions = theme =>
-    style([position(relative), width(pct(100.0))]);
-
-  let cardActions = theme =>
     style([
       padding(px(theme |> Utils.spacingPx(2))),
       paddingTop(px(0)),

@@ -1,16 +1,41 @@
-open AppStyles;
+module Styles = {
+  open Css;
+  let successNotification =
+    style([
+      backgroundColor(
+        hex(MaterialUi_Color_Green.c700 |> Utils.fromMuiColor),
+      ),
+    ]);
 
-let typeToClassName = (type_: AppNotifications.type_, classes) =>
-  switch (type_) {
-  | Primary => "primary"
-  | Secondary => "secondary"
-  | Success => classes.successNotification
-  | Error => classes.errorNotification
-  | Warning => "warning"
-  | Info => "info"
-  | Light => "light"
-  | Dark => "dark"
-  };
+  let getErrorColor = theme =>
+    MaterialUi.Theme.(
+      theme->Theme.paletteGet->Palette.errorGet->PaletteColor.mainGet
+    );
+
+  let errorNotification = theme =>
+    style([
+      backgroundColor(hex(theme |> getErrorColor |> Utils.fromMuiColor)),
+    ]);
+
+  let snackbarRoot = theme =>
+    style([
+      paddingLeft(px(theme |> Utils.spacingPx(1))),
+      paddingRight(px(theme |> Utils.spacingPx(1))),
+    ]);
+  let snackbarContent = style([flexGrow(0.0)]);
+
+  let typeToClassName = (type_: AppNotifications.type_, theme) =>
+    switch (type_) {
+    | Primary => "primary"
+    | Secondary => "secondary"
+    | Success => successNotification
+    | Error => errorNotification(theme)
+    | Warning => "warning"
+    | Info => "info"
+    | Light => "light"
+    | Dark => "dark"
+    };
+};
 
 let autoHideDuration = 1500;
 
@@ -27,7 +52,7 @@ let make = (~type_, ~id, ~style=?, ~children) => {
     if (reason !== "clickaway") {
       setOpen(_ => false);
     };
-  let classes = AppStyles.useStyles();
+  let theme = Mui_Theme.useTheme();
 
   <MaterialUi_Snackbar
     open_
@@ -37,17 +62,13 @@ let make = (~type_, ~id, ~style=?, ~children) => {
     )}
     ?style
     onExited={_ => remove()}
-    className={classes.snackbarRoot}
+    className={Styles.snackbarRoot(theme)}
     onClose=handleClose
     autoHideDuration={`Int(autoHideDuration)}>
     <MaterialUi_SnackbarContent
       message=children
-      classes=[
-        Root(
-          typeToClassName(type_, classes) ++ " " ++ classes.snackbarContent,
-        ),
-      ]
-      className={typeToClassName(type_, classes)}
+      classes=[Root(Styles.snackbarContent)]
+      className={Styles.typeToClassName(type_, theme)}
       action={
         <MaterialUi_IconButton
           onClick={_ => setOpen(_ => false)} color=`Inherit>
