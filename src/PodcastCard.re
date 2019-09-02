@@ -40,9 +40,7 @@ let make = (~podcast: SearchTypes.podcast, ~isSaved) => {
 
   <SearchCard isSaved>
     <MaterialUi_CardContent>
-      <MaterialUi_Typography gutterBottom=true variant=`H6>
-        {str(podcast.title)}
-      </MaterialUi_Typography>
+      <Cards.Title> {str(podcast.title)} </Cards.Title>
       <MaterialUi_Typography variant=`Subtitle1>
         {str(podcast.publisher)}
       </MaterialUi_Typography>

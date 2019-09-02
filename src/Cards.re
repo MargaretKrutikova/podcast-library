@@ -47,6 +47,18 @@ module SearchCard = {
   };
 };
 
+module Title = {
+  [@react.component]
+  let make = (~children) => {
+    <MaterialUi_Typography
+      gutterBottom=true
+      variant=`H6
+      className=Css.(style([lineHeight(`abs(1.3))]))>
+      children
+    </MaterialUi_Typography>;
+  };
+};
+
 module Description = {
   [@react.component]
   let make = (~description) => {

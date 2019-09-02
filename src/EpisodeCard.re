@@ -37,9 +37,7 @@ let make = (~episode: SearchTypes.episode, ~isSaved) => {
 
   <Cards.SearchCard isSaved>
     <MaterialUi_CardContent>
-      <MaterialUi_Typography gutterBottom=true variant=`H6>
-        {str(episode.title)}
-      </MaterialUi_Typography>
+      <Cards.Title> {str(episode.title)} </Cards.Title>
       <MaterialUi_Typography gutterBottom=true variant=`Subtitle1>
         {str(episode.podcastTitle ++ ", " ++ episode.pubDate)}
       </MaterialUi_Typography>

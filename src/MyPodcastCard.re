@@ -33,9 +33,7 @@ let make =
          </RouterLink>
        : ReasonReact.null}
     <MaterialUi_CardContent>
-      <MaterialUi_Typography gutterBottom=true variant=`H6>
-        {str(title)}
-      </MaterialUi_Typography>
+      <Cards.Title> {str(title)} </Cards.Title>
       <MaterialUi_Typography gutterBottom=true variant=`Subtitle1>
         {str(publisher)}
       </MaterialUi_Typography>
