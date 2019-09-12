@@ -2,7 +2,7 @@
 let make = (~anchorEl, ~onLogout, ~onClose) => {
   let identity = UserIdentity.Context.useIdentityContext();
 
-  let (status, setStatus) = UserUtils.useStateSafe(() => FormData.NotAsked);
+  let (status, setStatus) = UserUtils.useStateSafe(() => UserFormData.NotAsked);
 
   let userName =
     identity.user

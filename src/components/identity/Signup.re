@@ -1,25 +1,22 @@
 open IdentityDialogStyles;
-open FormData;
+open UserFormData;
 
 let str = ReasonReact.string;
 
 [@react.component]
-let make = (~gotoForgotPassword, ~onLogin) => {
+let make = () => {
   let theme = Mui_Theme.useTheme();
 
-  let (state, dispatch) =
-    UserUtils.useReducerSafe(FormData.reducer, FormData.initState);
+  let (state, dispatch) = UserUtils.useReducerSafe(reducer, initState);
+  let {email, password, fullName, status} = state;
+
   let identity = UserIdentity.Context.useIdentityContext();
 
-  let {email, password, status} = state;
-
-  let handleLogin = () => {
+  let handleSignup = _ => {
     dispatch(SubmitRequest);
-    identity.loginUser(~email, ~password, ~remember=true, ())
-    |> Js.Promise.then_(_ => {
-         dispatch(SubmitSuccess);
-         onLogin() |> Js.Promise.resolve;
-       })
+    // data is of type UserIdentity.userMetaData
+    identity.signupUser(~email, ~password, ~data={fullName: fullName})
+    |> Js.Promise.then_(_ => dispatch(SubmitSuccess) |> Js.Promise.resolve)
     |> Js.Promise.catch(error =>
          dispatch(
            SubmitError(UserUtils.promiseErrorToJsObj(error)##message),
@@ -32,12 +29,28 @@ let make = (~gotoForgotPassword, ~onLogin) => {
   <form
     onSubmit={e => {
       ReactEvent.Form.preventDefault(e);
-      handleLogin();
+      handleSignup();
     }}>
     <MaterialUi_FormControl
       fullWidth=true classes=[Root(Styles.formElement(theme))]>
+      <MaterialUi_FormControl
+        fullWidth=true classes=[Root(Styles.formElement(theme))]>
+        <MaterialUi_TextField
+          autoFocus=true
+          label={str("Name")}
+          name="name"
+          type_="text"
+          fullWidth=true
+          required=true
+          value={`String(fullName)}
+          disabled={status === Submitting}
+          onChange={e => {
+            let value = Utils.getInputValue(e);
+            dispatch(SetFullName(value));
+          }}
+        />
+      </MaterialUi_FormControl>
       <MaterialUi_TextField
-        autoFocus=true
         label={str("Email Address")}
         type_="email"
         fullWidth=true
@@ -56,11 +69,11 @@ let make = (~gotoForgotPassword, ~onLogin) => {
       <MaterialUi_TextField
         label={str("Password")}
         type_="password"
+        value={`String(password)}
         name="password"
         fullWidth=true
         required=true
         disabled={status === Submitting}
-        value={`String(password)}
         onChange={e => {
           let value = Utils.getInputValue(e);
           dispatch(SetPassword(value));
@@ -68,22 +81,19 @@ let make = (~gotoForgotPassword, ~onLogin) => {
       />
     </MaterialUi_FormControl>
     <MaterialUi_FormControl
-      fullWidth=true
-      className={Styles.submitButton(theme)}
-      classes=[Root(Styles.formElement(theme))]>
+      fullWidth=true className={Styles.submitButton(theme)}>
       <MaterialUi_Button
         color=`Primary
         disabled={status === Submitting}
         variant=`Contained
         type_="submit"
         fullWidth=true>
-        {str("Log in")}
+        {str("Sign up")}
       </MaterialUi_Button>
     </MaterialUi_FormControl>
     {switch (status) {
      | Error(message) => <ErrorMessage message />
      | _ => React.null
      }}
-    <UserLink onClick=gotoForgotPassword> {str("Forgot password")} </UserLink>
   </form>;
 };
