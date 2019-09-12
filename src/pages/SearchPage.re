@@ -38,15 +38,11 @@ module LoggedInSearchView = {
   };
 };
 
-let getSearchType = (model: AppCore.model) => model.search.searchType;
-let hasSearchTerm = (model: AppCore.model) =>
-  model.search.baseQuery.searchTerm->Js.String.length > 0;
-
 [@react.component]
 let make =
   React.memo((~userId, ~urlQuery: Routing.searchQuery) => {
-    let searchType = AppCore.useSelector(getSearchType);
-    let hasSearchTerm = AppCore.useSelector(hasSearchTerm);
+    let searchType = AppCore.useSelector(Selectors.getSearchType);
+    let hasSearchTerm = AppCore.useSelector(Selectors.hasSearchTerm);
 
     let dispatch = AppCore.useDispatch();
 

@@ -1,11 +1,8 @@
-let getSearchTerm = (model: AppCore.model) =>
-  model.search.baseQuery.searchTerm;
-
 [@react.component]
 let make = (~className=?, ~classes: option(MaterialUi_Input.Classes.t)=?) => {
   let dispatch = AppCore.useDispatch();
 
-  let globalSearchTerm = AppCore.useSelector(getSearchTerm);
+  let globalSearchTerm = AppCore.useSelector(Selectors.getSearchTerm);
   let (searchTerm, setSearchTerm) = React.useState(() => "");
 
   React.useEffect1(
@@ -20,10 +17,7 @@ let make = (~className=?, ~classes: option(MaterialUi_Input.Classes.t)=?) => {
     let value = Utils.getInputValue(e);
     setSearchTerm(_ => value);
   };
-  let handleSearch = _ => {
-    dispatch(EnteredSearchTerm(searchTerm));
-    Routing.pushRoute(Search({query: searchTerm}));
-  };
+  let handleSearch = _ => dispatch(EnteredSearchTerm(searchTerm));
 
   let handleKeyDown = e => {
     switch (Utils.onKeyDown(e)) {

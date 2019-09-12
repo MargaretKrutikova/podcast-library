@@ -22,3 +22,8 @@ let updateEpisodeSearchQuery = (episodeQuery, model) => {
   episodeQuery,
 };
 let updateSearchType = (searchType, model) => {...model, searchType};
+
+let getSearchQuery = (model): Routing.searchQuery => {
+  query: model.baseQuery.searchTerm,
+  content: model.searchType,
+};

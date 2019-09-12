@@ -15,14 +15,10 @@ module Styles = {
   let searchInput = style([fontSize(px(26))]);
 };
 
-let getSearchType = (model: AppCore.model) => model.search.searchType;
-let getSearchTerm = (model: AppCore.model) =>
-  model.search.baseQuery.searchTerm;
-
 [@react.component]
 let make = () => {
   let dispatch = AppCore.useDispatch();
-  let searchType = AppCore.useSelector(getSearchType);
+  let searchType = AppCore.useSelector(Selectors.getSearchType);
   let theme = Mui_Theme.useTheme();
 
   <>

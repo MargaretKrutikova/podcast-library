@@ -1,11 +1,9 @@
 module SearchEpisodesQuery =
   ReasonApolloHooks.Query.Make(SearchGraphql.SearchEpisodes);
 
-let getSearchModel = (model: AppCore.model) => model.search;
-
 [@react.component]
 let make = (~savedIds) => {
-  let searchModel = AppCore.useSelector(getSearchModel);
+  let searchModel = AppCore.useSelector(Selectors.getSearchModel);
 
   let getEpisodeSearchVariables = (~nextOffset=0, ()): Js.Json.t =>
     SearchGraphql.makeSearchEpisodesQuery(
