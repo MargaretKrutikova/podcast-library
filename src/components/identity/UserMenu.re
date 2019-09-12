@@ -2,7 +2,8 @@
 let make = (~anchorEl, ~onLogout, ~onClose) => {
   let identity = UserIdentity.Context.useIdentityContext();
 
-  let (status, setStatus) = UserUtils.useStateSafe(() => UserFormData.NotAsked);
+  let (status, setStatus) =
+    StateHooks.useStateSafe(() => UserFormData.NotAsked);
 
   let userName =
     identity.user
@@ -17,7 +18,7 @@ let make = (~anchorEl, ~onLogout, ~onClose) => {
          onLogout() |> Js.Promise.resolve;
        })
     |> Js.Promise.catch(error =>
-         setStatus(_ => Error(UserUtils.promiseErrorToJsObj(error)##message))
+         setStatus(_ => Error(Utils.promiseErrorToJsObj(error)##message))
          |> Js.Promise.resolve
        )
     |> ignore;

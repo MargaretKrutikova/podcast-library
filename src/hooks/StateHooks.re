@@ -1,5 +1,3 @@
-external promiseErrorToJsObj: Js.Promise.error => Js.t('a) = "%identity";
-
 let useReducerSafe = (reducer, initState) => {
   let (state, dispatch) = React.useReducer(reducer, initState);
   let mounted = React.useRef(false);

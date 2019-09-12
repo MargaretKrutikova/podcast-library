@@ -7,7 +7,7 @@ let str = ReasonReact.string;
 let make = () => {
   let theme = Mui_Theme.useTheme();
 
-  let (state, dispatch) = UserUtils.useReducerSafe(reducer, initState);
+  let (state, dispatch) = StateHooks.useReducerSafe(reducer, initState);
   let {email, password, fullName, status} = state;
 
   let identity = UserIdentity.Context.useIdentityContext();
@@ -18,9 +18,7 @@ let make = () => {
     identity.signupUser(~email, ~password, ~data={fullName: fullName})
     |> Js.Promise.then_(_ => dispatch(SubmitSuccess) |> Js.Promise.resolve)
     |> Js.Promise.catch(error =>
-         dispatch(
-           SubmitError(UserUtils.promiseErrorToJsObj(error)##message),
-         )
+         dispatch(SubmitError(Utils.promiseErrorToJsObj(error)##message))
          |> Js.Promise.resolve
        )
     |> ignore;

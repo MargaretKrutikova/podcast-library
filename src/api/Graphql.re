@@ -1,7 +1,5 @@
 [@bs.val] external grapqhlUrl: string = "process.env.REACT_APP_GRAPHQL_URL";
 
-external promiseErrorToJsObj: Js.Promise.error => Js.t('a) = "%identity";
-
 exception Graphql_error(string);
 
 let makeApolloClient = _ => {
@@ -29,7 +27,7 @@ let sendQuery = q =>
        resp##data->Js.Dict.unsafeGet("data") |> q##parse |> Js.Promise.resolve
      )
   |> Js.Promise.catch(error => {
-       let error = error |> promiseErrorToJsObj;
+       let error = error |> Utils.promiseErrorToJsObj;
        Js.log(error);
 
        Js.Promise.reject(

@@ -3,6 +3,7 @@ module type Query = {
   let parse: string => Js.Dict.t(queryItem);
 };
 
+// Belt_MapString
 module Query = {
   type queryItem =
     | Single(string)

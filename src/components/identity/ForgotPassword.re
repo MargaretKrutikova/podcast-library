@@ -26,7 +26,7 @@ let reducer = (state, action) => {
 [@react.component]
 let make = (~gotoLogin) => {
   let theme = Mui_Theme.useTheme();
-  let (state, dispatch) = UserUtils.useReducerSafe(reducer, initState);
+  let (state, dispatch) = StateHooks.useReducerSafe(reducer, initState);
   let identityContext = UserIdentity.Context.useIdentityContext();
 
   let {email, status} = state;
@@ -36,9 +36,7 @@ let make = (~gotoLogin) => {
     identityContext.requestPasswordRecovery(~email)
     |> Js.Promise.then_(_ => dispatch(SubmitSuccess) |> Js.Promise.resolve)
     |> Js.Promise.catch(error =>
-         dispatch(
-           SubmitError(UserUtils.promiseErrorToJsObj(error)##message),
-         )
+         dispatch(SubmitError(Utils.promiseErrorToJsObj(error)##message))
          |> Js.Promise.resolve
        )
     |> ignore;

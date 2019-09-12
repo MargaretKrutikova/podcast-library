@@ -1,3 +1,5 @@
+external promiseErrorToJsObj: Js.Promise.error => Js.t('a) = "%identity";
+
 let setWindowLocation: string => unit = [%bs.raw
   {| function (href) { window.location.href = href; } |}
 ];

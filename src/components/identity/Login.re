@@ -8,7 +8,7 @@ let make = (~gotoForgotPassword, ~onLogin) => {
   let theme = Mui_Theme.useTheme();
 
   let (state, dispatch) =
-    UserUtils.useReducerSafe(UserFormData.reducer, UserFormData.initState);
+    StateHooks.useReducerSafe(UserFormData.reducer, UserFormData.initState);
   let identity = UserIdentity.Context.useIdentityContext();
 
   let {email, password, status} = state;
@@ -21,9 +21,7 @@ let make = (~gotoForgotPassword, ~onLogin) => {
          onLogin() |> Js.Promise.resolve;
        })
     |> Js.Promise.catch(error =>
-         dispatch(
-           SubmitError(UserUtils.promiseErrorToJsObj(error)##message),
-         )
+         dispatch(SubmitError(Utils.promiseErrorToJsObj(error)##message))
          |> Js.Promise.resolve
        )
     |> ignore;
