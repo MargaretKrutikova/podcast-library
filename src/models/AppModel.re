@@ -1,12 +1,11 @@
 type message =
-  | /** notification  */
-    ShowNotification(AppNotifications.data)
+  | ShowNotification(AppNotifications.data)
   | RemoveNotification(int)
   | OnUnauthorizedAccess
   | SetShowIdentityModal(bool)
   | EnteredSearchTerm(string)
   | SetContentType(ContentType.t)
-  | SetSearchModelFromQuery(Routing.searchQuery);
+  | SetSearchModelFromQuery(SearchQs.t);
 
 type model = {
   search: SearchModel.t,
@@ -26,20 +25,26 @@ let updateNotifications = (model, notifications) => {
   notifications,
 };
 
+let pushSearchQuery = (model, _) => {
+  let searchQuery = SearchModel.toSearchQuery(model.search);
+  Routing.pushRoute(Search(searchQuery));
+  None;
+};
+
 let update = (model, message) => {
   switch (message) {
-  | EnteredSearchTerm(searchTerm) => (
+  | EnteredSearchTerm(searchTerm) =>
+    let model =
       model.search
       |> SearchModel.updateSearchTerm(searchTerm)
-      |> updateSearchModel(model),
-      None,
-    )
-  | SetContentType(searchType) => (
+      |> updateSearchModel(model);
+    (model, Some(pushSearchQuery(model)));
+  | SetContentType(searchType) =>
+    let model =
       model.search
       |> SearchModel.updateSearchType(searchType)
-      |> updateSearchModel(model),
-      None,
-    )
+      |> updateSearchModel(model);
+    (model, Some(pushSearchQuery(model)));
   | OnUnauthorizedAccess => ({...model, showIdentityModal: true}, None)
   | SetShowIdentityModal(showIdentityModal) => (
       {...model, showIdentityModal},
@@ -58,14 +63,9 @@ let update = (model, message) => {
       },
       None,
     )
-  | SetSearchModelFromQuery({query}) =>
-    let updatedModel =
-      query !== model.search.baseQuery.searchTerm
-        ? model.search
-          |> SearchModel.updateSearchTerm(query)
-          |> updateSearchModel(model)
-        : model;
-    (updatedModel, None);
+  | SetSearchModelFromQuery(searchQuery) =>
+    let model = {...model, search: SearchModel.fromSearchQuery(searchQuery)};
+    (model, None);
   };
 };
 

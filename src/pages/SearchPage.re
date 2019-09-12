@@ -40,7 +40,7 @@ module LoggedInSearchView = {
 
 [@react.component]
 let make =
-  React.memo((~userId, ~urlQuery: Routing.searchQuery) => {
+  React.memo((~userId, ~urlQuery: SearchQs.t) => {
     let searchType = AppCore.useSelector(Selectors.getSearchType);
     let hasSearchTerm = AppCore.useSelector(Selectors.hasSearchTerm);
 

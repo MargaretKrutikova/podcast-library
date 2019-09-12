@@ -2,14 +2,15 @@ type t =
   | Episode
   | Podcast;
 
-let episodeApiType = "episode";
-let podcastApiType = "podcast";
-
-let fromApiType = str =>
+let fromString = str =>
   switch (str) {
-  | s when s == episodeApiType => Episode
-  | s when s == podcastApiType => Podcast
+  | s when s == "episode" => Episode
+  | s when s == "podcast" => Podcast
   | _ => Podcast
   };
 
-let decode = json => json |> Json.Decode.string |> fromApiType;
+let toString = type_ =>
+  switch (type_) {
+  | Episode => "episode"
+  | Podcast => "podcast"
+  };

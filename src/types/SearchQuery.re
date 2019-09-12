@@ -41,8 +41,8 @@ type baseQuery = {
   genreIds: option(array(int)),
 };
 
-let createBaseQuery = () => {
-  searchTerm: "",
+let createBaseQuery = (~searchTerm="", ()) => {
+  searchTerm,
   language: Some("English"),
   genreIds: None,
 };
