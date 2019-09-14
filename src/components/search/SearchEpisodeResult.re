@@ -6,11 +6,7 @@ let make = (~savedIds) => {
   let searchModel = AppCore.useSelector(Selectors.getSearchModel);
 
   let getEpisodeSearchVariables = (~nextOffset=0, ()): Js.Json.t =>
-    SearchGraphql.makeSearchEpisodesQuery(
-      searchModel.baseQuery,
-      nextOffset,
-      searchModel.episodeQuery,
-    )##variables;
+    SearchGraphql.makeSearchEpisodesQuery(searchModel, nextOffset)##variables;
 
   let (_simple, full) =
     SearchEpisodesQuery.use(

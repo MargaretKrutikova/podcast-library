@@ -5,7 +5,8 @@ type message =
   | SetShowIdentityModal(bool)
   | EnteredSearchTerm(string)
   | SetContentType(ContentType.t)
-  | SetSearchModelFromQuery(SearchQuery.Url.t);
+  | SetEpisodeQueryPodcast(string)
+  | SetSearchModelFromQuery(SearchQuery.t);
 
 type model = {
   search: SearchQuery.t,
@@ -14,7 +15,7 @@ type model = {
 };
 
 let createInitModel = () => {
-  search: SearchQuery.make(~searchType=Episode, ()),
+  search: SearchQuery.make(),
   notifications: AppNotifications.init(),
   showIdentityModal: false,
 };
@@ -22,28 +23,19 @@ let createInitModel = () => {
 let updateSearchModel = (model, search) => {...model, search};
 let updateSearchTerm = (searchTerm, searchQuery: SearchQuery.t) => {
   ...searchQuery,
-  baseQuery: {
-    ...searchQuery.baseQuery,
-    searchTerm,
-  },
-};
-let updateEpisodeSearchQuery = (episodeQuery, searchQuery: SearchQuery.t) => {
-  ...searchQuery,
-  episodeQuery,
+  searchTerm,
 };
 let updateSearchType = (searchType, searchQuery: SearchQuery.t) => {
   ...searchQuery,
   searchType,
 };
-
 let updateNotifications = (model, notifications) => {
   ...model,
   notifications,
 };
 
 let pushSearchQuery = (model, _) => {
-  let searchQuery = SearchQuery.Url.fromSearchQuery(model.search);
-  Routing.pushRoute(Search(searchQuery));
+  Routing.pushRoute(Search(model.search));
   None;
 };
 
@@ -59,6 +51,12 @@ let update = (model, message) => {
     let model =
       model.search
       |> updateSearchType(searchType)
+      |> updateSearchModel(model);
+    (model, Some(pushSearchQuery(model)));
+  | SetEpisodeQueryPodcast(podcastId) =>
+    let model =
+      {...model.search, podcastId: Some(podcastId)}
+      |> updateSearchType(Episode)
       |> updateSearchModel(model);
     (model, Some(pushSearchQuery(model)));
   | OnUnauthorizedAccess => ({...model, showIdentityModal: true}, None)
@@ -80,10 +78,7 @@ let update = (model, message) => {
       None,
     )
   | SetSearchModelFromQuery(searchQuery) =>
-    let model = {
-      ...model,
-      search: SearchQuery.Url.toSearchQuery(searchQuery),
-    };
+    let model = {...model, search: searchQuery};
     (model, None);
   };
 };

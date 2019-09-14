@@ -1,10 +1,10 @@
 open SearchQuery;
 open SearchTypes;
 
-let toSearchInput = (~baseQuery: SearchQuery.BaseQuery.t, ~offset) => {
-  "searchTerm": baseQuery.searchTerm,
-  "language": baseQuery.language,
-  "genreIds": baseQuery.genreIds,
+let toSearchInput = (~query: SearchQuery.t, ~offset) => {
+  "searchTerm": query.searchTerm,
+  "language": query.language,
+  "genreIds": query.genreIds,
   "offset": offset,
 };
 
@@ -31,9 +31,8 @@ module SearchPodcasts = [%graphql
   |}
 ];
 
-let makeSearchPodcastsQuery =
-    (baseQuery: SearchQuery.BaseQuery.t, offset: int) =>
-  SearchPodcasts.make(~input=toSearchInput(~baseQuery, ~offset), ());
+let makeSearchPodcastsQuery = (query: SearchQuery.t, offset: int) =>
+  SearchPodcasts.make(~input=toSearchInput(~query, ~offset), ());
 
 module SearchEpisodes = [%graphql
   {|
@@ -59,15 +58,10 @@ module SearchEpisodes = [%graphql
   |}
 ];
 
-let makeSearchEpisodesQuery =
-    (
-      baseQuery: SearchQuery.BaseQuery.t,
-      offset: int,
-      episodeQuery: SearchQuery.EpisodeQuery.t,
-    ) => {
+let makeSearchEpisodesQuery = (query: SearchQuery.t, offset: int) => {
   SearchEpisodes.make(
-    ~input=toSearchInput(~baseQuery, ~offset),
-    ~episodeInput=SearchQuery.EpisodeQuery.tToJs(episodeQuery),
+    ~input=toSearchInput(~query, ~offset),
+    ~episodeInput={"podcastId": query.podcastId, "excludePodcastId": None},
     (),
   );
 };

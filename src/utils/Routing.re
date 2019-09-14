@@ -1,7 +1,7 @@
 type route =
   | MyLibrary
   | MyEpisodes(string)
-  | Search(SearchQuery.Url.t)
+  | Search(SearchQuery.t)
   | SearchEmpty
   | NotFound;
 
@@ -12,7 +12,7 @@ let urlToRoute = (url: ReasonReactRouter.url) =>
   | []
   | ["search"] =>
     switch (url.search) {
-    | "" => Search({searchTerm: "", content: Episode})
+    | "" => Search(SearchQuery.make())
     | search => Search(SearchQuery.Url.parse(search))
     }
   | _ => NotFound
