@@ -5,28 +5,44 @@ type message =
   | SetShowIdentityModal(bool)
   | EnteredSearchTerm(string)
   | SetContentType(ContentType.t)
-  | SetSearchModelFromQuery(SearchQs.t);
+  | SetSearchModelFromQuery(SearchQuery.Url.t);
 
 type model = {
-  search: SearchModel.t,
+  search: SearchQuery.t,
   notifications: AppNotifications.t,
   showIdentityModal: bool,
 };
 
 let createInitModel = () => {
-  search: SearchModel.createInitModel(),
+  search: SearchQuery.make(~searchType=Episode, ()),
   notifications: AppNotifications.init(),
   showIdentityModal: false,
 };
 
 let updateSearchModel = (model, search) => {...model, search};
+let updateSearchTerm = (searchTerm, searchQuery: SearchQuery.t) => {
+  ...searchQuery,
+  baseQuery: {
+    ...searchQuery.baseQuery,
+    searchTerm,
+  },
+};
+let updateEpisodeSearchQuery = (episodeQuery, searchQuery: SearchQuery.t) => {
+  ...searchQuery,
+  episodeQuery,
+};
+let updateSearchType = (searchType, searchQuery: SearchQuery.t) => {
+  ...searchQuery,
+  searchType,
+};
+
 let updateNotifications = (model, notifications) => {
   ...model,
   notifications,
 };
 
 let pushSearchQuery = (model, _) => {
-  let searchQuery = SearchModel.toSearchQuery(model.search);
+  let searchQuery = SearchQuery.Url.fromSearchQuery(model.search);
   Routing.pushRoute(Search(searchQuery));
   None;
 };
@@ -36,13 +52,13 @@ let update = (model, message) => {
   | EnteredSearchTerm(searchTerm) =>
     let model =
       model.search
-      |> SearchModel.updateSearchTerm(searchTerm)
+      |> updateSearchTerm(searchTerm)
       |> updateSearchModel(model);
     (model, Some(pushSearchQuery(model)));
   | SetContentType(searchType) =>
     let model =
       model.search
-      |> SearchModel.updateSearchType(searchType)
+      |> updateSearchType(searchType)
       |> updateSearchModel(model);
     (model, Some(pushSearchQuery(model)));
   | OnUnauthorizedAccess => ({...model, showIdentityModal: true}, None)
@@ -64,9 +80,22 @@ let update = (model, message) => {
       None,
     )
   | SetSearchModelFromQuery(searchQuery) =>
-    let model = {...model, search: SearchModel.fromSearchQuery(searchQuery)};
+    let model = {
+      ...model,
+      search: SearchQuery.Url.toSearchQuery(searchQuery),
+    };
     (model, None);
   };
 };
 
-let initialState = (createInitModel(), None);
+let initEffect = dispatch => {
+  let route =
+    ReasonReact.Router.dangerouslyGetInitialUrl() |> Routing.urlToRoute;
+  switch (route) {
+  | Search(query) => dispatch(SetSearchModelFromQuery(query))
+  | _ => ignore()
+  };
+  None;
+};
+
+let initialState = (createInitModel(), Some(initEffect));

@@ -31,9 +31,9 @@
     "react-dom": "^16.8.6",
     "react-feather": "^2.0.3",
     "reason-apollo": "0.17.0",
-    "reason-apollo-hooks": "git+https://github.com/MargaretKrutikova/reason-apollo-hooks.git#fetch-policy",
+    "reason-apollo-hooks": "git+https://github.com/Astrocoders/reason-apollo-hooks.git",
     "reason-react": "^0.7.0",
-    "reason-react-elmish": "git+https://github.com/MargaretKrutikova/reason-react-elmish.git",
+    "reason-react-elmish": "git+https://github.com/margaretkrutikova/reason-react-elmish.git",
     "style-loader": "^0.23.1"
   },
   "devDependencies": {

@@ -1,7 +1,7 @@
 open SearchQuery;
 open SearchTypes;
 
-let toSearchInput = (~baseQuery: SearchQuery.baseQuery, ~offset) => {
+let toSearchInput = (~baseQuery: SearchQuery.BaseQuery.t, ~offset) => {
   "searchTerm": baseQuery.searchTerm,
   "language": baseQuery.language,
   "genreIds": baseQuery.genreIds,
@@ -31,7 +31,8 @@ module SearchPodcasts = [%graphql
   |}
 ];
 
-let makeSearchPodcastsQuery = (baseQuery: baseQuery, offset: int) =>
+let makeSearchPodcastsQuery =
+    (baseQuery: SearchQuery.BaseQuery.t, offset: int) =>
   SearchPodcasts.make(~input=toSearchInput(~baseQuery, ~offset), ());
 
 module SearchEpisodes = [%graphql
@@ -59,10 +60,14 @@ module SearchEpisodes = [%graphql
 ];
 
 let makeSearchEpisodesQuery =
-    (baseQuery: baseQuery, offset: int, episodeQuery: episodeQuery) => {
+    (
+      baseQuery: SearchQuery.BaseQuery.t,
+      offset: int,
+      episodeQuery: SearchQuery.EpisodeQuery.t,
+    ) => {
   SearchEpisodes.make(
     ~input=toSearchInput(~baseQuery, ~offset),
-    ~episodeInput=episodeQueryToJs(episodeQuery),
+    ~episodeInput=SearchQuery.EpisodeQuery.tToJs(episodeQuery),
     (),
   );
 };
