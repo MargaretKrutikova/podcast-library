@@ -62,17 +62,6 @@ let make = (~podcast: SearchTypes.podcast, ~isSaved) => {
       </MaterialUi_Typography>
       <Cards.Description description={podcast.description} />
     </MaterialUi_CardContent>
-    // </MaterialUi_Button>
-    //   {str("Filter")}
-    //   />
-    //     )
-    //       ])
-    //         height(px(18)),
-    //         marginRight(px((theme |> Utils.spacingPx(1)) / 2)),
-    //       style([
-    //     className=Css.(
-    //   <ReactFeather.FilterIcon
-    // <MaterialUi_Button size=`Small color=`Secondary variant=`Contained>
     <Cards.CardActions>
       <MaterialUi_Button
         color=`Secondary
