@@ -1,0 +1,18 @@
+{
+  "__schema": {
+    "types": [
+      {
+        "kind": "UNION",
+        "name": "SearchResult",
+        "possibleTypes": [
+          {
+            "name": "Episode"
+          },
+          {
+            "name": "Podcast"
+          }
+        ]
+      }
+    ]
+  }
+}

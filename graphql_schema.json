@@ -61,73 +61,6 @@
       },
       "types": [
         {
-          "inputFields": [
-            {
-              "name": "genreIds",
-              "defaultValue": null,
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "Int",
-                    "ofType": null
-                  }
-                }
-              },
-              "description": ""
-            },
-            {
-              "name": "language",
-              "defaultValue": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": ""
-            },
-            {
-              "name": "offset",
-              "defaultValue": null,
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                }
-              },
-              "description": ""
-            },
-            {
-              "name": "searchTerm",
-              "defaultValue": null,
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              },
-              "description": ""
-            }
-          ],
-          "kind": "INPUT_OBJECT",
-          "possibleTypes": null,
-          "interfaces": null,
-          "name": "BaseSearchInput",
-          "enumValues": null,
-          "description": "",
-          "fields": null
-        },
-        {
           "inputFields": null,
           "kind": "SCALAR",
           "possibleTypes": null,
@@ -161,42 +94,11 @@
           "fields": null
         },
         {
-          "inputFields": [
-            {
-              "name": "excludePodcastId",
-              "defaultValue": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": ""
-            },
-            {
-              "name": "podcastId",
-              "defaultValue": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "description": ""
-            }
-          ],
-          "kind": "INPUT_OBJECT",
-          "possibleTypes": null,
-          "interfaces": null,
-          "name": "EpisodeSearchInput",
-          "enumValues": null,
-          "description": "",
-          "fields": null
-        },
-        {
           "inputFields": null,
           "kind": "OBJECT",
           "possibleTypes": null,
           "interfaces": [],
-          "name": "EpisodeSearchResult",
+          "name": "Episode",
           "enumValues": null,
           "description": "",
           "fields": [
@@ -244,6 +146,22 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "description": ""
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
               "name": "image",
               "type": {
                 "kind": "NON_NULL",
@@ -276,7 +194,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "listennotesId",
+              "name": "listennotesUrl",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -292,7 +210,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "listennotesUrl",
+              "name": "podcastId",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -315,22 +233,6 @@
                 "ofType": {
                   "kind": "SCALAR",
                   "name": "Int",
-                  "ofType": null
-                }
-              },
-              "description": ""
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "podcastListennotesId",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
                   "ofType": null
                 }
               },
@@ -452,89 +354,6 @@
         },
         {
           "inputFields": null,
-          "kind": "OBJECT",
-          "possibleTypes": null,
-          "interfaces": [],
-          "name": "EpisodeSearchResults",
-          "enumValues": null,
-          "description": "",
-          "fields": [
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "count",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                }
-              },
-              "description": ""
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "nextOffset",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                }
-              },
-              "description": ""
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "results",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "OBJECT",
-                      "name": "EpisodeSearchResult",
-                      "ofType": null
-                    }
-                  }
-                }
-              },
-              "description": ""
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "total",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                }
-              },
-              "description": ""
-            }
-          ]
-        },
-        {
-          "inputFields": null,
           "kind": "SCALAR",
           "possibleTypes": null,
           "interfaces": null,
@@ -603,7 +422,7 @@
           "kind": "OBJECT",
           "possibleTypes": null,
           "interfaces": [],
-          "name": "PodcastSearchResult",
+          "name": "Podcast",
           "enumValues": null,
           "description": "",
           "fields": [
@@ -667,6 +486,22 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "description": ""
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
               "name": "image",
               "type": {
                 "kind": "NON_NULL",
@@ -684,22 +519,6 @@
               "isDeprecated": false,
               "deprecationReason": null,
               "name": "latestPubDate",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              },
-              "description": ""
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "listennotesId",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -830,89 +649,6 @@
           "kind": "OBJECT",
           "possibleTypes": null,
           "interfaces": [],
-          "name": "PodcastSearchResults",
-          "enumValues": null,
-          "description": "",
-          "fields": [
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "count",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                }
-              },
-              "description": ""
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "nextOffset",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                }
-              },
-              "description": ""
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "results",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "OBJECT",
-                      "name": "PodcastSearchResult",
-                      "ofType": null
-                    }
-                  }
-                }
-              },
-              "description": ""
-            },
-            {
-              "args": [],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "total",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                }
-              },
-              "description": ""
-            }
-          ]
-        },
-        {
-          "inputFields": null,
-          "kind": "OBJECT",
-          "possibleTypes": null,
-          "interfaces": [],
           "name": "Query",
           "enumValues": null,
           "description": "",
@@ -939,7 +675,7 @@
               "name": "getPodcastById",
               "type": {
                 "kind": "OBJECT",
-                "name": "PodcastSearchResult",
+                "name": "Podcast",
                 "ofType": null
               },
               "description": ""
@@ -992,16 +728,6 @@
             {
               "args": [
                 {
-                  "name": "episodeInput",
-                  "defaultValue": null,
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "EpisodeSearchInput",
-                    "ofType": null
-                  },
-                  "description": ""
-                },
-                {
                   "name": "input",
                   "defaultValue": null,
                   "type": {
@@ -1009,7 +735,7 @@
                     "name": null,
                     "ofType": {
                       "kind": "INPUT_OBJECT",
-                      "name": "BaseSearchInput",
+                      "name": "SearchInput",
                       "ofType": null
                     }
                   },
@@ -1018,44 +744,241 @@
               ],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "searchEpisodes",
+              "name": "search",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
                   "kind": "OBJECT",
-                  "name": "EpisodeSearchResults",
+                  "name": "SearchResults",
+                  "ofType": null
+                }
+              },
+              "description": ""
+            }
+          ]
+        },
+        {
+          "inputFields": null,
+          "kind": "ENUM",
+          "possibleTypes": null,
+          "interfaces": null,
+          "name": "SEARCH_TYPE",
+          "enumValues": [
+            {
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "EPISODE",
+              "description": ""
+            },
+            {
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "PODCAST",
+              "description": ""
+            }
+          ],
+          "description": "",
+          "fields": null
+        },
+        {
+          "inputFields": [
+            {
+              "name": "excludePodcastId",
+              "defaultValue": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": ""
+            },
+            {
+              "name": "genreIds",
+              "defaultValue": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  }
+                }
+              },
+              "description": ""
+            },
+            {
+              "name": "language",
+              "defaultValue": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": ""
+            },
+            {
+              "name": "offset",
+              "defaultValue": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
                   "ofType": null
                 }
               },
               "description": ""
             },
             {
-              "args": [
-                {
-                  "name": "input",
-                  "defaultValue": null,
-                  "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "INPUT_OBJECT",
-                      "name": "BaseSearchInput",
-                      "ofType": null
-                    }
-                  },
-                  "description": ""
-                }
-              ],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "searchPodcasts",
+              "name": "podcastId",
+              "defaultValue": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "description": ""
+            },
+            {
+              "name": "searchTerm",
+              "defaultValue": null,
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "OBJECT",
-                  "name": "PodcastSearchResults",
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "description": ""
+            },
+            {
+              "name": "searchType",
+              "defaultValue": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "SEARCH_TYPE",
+                  "ofType": null
+                }
+              },
+              "description": ""
+            }
+          ],
+          "kind": "INPUT_OBJECT",
+          "possibleTypes": null,
+          "interfaces": null,
+          "name": "SearchInput",
+          "enumValues": null,
+          "description": "",
+          "fields": null
+        },
+        {
+          "inputFields": null,
+          "kind": "UNION",
+          "possibleTypes": [
+            {
+              "kind": "OBJECT",
+              "name": "Episode",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "Podcast",
+              "ofType": null
+            }
+          ],
+          "interfaces": null,
+          "name": "SearchResult",
+          "enumValues": null,
+          "description": "",
+          "fields": null
+        },
+        {
+          "inputFields": null,
+          "kind": "OBJECT",
+          "possibleTypes": null,
+          "interfaces": [],
+          "name": "SearchResults",
+          "enumValues": null,
+          "description": "",
+          "fields": [
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "count",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
+              "description": ""
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "nextOffset",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
+              "description": ""
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "results",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "UNION",
+                      "name": "SearchResult",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "description": ""
+            },
+            {
+              "args": [],
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "name": "total",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
                   "ofType": null
                 }
               },
@@ -2278,7 +2201,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "podcastListennotesId",
+              "name": "podcastId",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -2852,7 +2775,7 @@
               "description": null
             },
             {
-              "name": "podcastListennotesId",
+              "name": "podcastId",
               "defaultValue": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -2997,7 +2920,7 @@
               "description": null
             },
             {
-              "name": "podcastListennotesId",
+              "name": "podcastId",
               "defaultValue": null,
               "type": {
                 "kind": "SCALAR",
@@ -3096,7 +3019,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "podcastListennotesId",
+              "name": "podcastId",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -3173,7 +3096,7 @@
               "description": null
             },
             {
-              "name": "podcastListennotesId",
+              "name": "podcastId",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -3272,7 +3195,7 @@
               "args": [],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "podcastListennotesId",
+              "name": "podcastId",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -3349,7 +3272,7 @@
               "description": null
             },
             {
-              "name": "podcastListennotesId",
+              "name": "podcastId",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -3583,7 +3506,7 @@
               "description": null
             },
             {
-              "name": "podcastListennotesId",
+              "name": "podcastId",
               "defaultValue": null,
               "type": {
                 "kind": "ENUM",
@@ -3655,7 +3578,7 @@
             {
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "podcastListennotesId",
+              "name": "podcastId",
               "description": "column name"
             },
             {
@@ -3717,7 +3640,7 @@
               "description": null
             },
             {
-              "name": "podcastListennotesId",
+              "name": "podcastId",
               "defaultValue": null,
               "type": {
                 "kind": "SCALAR",
@@ -3965,7 +3888,7 @@
             {
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "podcastListennotesId",
+              "name": "podcastId",
               "description": "column name"
             },
             {
@@ -11124,7 +11047,7 @@
               "name": "getPodcastById",
               "type": {
                 "kind": "OBJECT",
-                "name": "PodcastSearchResult",
+                "name": "Podcast",
                 "ofType": null
               },
               "description": ""
@@ -12211,16 +12134,6 @@
             {
               "args": [
                 {
-                  "name": "episodeInput",
-                  "defaultValue": null,
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "EpisodeSearchInput",
-                    "ofType": null
-                  },
-                  "description": ""
-                },
-                {
                   "name": "input",
                   "defaultValue": null,
                   "type": {
@@ -12228,7 +12141,7 @@
                     "name": null,
                     "ofType": {
                       "kind": "INPUT_OBJECT",
-                      "name": "BaseSearchInput",
+                      "name": "SearchInput",
                       "ofType": null
                     }
                   },
@@ -12237,44 +12150,13 @@
               ],
               "isDeprecated": false,
               "deprecationReason": null,
-              "name": "searchEpisodes",
+              "name": "search",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
                   "kind": "OBJECT",
-                  "name": "EpisodeSearchResults",
-                  "ofType": null
-                }
-              },
-              "description": ""
-            },
-            {
-              "args": [
-                {
-                  "name": "input",
-                  "defaultValue": null,
-                  "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "INPUT_OBJECT",
-                      "name": "BaseSearchInput",
-                      "ofType": null
-                    }
-                  },
-                  "description": ""
-                }
-              ],
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "name": "searchPodcasts",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "PodcastSearchResults",
+                  "name": "SearchResults",
                   "ofType": null
                 }
               },

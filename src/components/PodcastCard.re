@@ -9,11 +9,7 @@ module PodcastLoggedInButton = {
       UseSavePodcast.useSavePodcast(~userId, ~podcast);
 
     let (onRemove, removeResult) =
-      UseRemovePodcast.useRemovePodcast(
-        ~userId,
-        ~podcastId=podcast.listennotesId,
-        (),
-      );
+      UseRemovePodcast.useRemovePodcast(~userId, ~podcastId=podcast.id, ());
 
     isSaved
       ? <ActionButton
@@ -39,7 +35,7 @@ let make = (~podcast: SearchTypes.podcast, ~isSaved) => {
   let handleAnonymous = () => dispatch(OnUnauthorizedAccess);
   let setEpisodeQueryPodcast = () => {
     let podcastSearch: AppModel.podcastSearchQuery = {
-      id: podcast.listennotesId,
+      id: podcast.id,
       title: podcast.title,
     };
     dispatch(SetEpisodeQueryPodcast(podcastSearch));

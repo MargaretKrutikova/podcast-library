@@ -1,10 +1,16 @@
 [@bs.val] external grapqhlUrl: string = "process.env.REACT_APP_GRAPHQL_URL";
+let fragmentsData = [%bs.raw {|require('../../fragmentTypes.json')|}];
 
 exception Graphql_error(string);
 
 let makeApolloClient = _ => {
   // Create an InMemoryCache
-  let inMemoryCache = ApolloInMemoryCache.createInMemoryCache();
+  let fragmentMatcher =
+    ApolloInMemoryCache.createIntrospectionFragmentMatcher(
+      ~data=fragmentsData,
+    );
+  let inMemoryCache =
+    ApolloInMemoryCache.createInMemoryCache(~fragmentMatcher, ());
 
   // Create an HTTP Link
   let httpLink = ApolloLinks.createHttpLink(~uri=grapqhlUrl, ());

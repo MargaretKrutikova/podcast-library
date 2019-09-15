@@ -69,8 +69,8 @@ let makeSaveEpisodeMutation =
     ~podcastDescription=episodeInfo.podcastDescription,
     ~podcastImage=episodeInfo.podcastImage,
     ~itunesId=?episodeInfo.itunesId,
-    ~podcastListennotesId=episode.podcastListennotesId,
-    ~listennotesId=episode.listennotesId,
+    ~podcastListennotesId=episode.podcastId,
+    ~listennotesId=episode.id,
     ~lengthSec=episode.lengthSec,
     ~description=episode.description,
     ~status=EpisodeStatus.encode(myEpisode.status),
@@ -100,7 +100,7 @@ module GetEpisodeInsertInfo = [%graphql
 let getEpisodeInsertInfo = (episode: SearchTypes.episode) => {
   GetEpisodeInsertInfo.make(
     ~podcastItunesId=string_of_int(episode.podcastItunesId),
-    ~podcastListennotesId=episode.podcastListennotesId,
+    ~podcastListennotesId=episode.podcastId,
     ~episodeName=episode.title,
     (),
   )
@@ -175,7 +175,7 @@ let makeSavePodcastMutation = (~podcast: SearchTypes.podcast, ~userId) =>
     ~userId,
     ~tags="",
     ~image=podcast.image,
-    ~listennotesId=podcast.listennotesId,
+    ~listennotesId=podcast.id,
     ~title=podcast.title,
     ~description=podcast.description,
     ~publisher=podcast.publisher,

@@ -1,24 +1,9 @@
 module GetSavedIdsQuery =
   ReasonApolloHooks.Query.Make(LibraryQueries.GetMyLibrarySavedIds);
 
-module SearchResultsView = {
-  [@react.component]
-  let make =
-      (
-        ~searchType: ContentType.t,
-        ~savedPodcastsIds=[||],
-        ~savedEpisodesIds=[||],
-      ) => {
-    switch (searchType) {
-    | Episode => <SearchEpisodeResult savedIds=savedEpisodesIds />
-    | Podcast => <SearchPodcastResult savedIds=savedPodcastsIds />
-    };
-  };
-};
-
 module LoggedInSearchView = {
   [@react.component]
-  let make = (~userId, ~searchType: ContentType.t) => {
+  let make = (~userId) => {
     let (_simple, full) =
       GetSavedIdsQuery.use(
         ~variables=
@@ -28,12 +13,12 @@ module LoggedInSearchView = {
 
     switch (full) {
     | {data: Some(data)} =>
-      let savedEpisodesIds = data##my_episodes;
-      let savedPodcastsIds = data##my_podcasts;
+      let savedEpisodeIds = data##my_episodes;
+      let savedPodcastIds = data##my_podcasts;
 
-      <SearchResultsView searchType savedEpisodesIds savedPodcastsIds />;
+      <SearchResult savedEpisodeIds savedPodcastIds />;
 
-    | _ => <SearchResultsView searchType />
+    | _ => <SearchResult />
     };
   };
 };
@@ -41,15 +26,14 @@ module LoggedInSearchView = {
 [@react.component]
 let make =
   React.memo((~userId) => {
-    let searchType = AppCore.useSelector(Selectors.getSearchType);
     let hasSearchTerm = AppCore.useSelector(Selectors.hasSearchTerm);
 
     <PageContainer>
       <SearchForm />
       {hasSearchTerm
          ? switch (userId) {
-           | Some(userId) => <LoggedInSearchView userId searchType />
-           | None => <SearchResultsView searchType />
+           | Some(userId) => <LoggedInSearchView userId />
+           | None => <SearchResult />
            }
          : React.null}
     </PageContainer>;
