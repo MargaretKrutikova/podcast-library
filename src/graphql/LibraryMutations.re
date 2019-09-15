@@ -11,8 +11,8 @@ module SaveEpisode = [%graphql
     $podcastImage: String!,
     $publisher: String!,
     $podcastItunesId: String!,
-    $podcastListennotesId: String!,
-    $listennotesId: String!,
+    $podcastId: String!,
+    $id: String!,
     $lengthSec: Int!,
     $itunesId: String,
     $genreIds: String!,
@@ -25,13 +25,13 @@ module SaveEpisode = [%graphql
      objects: {
         title: $title,
         pubDate: $pubDate,
-        listennotesId: $listennotesId,
+        id: $id,
         lengthSec: $lengthSec,
         itunesId: $itunesId,
         description: $description
         podcast: {
           data: {
-              listennotesId: $podcastListennotesId, title: $podcastTitle, description: $podcastDescription,
+              id: $podcastId, title: $podcastTitle, description: $podcastDescription,
               publisher: $publisher, itunesId: $podcastItunesId, genreIds: $genreIds, image: $podcastImage
           },
           on_conflict: {constraint: podcasts_pkey, update_columns: [genreIds]}
@@ -69,8 +69,8 @@ let makeSaveEpisodeMutation =
     ~podcastDescription=episodeInfo.podcastDescription,
     ~podcastImage=episodeInfo.podcastImage,
     ~itunesId=?episodeInfo.itunesId,
-    ~podcastListennotesId=episode.podcastId,
-    ~listennotesId=episode.id,
+    ~podcastId=episode.podcastId,
+    ~id=episode.id,
     ~lengthSec=episode.lengthSec,
     ~description=episode.description,
     ~status=EpisodeStatus.encode(myEpisode.status),
@@ -85,11 +85,11 @@ let makeSaveEpisodeMutation =
 
 module GetEpisodeInsertInfo = [%graphql
   {|
-    query($podcastItunesId: String!, $podcastListennotesId: String!, $episodeName: String!) {
+    query($podcastItunesId: String!, $podcastId: String!, $episodeName: String!) {
       itunesEpisode (podcastId: $podcastItunesId, episodeName: $episodeName) {
         id
       }
-      getPodcastById(podcastId: $podcastListennotesId) {
+      getPodcastById(podcastId: $podcastId) {
         description
         image
       }
@@ -100,7 +100,7 @@ module GetEpisodeInsertInfo = [%graphql
 let getEpisodeInsertInfo = (episode: SearchTypes.episode) => {
   GetEpisodeInsertInfo.make(
     ~podcastItunesId=string_of_int(episode.podcastItunesId),
-    ~podcastListennotesId=episode.podcastId,
+    ~podcastId=episode.podcastId,
     ~episodeName=episode.title,
     (),
   )
@@ -149,7 +149,7 @@ module SavePodcast = [%graphql
     $userId: String!,
     $tags: String!,
     $image: String!,
-    $listennotesId: String!,
+    $id: String!,
     $title: String!,
     $description: String!,
     $publisher: String!,
@@ -158,7 +158,7 @@ module SavePodcast = [%graphql
     insert_my_podcasts(objects: {
       userId: $userId, tags: $tags,
       podcast: {
-        data: {description: $description, genreIds: $genreIds, image: $image, itunesId: $itunesId, title: $title, publisher: $publisher, listennotesId: $listennotesId},
+        data: {description: $description, genreIds: $genreIds, image: $image, itunesId: $itunesId, title: $title, publisher: $publisher, id: $id},
         on_conflict: {constraint: podcasts_pkey, update_columns: [itunesId]}
       }
     }) {
@@ -175,7 +175,7 @@ let makeSavePodcastMutation = (~podcast: SearchTypes.podcast, ~userId) =>
     ~userId,
     ~tags="",
     ~image=podcast.image,
-    ~listennotesId=podcast.id,
+    ~id=podcast.id,
     ~title=podcast.title,
     ~description=podcast.description,
     ~publisher=podcast.publisher,
