@@ -19,7 +19,7 @@ let make = () => {
         | (MyLibrary, Some(userId)) => <MyLibraryPage userId />
         | (MyEpisodes(id), Some(userId)) =>
           <MyEpisodesPage podcastId=id userId />
-        | (Search(urlQuery), _) => <SearchPage userId=id urlQuery />
+        | (Search(_), _) => <SearchPage userId=id />
         | (_, _) => <div />
         },
       (route, id),

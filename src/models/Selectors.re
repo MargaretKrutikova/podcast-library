@@ -1,7 +1,8 @@
-let getSearchTerm = (model: AppCore.model) =>
-  model.search.baseQuery.searchTerm;
+let getSearchTerm = (model: AppCore.model) => model.search.searchTerm;
 
 let getSearchType = (model: AppCore.model) => model.search.searchType;
+
+let getSearchPodcast = (model: AppCore.model) => model.searchPodcast;
 
 let getSearchModel = (model: AppCore.model) => model.search;
 

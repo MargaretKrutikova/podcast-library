@@ -12,6 +12,7 @@ let make =
       ~userId,
     ) => {
   let hasSavedEpisodes = numberOfSavedEpisodes > 0;
+  let dispatch = AppCore.useDispatch();
 
   let myPodcastsQuery = LibraryQueries.GetAllPodcasts.make(~userId, ());
   let refetchQueries = [|
@@ -26,13 +27,19 @@ let make =
       (),
     );
 
-  <MaterialUi_Card>
+  let setEpisodeQueryPodcast = () => {
+    let podcastSearch: AppModel.podcastSearchQuery = {id, title};
+    dispatch(SetEpisodeQueryPodcast(podcastSearch));
+  };
+
+  <MaterialUi_Card className=Css.(style([position(`relative)]))>
     {hasSavedEpisodes
        ? <RouterLink href={"/my-library/" ++ id ++ "/episodes"}>
            {str("Show episodes")}
          </RouterLink>
        : ReasonReact.null}
     <MaterialUi_CardContent>
+      <Cards.PodcastFilterButton onDelete=setEpisodeQueryPodcast />
       <Cards.Title> {str(title)} </Cards.Title>
       <MaterialUi_Typography gutterBottom=true variant=`Subtitle1>
         {str(publisher)}

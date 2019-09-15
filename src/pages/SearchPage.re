@@ -40,19 +40,9 @@ module LoggedInSearchView = {
 
 [@react.component]
 let make =
-  React.memo((~userId, ~urlQuery: SearchQs.t) => {
+  React.memo((~userId) => {
     let searchType = AppCore.useSelector(Selectors.getSearchType);
     let hasSearchTerm = AppCore.useSelector(Selectors.hasSearchTerm);
-
-    let dispatch = AppCore.useDispatch();
-
-    React.useEffect1(
-      () => {
-        dispatch(SetSearchModelFromQuery(urlQuery));
-        None;
-      },
-      [|urlQuery|],
-    );
 
     <PageContainer>
       <SearchForm />

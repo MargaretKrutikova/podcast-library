@@ -1,10 +1,54 @@
 [@bs.deriving jsConverter]
-type episodeQuery = {
+type t = {
+  searchTerm: string,
+  searchType: ContentType.t,
+  language: option(string),
   podcastId: option(string),
-  excludePodcastId: option(string),
+  genreIds: option(array(int)),
 };
 
-let createEpisodeQuery = () => {podcastId: None, excludePodcastId: None};
+let make = (~searchTerm="", ()) => {
+  searchTerm,
+  language: Some("English"),
+  searchType: Episode,
+  genreIds: None,
+  podcastId: None,
+};
+
+module Url = {
+  let valueFromDict = (key, dict) => {
+    switch (Js.Dict.get(dict, key)) {
+    | Some(Url.Query.Single(search)) => search
+    | Some(Multiple(array)) when Js.Array.length(array) > 0 =>
+      Js.Array.unsafe_get(array, 0)
+    | _ => ""
+    };
+  };
+
+  let parse = queryString => {
+    let dict = Url.Query.parse(queryString);
+    let searchTerm = valueFromDict("q", dict);
+    // let podcastId = valueFromDict("podcastid", dict);
+    let searchType = valueFromDict("content", dict) |> ContentType.fromString;
+
+    {
+      searchTerm,
+      searchType,
+      language: Some("English"),
+      genreIds: None,
+      podcastId: None // TODO: implement
+    };
+  };
+
+  let stringify = query => {
+    [||]
+    |> Url.Params.add("q", query.searchTerm)
+    //  |> Url.Params.addOption("podcastid", query.podcastId)
+    |> Url.Params.add("content", query.searchType |> ContentType.toString);
+  };
+};
+
+/** not used yet */
 
 type sort =
   | Relevance
@@ -32,17 +76,4 @@ let searchFieldToParam = field => {
   | Author => "author"
   | Audio => "audio"
   };
-};
-
-[@bs.deriving jsConverter]
-type baseQuery = {
-  searchTerm: string,
-  language: option(string),
-  genreIds: option(array(int)),
-};
-
-let createBaseQuery = (~searchTerm="", ()) => {
-  searchTerm,
-  language: Some("English"),
-  genreIds: None,
 };

@@ -1,3 +1,5 @@
+open MaterialUi_Chip.Classes;
+
 let str = ReasonReact.string;
 
 module Styles = {
@@ -19,6 +21,8 @@ module Styles = {
 let make = () => {
   let dispatch = AppCore.useDispatch();
   let searchType = AppCore.useSelector(Selectors.getSearchType);
+  let searchPodcast = AppCore.useSelector(Selectors.getSearchPodcast);
+
   let theme = Mui_Theme.useTheme();
 
   <>
@@ -30,6 +34,28 @@ let make = () => {
         ]
       />
     </MaterialUi_FormControl>
+    {switch (searchPodcast, searchType) {
+     | (Some(podcast), Episode) =>
+       <MaterialUi_Chip
+         size=`Medium
+         label={str(podcast.title)}
+         onDelete={_ => dispatch(ClearEpisodeQueryPodcast)}
+         classes=[
+           Label(
+             Css.(
+               style([
+                 maxWidth(px(300)),
+                 textOverflow(ellipsis),
+                 display(block),
+                 overflow(hidden),
+                 whiteSpace(`nowrap),
+               ])
+             ),
+           ),
+         ]
+       />
+     | _ => React.null
+     }}
     <ContentTabs
       activeTab=searchType
       onTabChange={contentType => dispatch(SetContentType(contentType))}

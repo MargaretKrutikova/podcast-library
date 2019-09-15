@@ -1,24 +1,26 @@
 type route =
   | MyLibrary
   | MyEpisodes(string)
-  | Search(SearchQs.t)
+  | Search(SearchQuery.t)
   | SearchEmpty
   | NotFound;
 
-let useAppUrl = () => {
-  let url = ReasonReactRouter.useUrl();
-
+let urlToRoute = (url: ReasonReactRouter.url) =>
   switch (url.path) {
   | ["my-library", podcastId, "episodes"] => MyEpisodes(podcastId)
   | ["my-library"] => MyLibrary
   | []
   | ["search"] =>
     switch (url.search) {
-    | "" => Search({query: "", content: Episode})
-    | search => Search(SearchQs.parse(search))
+    | "" => Search(SearchQuery.make())
+    | search => Search(SearchQuery.Url.parse(search))
     }
   | _ => NotFound
   };
+
+let useAppUrl = () => {
+  let url = ReasonReactRouter.useUrl();
+  urlToRoute(url);
 };
 
 let getUrlFromRoute = route => {
@@ -27,7 +29,7 @@ let getUrlFromRoute = route => {
   | MyEpisodes(id) => {j|my-library/$id/my-episodes|j}
   | SearchEmpty => "/search"
   | Search(query) =>
-    let params = SearchQs.stringify(query);
+    let params = SearchQuery.Url.stringify(query);
     Url.Params.buildUrl("/search", params);
   | _ => "/"
   };

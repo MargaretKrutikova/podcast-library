@@ -37,9 +37,17 @@ let make = (~podcast: SearchTypes.podcast, ~isSaved) => {
   let user = UserIdentity.getLoggedInUser(identity);
 
   let handleAnonymous = () => dispatch(OnUnauthorizedAccess);
+  let setEpisodeQueryPodcast = () => {
+    let podcastSearch: AppModel.podcastSearchQuery = {
+      id: podcast.listennotesId,
+      title: podcast.title,
+    };
+    dispatch(SetEpisodeQueryPodcast(podcastSearch));
+  };
 
   <SearchCard isSaved>
     <MaterialUi_CardContent>
+      <Cards.PodcastFilterButton onDelete=setEpisodeQueryPodcast />
       <Cards.Title> {str(podcast.title)} </Cards.Title>
       <MaterialUi_Typography variant=`Subtitle1>
         {str(podcast.publisher)}
