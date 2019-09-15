@@ -24,7 +24,7 @@
         name: episodes
         using:
           foreign_key_constraint_on:
-            column: podcastListennotesId
+            column: podcastId
             table: episodes
       delete_permissions: []
       event_triggers: []
@@ -79,7 +79,7 @@
       - comment: null
         name: podcast
         using:
-          foreign_key_constraint_on: podcastListennotesId
+          foreign_key_constraint_on: podcastId
       select_permissions: []
       table: episodes
       update_permissions: []
