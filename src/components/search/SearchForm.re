@@ -1,3 +1,5 @@
+open MaterialUi_Chip.Classes;
+
 let str = ReasonReact.string;
 
 module Styles = {
@@ -38,6 +40,19 @@ let make = () => {
          size=`Medium
          label={str(podcast.title)}
          onDelete={_ => dispatch(ClearEpisodeQueryPodcast)}
+         classes=[
+           Label(
+             Css.(
+               style([
+                 maxWidth(px(300)),
+                 textOverflow(ellipsis),
+                 display(block),
+                 overflow(hidden),
+                 whiteSpace(`nowrap),
+               ])
+             ),
+           ),
+         ]
        />
      | _ => React.null
      }}
