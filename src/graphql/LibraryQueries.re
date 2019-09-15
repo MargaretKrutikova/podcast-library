@@ -13,12 +13,19 @@ module GetMyEpisodes = [%graphql
           description
           pubDate
           lengthSec
+          podcast {
+            itunesId
+            title
+            image
+            publisher
+          }
         }
       }
       podcasts(limit: 1, where: {listennotesId: {_eq: $podcastId}}) {
           title
           description
           itunesId
+          image
         }
       }
   |}
@@ -42,6 +49,9 @@ module GetAllEpisodes = [%graphql
           lengthSec
           podcast {
             itunesId
+            title
+            image
+            publisher
           }
         }
       }

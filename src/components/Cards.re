@@ -72,6 +72,16 @@ module Publisher = {
   };
 };
 
+module PodcastTitle = {
+  [@react.component]
+  let make = (~title) => {
+    <MaterialUi_Typography
+      variant=`Subtitle1 className=Css.(style([fontWeight(`num(500))]))>
+      {React.string(title)}
+    </MaterialUi_Typography>;
+  };
+};
+
 module Description = {
   [@react.component]
   let make = (~description) => {
@@ -120,24 +130,35 @@ module PodcastFilterButton = {
   };
 };
 
+module CardMediaContainer = {
+  [@react.component]
+  let make = (~children) => {
+    let theme = Mui_Theme.useTheme();
+
+    <div
+      className=Css.(
+        style([
+          display(`flex),
+          alignItems(`center),
+          marginBottom(px(theme |> Utils.spacingPx(2))),
+          paddingTop(px(theme |> Utils.spacingPx(1))),
+          media(Utils.getBreakpoint(`MD, theme), [marginBottom(px(0))]),
+        ])
+      )>
+      children
+    </div>;
+  };
+};
+
 module PodcastCardContent = {
   [@react.component]
-  let make = (~title, ~image, ~description, ~onFilter, ~info) => {
+  let make = (~title, ~image, ~description, ~onFilter=?, ~info) => {
     let isDesktop = MediaHooks.useIsDesktop();
-    let theme = Mui_Theme.useTheme();
 
     <MaterialUi_CardContent>
       <Title> {str(title)} </Title>
       {isDesktop ? info : React.null}
-      <div
-        className=Css.(
-          style([
-            display(`flex),
-            marginBottom(px(theme |> Utils.spacingPx(2))),
-            paddingTop(px(theme |> Utils.spacingPx(1))),
-            media(Utils.getBreakpoint(`MD, theme), [marginBottom(px(0))]),
-          ])
-        )>
+      <CardMediaContainer>
         <CardMedia image />
         <div
           className=Css.(
@@ -148,10 +169,56 @@ module PodcastCardContent = {
             ])
           )>
           {!isDesktop ? info : React.null}
-          <PodcastFilterButton onFilter />
+          {onFilter->Belt.Option.mapWithDefault(React.null, filter =>
+             <PodcastFilterButton onFilter=filter />
+           )}
           {isDesktop ? <Description description /> : React.null}
         </div>
-      </div>
+      </CardMediaContainer>
+      {!isDesktop ? <Description description /> : React.null}
+    </MaterialUi_CardContent>;
+  };
+};
+
+module EpisodeCardContent = {
+  [@react.component]
+  let make =
+      (
+        ~title,
+        ~image,
+        ~description,
+        ~lengthSec,
+        ~pubDate,
+        ~podcastTitle,
+        ~publisher,
+      ) => {
+    let isDesktop = MediaHooks.useIsDesktop();
+    let info = <Publisher publisher />;
+
+    <MaterialUi_CardContent>
+      <Title> {str(title)} </Title>
+      {isDesktop ? info : React.null}
+      <CardMediaContainer>
+        <CardMedia image />
+        <div
+          className=Css.(
+            style([
+              display(`flex),
+              flexDirection(column),
+              justifyContent(`center),
+            ])
+          )>
+          <PodcastTitle title=podcastTitle />
+          <MaterialUi_Typography gutterBottom=true variant=`Subtitle2>
+            {str(
+               string_of_int(lengthSec)
+               ++ " , published "
+               ++ Js.Date.toLocaleDateString(Js.Date.fromString(pubDate)),
+             )}
+          </MaterialUi_Typography>
+          {isDesktop ? <Description description /> : React.null}
+        </div>
+      </CardMediaContainer>
       {!isDesktop ? <Description description /> : React.null}
     </MaterialUi_CardContent>;
   };
