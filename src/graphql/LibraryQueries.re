@@ -6,8 +6,8 @@ module GetMyEpisodes = [%graphql
         status @bsDecoder(fn: "EpisodeStatus.decode")
         tags
         episode {
-          listennotesId
-          podcastListennotesId
+          id
+          podcastId
           itunesId
           title
           description
@@ -33,8 +33,8 @@ module GetAllEpisodes = [%graphql
         tags
         addedDate
         episode {
-          listennotesId
-          podcastListennotesId
+          id
+          podcastId
           itunesId
           title
           description
@@ -74,7 +74,7 @@ module GetMyLibrary = [%graphql
         numberOfEpisodes
         lastEpisodeAddedDate
         podcastAddedDate
-        listennotesId
+        id
         description
         itunesId
         publisher

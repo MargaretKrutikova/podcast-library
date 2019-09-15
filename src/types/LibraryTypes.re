@@ -14,7 +14,7 @@ type myEpisode = {
 let toMyEpisode = data => {
   let episode = data##episode;
   {
-    id: episode##listennotesId,
+    id: episode##id,
     title: episode##title,
     description: episode##description,
     pubDate: episode##pubDate,
@@ -22,7 +22,7 @@ let toMyEpisode = data => {
     itunesId: episode##itunesId,
     tags: data##tags,
     status: data##status,
-    podcastId: episode##podcastListennotesId,
+    podcastId: episode##podcastId,
   };
 };
 
@@ -39,7 +39,7 @@ type myEpisodeData = {
 
 /** my podcast */
 type myPodcast = {
-  listennotesId: string,
+  id: string,
   title: string,
   description: string,
   itunesId: string,
@@ -50,7 +50,7 @@ type myPodcast = {
 };
 
 let toMyPodcast = query => {
-  listennotesId: query##listennotesId,
+  id: query##id,
   title: query##title,
   description: query##description,
   itunesId: query##itunesId,
