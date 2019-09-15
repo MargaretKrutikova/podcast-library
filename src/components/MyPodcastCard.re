@@ -9,7 +9,9 @@ let make =
       ~title,
       ~publisher,
       ~itunesId,
+      ~image,
       ~userId,
+      ~addedDate,
     ) => {
   let hasSavedEpisodes = numberOfSavedEpisodes > 0;
   let dispatch = AppCore.useDispatch();
@@ -32,25 +34,39 @@ let make =
     dispatch(SetEpisodeQueryPodcast(podcastSearch));
   };
 
-  <MaterialUi_Card className=Css.(style([position(`relative)]))>
-    {hasSavedEpisodes
-       ? <RouterLink href={"/my-library/" ++ id ++ "/episodes"}>
-           {str("Show episodes")}
-         </RouterLink>
-       : ReasonReact.null}
-    <MaterialUi_CardContent>
-      <Cards.PodcastFilterButton onDelete=setEpisodeQueryPodcast />
-      <Cards.Title> {str(title)} </Cards.Title>
-      <MaterialUi_Typography gutterBottom=true variant=`Subtitle1>
-        {str(publisher)}
+  let info =
+    <>
+      <Cards.Publisher publisher />
+      <MaterialUi_Typography gutterBottom=true variant=`Subtitle2>
+        {str(
+           "Added: "
+           ++ Js.Date.toLocaleDateString(
+                Js.Json.decodeString(addedDate)
+                ->Belt.Option.getWithDefault("")
+                |> Js.Date.fromString,
+              ),
+         )}
       </MaterialUi_Typography>
       {hasSavedEpisodes
          ? <MaterialUi_Typography gutterBottom=true variant=`Subtitle1>
              {str("Saved episodes: " ++ string_of_int(numberOfSavedEpisodes))}
            </MaterialUi_Typography>
          : ReasonReact.null}
-      <Cards.Description description />
-    </MaterialUi_CardContent>
+    </>;
+
+  <MaterialUi_Card className=Css.(style([position(`relative)]))>
+    {hasSavedEpisodes
+       ? <RouterLink href={"/my-library/" ++ id ++ "/episodes"}>
+           {str("Show episodes")}
+         </RouterLink>
+       : ReasonReact.null}
+    <Cards.PodcastCardContent
+      title
+      image
+      description
+      onFilter=setEpisodeQueryPodcast
+      info
+    />
     <Cards.CardActions>
       <MaterialUi_Button
         color=`Secondary href={Utils.makePodcastItunesUrl(itunesId)}>

@@ -18,7 +18,7 @@ let make = (~episode: LibraryTypes.myEpisode, ~userId, ~podcastItunesId) => {
 
   <MaterialUi_Card>
     <MaterialUi_CardContent>
-      <Cards.Title> {str(episode.title)} </Cards.Title>
+      <Cards.Title gutterBottom=true> {str(episode.title)} </Cards.Title>
       <MaterialUi_Typography gutterBottom=true variant=`Subtitle1>
         {str(
            episode.pubDate ++ ", length: " ++ string_of_int(episode.lengthSec),

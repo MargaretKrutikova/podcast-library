@@ -60,6 +60,7 @@ module GetAllPodcasts = [%graphql
           itunesId
           title
           publisher
+          image
         }
       }
     }
