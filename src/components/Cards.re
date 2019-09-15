@@ -75,3 +75,23 @@ module Description = {
     </MaterialUi_Typography>;
   };
 };
+
+module PodcastFilterButton = {
+  [@react.component]
+  let make = (~onDelete) => {
+    <MaterialUi_Fab
+      color=`Default
+      size=`Small
+      className=Css.(
+        style([
+          position(absolute),
+          right(px(10)),
+          top(px(10)),
+          boxShadow(transparent),
+        ])
+      )
+      onClick={_ => onDelete()}>
+      <ReactFeather.SearchIcon />
+    </MaterialUi_Fab>;
+  };
+};

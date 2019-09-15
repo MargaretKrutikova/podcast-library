@@ -102,3 +102,18 @@ module LoaderIcon = {
     React.element =
     "default";
 };
+
+module FilterIcon = {
+  [@bs.module "react-feather/dist/icons/filter.js"] [@react.component]
+  external make:
+    (
+      ~color: string=?,
+      ~onClick: 'c=?,
+      ~size: string=?,
+      ~fill: string=?,
+      ~className: string=?,
+      unit
+    ) =>
+    React.element =
+    "default";
+};

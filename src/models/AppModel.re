@@ -1,3 +1,8 @@
+type podcastSearchQuery = {
+  id: string,
+  title: string,
+};
+
 type message =
   | ShowNotification(AppNotifications.data)
   | RemoveNotification(int)
@@ -5,17 +10,21 @@ type message =
   | SetShowIdentityModal(bool)
   | EnteredSearchTerm(string)
   | SetContentType(ContentType.t)
-  | SetEpisodeQueryPodcast(string)
+  | SetEpisodeQueryPodcast(podcastSearchQuery)
+  | ClearEpisodeQueryPodcast
   | SetSearchModelFromQuery(SearchQuery.t);
 
 type model = {
   search: SearchQuery.t,
+  /** TODO: find a cleaner solution */
+  searchPodcast: option(podcastSearchQuery),
   notifications: AppNotifications.t,
   showIdentityModal: bool,
 };
 
 let createInitModel = () => {
   search: SearchQuery.make(),
+  searchPodcast: None,
   notifications: AppNotifications.init(),
   showIdentityModal: false,
 };
@@ -53,17 +62,22 @@ let update = (model, message) => {
       |> updateSearchType(searchType)
       |> updateSearchModel(model);
     (model, Some(pushSearchQuery(model)));
-  | SetEpisodeQueryPodcast(podcastId) =>
+  | SetEpisodeQueryPodcast(podcast) =>
     let model =
-      {...model.search, podcastId: Some(podcastId)}
+      {...model.search, podcastId: Some(podcast.id)}
       |> updateSearchType(Episode)
-      |> updateSearchModel(model);
+      |> updateSearchModel({...model, searchPodcast: Some(podcast)});
     (model, Some(pushSearchQuery(model)));
   | OnUnauthorizedAccess => ({...model, showIdentityModal: true}, None)
   | SetShowIdentityModal(showIdentityModal) => (
       {...model, showIdentityModal},
       None,
     )
+  | ClearEpisodeQueryPodcast =>
+    let model =
+      {...model.search, podcastId: None}
+      |> updateSearchModel({...model, searchPodcast: None});
+    (model, Some(pushSearchQuery(model)));
   | ShowNotification(data) => (
       model.notifications
       |> AppNotifications.add(data)

@@ -28,7 +28,7 @@ module Url = {
   let parse = queryString => {
     let dict = Url.Query.parse(queryString);
     let searchTerm = valueFromDict("q", dict);
-    let podcastId = valueFromDict("podcastid", dict);
+    // let podcastId = valueFromDict("podcastid", dict);
     let searchType = valueFromDict("content", dict) |> ContentType.fromString;
 
     {
@@ -36,14 +36,14 @@ module Url = {
       searchType,
       language: Some("English"),
       genreIds: None,
-      podcastId: Some(podcastId),
+      podcastId: None // TODO: implement
     };
   };
 
   let stringify = query => {
     [||]
     |> Url.Params.add("q", query.searchTerm)
-    |> Url.Params.addOption("podcastid", query.podcastId)
+    //  |> Url.Params.addOption("podcastid", query.podcastId)
     |> Url.Params.add("content", query.searchType |> ContentType.toString);
   };
 };
