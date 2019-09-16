@@ -51,11 +51,14 @@ module SearchCard = {
 
 module Title = {
   [@react.component]
-  let make = (~children, ~gutterBottom=false) => {
+  let make = (~children) => {
     <MaterialUi_Typography
-      gutterBottom
+      gutterBottom=true
       variant=`H6
-      className=Css.(style([lineHeight(`abs(1.3))]))>
+      className=Css.(style([
+        lineHeight(`abs(1.3)), 
+        overflow(hidden),
+      ]))>
       children
     </MaterialUi_Typography>;
   };
@@ -65,7 +68,13 @@ module Publisher = {
   let make = (~publisher, ~className="") => {
     <MaterialUi_Typography
       variant=`Subtitle1
-      className={Css.(style([fontWeight(`num(500))])) ++ " " ++ className}
+      className={Css.(style([
+        fontWeight(`num(500)), 
+        lineHeight(`abs(1.3)),
+        overflow(hidden),
+        wordBreak(`breakAll)
+      ])) ++ " " ++ className}
+      gutterBottom=true
       color=`TextSecondary>
       {React.string("By " ++ publisher)}
     </MaterialUi_Typography>;
@@ -76,7 +85,12 @@ module PodcastTitle = {
   [@react.component]
   let make = (~title) => {
     <MaterialUi_Typography
-      variant=`Subtitle1 className=Css.(style([fontWeight(`num(500))]))>
+      variant=`Subtitle1 className=Css.(style([
+        fontWeight(`num(500)),
+        lineHeight(`abs(1.3)),
+        wordBreak(`breakAll)
+      ]))
+      gutterBottom=true>
       {React.string(title)}
     </MaterialUi_Typography>;
   };

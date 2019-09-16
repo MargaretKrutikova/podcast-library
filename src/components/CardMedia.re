@@ -6,8 +6,8 @@ let make = (~image) => {
     ? <MaterialUi_CardMedia
         className=Css.(
           style([
-            width(px(100)),
-            height(px(100)),
+            width(px(80)),
+            height(px(80)),
             borderRadius(px(4)),
             flexShrink(0.0),
             marginRight(px(theme |> Utils.spacingPx(2))),
@@ -17,6 +17,8 @@ let make = (~image) => {
               ~blur=px(20),
               `rgba((0, 0, 0, 0.1)),
             ),
+            media(Utils.getBreakpoint(`MD, theme), [ width(px(100)),
+            height(px(100)),]),
           ])
         )
         image
