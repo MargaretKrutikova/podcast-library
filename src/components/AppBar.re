@@ -52,7 +52,13 @@ let make = (~isLoggedIn, ~activePage) => {
   let theme = Mui_Theme.useTheme();
   let (userMenuAnchor, setUserMenuAnchor) = React.useState(() => None);
 
-  Js.log(Utils.getBreakpoint(`MD, theme));
+  React.useEffect1(
+    () => {
+      setUserMenuAnchor(_ => None);
+      None;
+    },
+    [|isLoggedIn|],
+  );
 
   <MaterialUi_AppBar color=`Default position=`Static>
     <MaterialUi_Container>
@@ -85,11 +91,6 @@ let make = (~isLoggedIn, ~activePage) => {
                    }}>
                    <ReactFeather.UserIcon />
                  </MaterialUi_IconButton>
-                 <UserMenu
-                   anchorEl=userMenuAnchor
-                   onLogout={() => Routing.pushRoute(SearchEmpty)}
-                   onClose={(_, _) => setUserMenuAnchor(_ => None)}
-                 />
                  <RouterLink href={Routing.getUrlFromRoute(MyLibrary)}>
                    <MaterialUi_IconButton component={`String("span")}>
                      <ReactFeather.BookmarkIcon />
@@ -100,6 +101,11 @@ let make = (~isLoggedIn, ~activePage) => {
                  onClick={_ => dispatch(SetShowIdentityModal(true))}>
                  {React.string("Log in")}
                </MaterialUi_Button>}
+          <UserMenu
+            anchorEl=userMenuAnchor
+            onLogout={() => Routing.pushRoute(SearchEmpty)}
+            onClose={(_, _) => setUserMenuAnchor(_ => None)}
+          />
         </div>
       </MaterialUi_Toolbar>
     </MaterialUi_Container>
