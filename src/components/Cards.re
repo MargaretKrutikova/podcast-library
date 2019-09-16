@@ -9,7 +9,6 @@ module Styles = {
       paddingTop(px(0)),
       justifyContent(`flexEnd),
     ]);
-  let searchCard = style([position(`relative), overflow(`visible)]);
 
   let cardSavedIcon = theme =>
     style([
@@ -17,7 +16,8 @@ module Styles = {
       right(px(theme |> Utils.spacingPx(1))),
       top(px(theme |> Utils.spacingPx(1) |> ( * )(-1))),
     ]);
-  let cardDescription = style([overflow(`hidden)]);
+  let breakWord =
+    style([overflow(hidden), unsafe("word-break", "break-word")]);
 };
 
 module CardActions = {
@@ -36,7 +36,8 @@ module SearchCard = {
   let make = (~isSaved, ~children) => {
     let theme = Mui_Theme.useTheme();
 
-    <MaterialUi_Card className=Styles.searchCard>
+    <MaterialUi_Card
+      className=Css.(style([position(`relative), overflow(`visible)]))>
       {isSaved
          ? <ReactFeather.BookmarkIcon
              className={Styles.cardSavedIcon(theme)}
@@ -55,10 +56,10 @@ module Title = {
     <MaterialUi_Typography
       gutterBottom=true
       variant=`H6
-      className=Css.(style([
-        lineHeight(`abs(1.3)), 
-        overflow(hidden),
-      ]))>
+      className={Cn.make([
+        Css.(style([lineHeight(`abs(1.3))])),
+        Styles.breakWord,
+      ])}>
       children
     </MaterialUi_Typography>;
   };
@@ -68,12 +69,11 @@ module Publisher = {
   let make = (~publisher, ~className="") => {
     <MaterialUi_Typography
       variant=`Subtitle1
-      className={Css.(style([
-        fontWeight(`num(500)), 
-        lineHeight(`abs(1.3)),
-        overflow(hidden),
-        wordBreak(`breakAll)
-      ])) ++ " " ++ className}
+      className={Cn.make([
+        Css.(style([fontWeight(`num(500)), lineHeight(`abs(1.3))])),
+        Styles.breakWord,
+        className,
+      ])}
       gutterBottom=true
       color=`TextSecondary>
       {React.string("By " ++ publisher)}
@@ -85,11 +85,11 @@ module PodcastTitle = {
   [@react.component]
   let make = (~title) => {
     <MaterialUi_Typography
-      variant=`Subtitle1 className=Css.(style([
-        fontWeight(`num(500)),
-        lineHeight(`abs(1.3)),
-        wordBreak(`breakAll)
-      ]))
+      variant=`Subtitle1
+      className={Cn.make([
+        Css.(style([fontWeight(`num(500)), lineHeight(`abs(1.3))])),
+        Styles.breakWord,
+      ])}
       gutterBottom=true>
       {React.string(title)}
     </MaterialUi_Typography>;
@@ -103,7 +103,7 @@ module Description = {
       variant=`Body1
       color=`TextSecondary
       component={`String("div")}
-      className=Styles.cardDescription>
+      className=Css.(style([overflow(`hidden)]))>
       <div
         dangerouslySetInnerHTML={
           "__html": Utils.truncateDescription(description),
@@ -207,11 +207,10 @@ module EpisodeCardContent = {
         ~publisher,
       ) => {
     let isDesktop = MediaHooks.useIsDesktop();
-    let info = <Publisher publisher />;
 
     <MaterialUi_CardContent>
       <Title> {str(title)} </Title>
-      {isDesktop ? info : React.null}
+      {isDesktop ? <Publisher publisher /> : React.null}
       <CardMediaContainer>
         <CardMedia image />
         <div

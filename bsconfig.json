@@ -25,7 +25,8 @@
     "reason-react-elmish",
     "@jsiebern/bs-material-ui",
     "bs-react-netlify-identity",
-    "bs-css"
+    "bs-css",
+    "re-classnames"
   ],
   "refmt": 3
 }

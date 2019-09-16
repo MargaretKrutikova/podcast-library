@@ -12,13 +12,17 @@ let make = (~image) => {
             flexShrink(0.0),
             marginRight(px(theme |> Utils.spacingPx(2))),
             boxShadow(
-              ~x=px(0),
-              ~y=px(0),
-              ~blur=px(20),
-              `rgba((0, 0, 0, 0.1)),
+              Shadow.box(
+                ~x=px(0),
+                ~y=px(0),
+                ~blur=px(20),
+                `rgba((0, 0, 0, 0.1)),
+              ),
             ),
-            media(Utils.getBreakpoint(`MD, theme), [ width(px(100)),
-            height(px(100)),]),
+            media(
+              Utils.getBreakpoint(`MD, theme),
+              [width(px(100)), height(px(100))],
+            ),
           ])
         )
         image
