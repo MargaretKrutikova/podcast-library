@@ -52,6 +52,7 @@ module SearchEpisodes = [%graphql
         pubDate
         genreIds
         publisher
+        image
       }
     }
   }

@@ -69,6 +69,8 @@ let make = (~userId) => {
                   title={data##podcast##title}
                   publisher={data##podcast##publisher}
                   itunesId={data##podcast##itunesId}
+                  addedDate={data##addedDate}
+                  image={data##podcast##image}
                   userId
                 />
               )

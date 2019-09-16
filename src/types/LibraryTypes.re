@@ -9,10 +9,14 @@ type myEpisode = {
   tags: string,
   status: EpisodeStatus.t,
   podcastId: string,
+  image: string,
+  podcastTitle: string,
+  publisher: string,
 };
 
 let toMyEpisode = data => {
   let episode = data##episode;
+
   {
     id: episode##listennotesId,
     title: episode##title,
@@ -23,6 +27,9 @@ let toMyEpisode = data => {
     tags: data##tags,
     status: data##status,
     podcastId: episode##podcastListennotesId,
+    image: episode##podcast##image,
+    podcastTitle: episode##podcast##title,
+    publisher: episode##podcast##publisher,
   };
 };
 

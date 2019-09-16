@@ -1,3 +1,5 @@
+let str = React.string;
+
 module Styles = {
   open Css;
 
@@ -53,8 +55,43 @@ module Title = {
     <MaterialUi_Typography
       gutterBottom=true
       variant=`H6
-      className=Css.(style([lineHeight(`abs(1.3))]))>
+      className=Css.(style([
+        lineHeight(`abs(1.3)), 
+        overflow(hidden),
+      ]))>
       children
+    </MaterialUi_Typography>;
+  };
+};
+module Publisher = {
+  [@react.component]
+  let make = (~publisher, ~className="") => {
+    <MaterialUi_Typography
+      variant=`Subtitle1
+      className={Css.(style([
+        fontWeight(`num(500)), 
+        lineHeight(`abs(1.3)),
+        overflow(hidden),
+        wordBreak(`breakAll)
+      ])) ++ " " ++ className}
+      gutterBottom=true
+      color=`TextSecondary>
+      {React.string("By " ++ publisher)}
+    </MaterialUi_Typography>;
+  };
+};
+
+module PodcastTitle = {
+  [@react.component]
+  let make = (~title) => {
+    <MaterialUi_Typography
+      variant=`Subtitle1 className=Css.(style([
+        fontWeight(`num(500)),
+        lineHeight(`abs(1.3)),
+        wordBreak(`breakAll)
+      ]))
+      gutterBottom=true>
+      {React.string(title)}
     </MaterialUi_Typography>;
   };
 };
@@ -78,20 +115,125 @@ module Description = {
 
 module PodcastFilterButton = {
   [@react.component]
-  let make = (~onDelete) => {
-    <MaterialUi_Fab
-      color=`Default
+  let make = (~onFilter) => {
+    <MaterialUi_Button
+      color=`Secondary
       size=`Small
       className=Css.(
         style([
-          position(absolute),
-          right(px(10)),
-          top(px(10)),
-          boxShadow(transparent),
+          alignSelf(`flexStart),
+          padding(px(0)),
+          marginBottom(px(5)),
         ])
       )
-      onClick={_ => onDelete()}>
-      <ReactFeather.SearchIcon />
-    </MaterialUi_Fab>;
+      onClick={_ => onFilter()}>
+      <ReactFeather.FilterIcon className=Css.(style([width(px(21))])) />
+      <MaterialUi_Typography
+        className=Css.(
+          style([
+            textTransform(`none),
+            fontWeight(`num(600)),
+            marginLeft(px(5)),
+          ])
+        )
+        variant=`Body2
+        component={`String("span")}>
+        {React.string("Filter")}
+      </MaterialUi_Typography>
+    </MaterialUi_Button>;
+  };
+};
+
+module CardMediaContainer = {
+  [@react.component]
+  let make = (~children) => {
+    let theme = Mui_Theme.useTheme();
+
+    <div
+      className=Css.(
+        style([
+          display(`flex),
+          alignItems(`center),
+          marginBottom(px(theme |> Utils.spacingPx(2))),
+          paddingTop(px(theme |> Utils.spacingPx(1))),
+          media(Utils.getBreakpoint(`MD, theme), [marginBottom(px(0))]),
+        ])
+      )>
+      children
+    </div>;
+  };
+};
+
+module PodcastCardContent = {
+  [@react.component]
+  let make = (~title, ~image, ~description, ~onFilter=?, ~info) => {
+    let isDesktop = MediaHooks.useIsDesktop();
+
+    <MaterialUi_CardContent>
+      <Title> {str(title)} </Title>
+      {isDesktop ? info : React.null}
+      <CardMediaContainer>
+        <CardMedia image />
+        <div
+          className=Css.(
+            style([
+              display(`flex),
+              flexDirection(column),
+              justifyContent(`center),
+            ])
+          )>
+          {!isDesktop ? info : React.null}
+          {onFilter->Belt.Option.mapWithDefault(React.null, filter =>
+             <PodcastFilterButton onFilter=filter />
+           )}
+          {isDesktop ? <Description description /> : React.null}
+        </div>
+      </CardMediaContainer>
+      {!isDesktop ? <Description description /> : React.null}
+    </MaterialUi_CardContent>;
+  };
+};
+
+module EpisodeCardContent = {
+  [@react.component]
+  let make =
+      (
+        ~title,
+        ~image,
+        ~description,
+        ~lengthSec,
+        ~pubDate,
+        ~podcastTitle,
+        ~publisher,
+      ) => {
+    let isDesktop = MediaHooks.useIsDesktop();
+    let info = <Publisher publisher />;
+
+    <MaterialUi_CardContent>
+      <Title> {str(title)} </Title>
+      {isDesktop ? info : React.null}
+      <CardMediaContainer>
+        <CardMedia image />
+        <div
+          className=Css.(
+            style([
+              display(`flex),
+              flexDirection(column),
+              justifyContent(`center),
+            ])
+          )>
+          <PodcastTitle title=podcastTitle />
+          <MaterialUi_Typography gutterBottom=true variant=`Subtitle2>
+            {str(
+               string_of_int(lengthSec / 60)
+               ++ " mins, published "
+               ++ Utils.formatDate(pubDate),
+             )}
+          </MaterialUi_Typography>
+          {isDesktop ? <Description description /> : React.null}
+        </div>
+      </CardMediaContainer>
+      {!isDesktop ? <Description description /> : React.null}
+    </MaterialUi_CardContent>;
   };
 };

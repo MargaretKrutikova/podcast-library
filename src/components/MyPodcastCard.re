@@ -9,7 +9,9 @@ let make =
       ~title,
       ~publisher,
       ~itunesId,
+      ~image,
       ~userId,
+      ~addedDate,
     ) => {
   let hasSavedEpisodes = numberOfSavedEpisodes > 0;
   let dispatch = AppCore.useDispatch();
@@ -32,25 +34,36 @@ let make =
     dispatch(SetEpisodeQueryPodcast(podcastSearch));
   };
 
+  let info =
+    <>
+      <Cards.Publisher publisher />
+      {addedDate
+       ->Js.Json.decodeString
+       ->Belt.Option.mapWithDefault(React.null, date =>
+           <MaterialUi_Typography gutterBottom=true variant=`Subtitle2>
+             {str("Added: " ++ Utils.formatDate(date))}
+           </MaterialUi_Typography>
+         )}
+      {hasSavedEpisodes
+         ? <MaterialUi_Typography gutterBottom=true variant=`Subtitle1>
+             {str("Saved episodes: " ++ string_of_int(numberOfSavedEpisodes))}
+           </MaterialUi_Typography>
+         : ReasonReact.null}
+    </>;
+
   <MaterialUi_Card className=Css.(style([position(`relative)]))>
     {hasSavedEpisodes
        ? <RouterLink href={"/my-library/" ++ id ++ "/episodes"}>
            {str("Show episodes")}
          </RouterLink>
        : ReasonReact.null}
-    <MaterialUi_CardContent>
-      <Cards.PodcastFilterButton onDelete=setEpisodeQueryPodcast />
-      <Cards.Title> {str(title)} </Cards.Title>
-      <MaterialUi_Typography gutterBottom=true variant=`Subtitle1>
-        {str(publisher)}
-      </MaterialUi_Typography>
-      {hasSavedEpisodes
-         ? <MaterialUi_Typography gutterBottom=true variant=`Subtitle1>
-             {str("Saved episodes: " ++ string_of_int(numberOfSavedEpisodes))}
-           </MaterialUi_Typography>
-         : ReasonReact.null}
-      <Cards.Description description />
-    </MaterialUi_CardContent>
+    <Cards.PodcastCardContent
+      title
+      image
+      description
+      onFilter=setEpisodeQueryPodcast
+      info
+    />
     <Cards.CardActions>
       <MaterialUi_Button
         color=`Secondary href={Utils.makePodcastItunesUrl(itunesId)}>
