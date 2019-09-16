@@ -37,16 +37,13 @@ let make =
   let info =
     <>
       <Cards.Publisher publisher />
-      <MaterialUi_Typography gutterBottom=true variant=`Subtitle2>
-        {str(
-           "Added: "
-           ++ Js.Date.toLocaleDateString(
-                Js.Json.decodeString(addedDate)
-                ->Belt.Option.getWithDefault("")
-                |> Js.Date.fromString,
-              ),
+      {addedDate
+       ->Js.Json.decodeString
+       ->Belt.Option.mapWithDefault(React.null, date =>
+           <MaterialUi_Typography gutterBottom=true variant=`Subtitle2>
+             {str("Added: " ++ Utils.formatDate(date))}
+           </MaterialUi_Typography>
          )}
-      </MaterialUi_Typography>
       {hasSavedEpisodes
          ? <MaterialUi_Typography gutterBottom=true variant=`Subtitle1>
              {str("Saved episodes: " ++ string_of_int(numberOfSavedEpisodes))}

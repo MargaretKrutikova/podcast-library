@@ -52,9 +52,7 @@ let make = (~podcast: SearchTypes.podcast, ~isSaved) => {
         {str(
            string_of_int(podcast.totalEpisodes)
            ++ " episodes, "
-           ++ Js.Date.toLocaleDateString(
-                Js.Date.fromString(podcast.latestPubDate),
-              ),
+           ++ Utils.formatDate(podcast.latestPubDate),
          )}
       </MaterialUi_Typography>
     </>;

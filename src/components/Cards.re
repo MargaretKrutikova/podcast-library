@@ -211,9 +211,9 @@ module EpisodeCardContent = {
           <PodcastTitle title=podcastTitle />
           <MaterialUi_Typography gutterBottom=true variant=`Subtitle2>
             {str(
-               string_of_int(lengthSec)
-               ++ " , published "
-               ++ Js.Date.toLocaleDateString(Js.Date.fromString(pubDate)),
+               string_of_int(lengthSec / 60)
+               ++ " mins, published "
+               ++ Utils.formatDate(pubDate),
              )}
           </MaterialUi_Typography>
           {isDesktop ? <Description description /> : React.null}
