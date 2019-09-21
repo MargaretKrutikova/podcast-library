@@ -17,22 +17,15 @@ let make = (~episode: LibraryTypes.myEpisode, ~userId, ~podcastItunesId) => {
     );
 
   <MaterialUi_Card>
-    <MaterialUi_CardContent>
-      <Cards.Title> {str(episode.title)} </Cards.Title>
-      <MaterialUi_Typography gutterBottom=true variant=`Subtitle1>
-        {str(
-           episode.pubDate ++ ", length: " ++ string_of_int(episode.lengthSec),
-         )}
-      </MaterialUi_Typography>
-      <MaterialUi_Typography
-        variant=`Body1 color=`TextSecondary component={`String("div")}>
-        <div
-          dangerouslySetInnerHTML={
-            "__html": Utils.truncateDescription(episode.description),
-          }
-        />
-      </MaterialUi_Typography>
-    </MaterialUi_CardContent>
+    <Cards.EpisodeCardContent
+      title={episode.title}
+      podcastTitle={episode.podcastTitle}
+      image={episode.image}
+      description={episode.description}
+      lengthSec={episode.lengthSec}
+      pubDate={episode.pubDate}
+      publisher={episode.publisher}
+    />
     <Cards.CardActions>
       {switch (episode.itunesId, podcastItunesId) {
        | (Some(episodeItunesId), Some(podcastId)) =>

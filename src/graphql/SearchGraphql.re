@@ -47,6 +47,7 @@ module Search = [%graphql
           pubDate
           genreIds
           publisher
+          image
         }
       }
     }

@@ -1,5 +1,10 @@
 [@react.component]
-let make = (~className=?, ~classes: option(MaterialUi_Input.Classes.t)=?) => {
+let make =
+    (
+      ~className=?,
+      ~iconClassName=?,
+      ~classes: option(MaterialUi_Input.Classes.t)=?,
+    ) => {
   let dispatch = AppCore.useDispatch();
 
   let globalSearchTerm = AppCore.useSelector(Selectors.getSearchTerm);
@@ -36,7 +41,11 @@ let make = (~className=?, ~classes: option(MaterialUi_Input.Classes.t)=?) => {
     ?className
     ?classes
     endAdornment={
-      <MaterialUi_IconButton type_=`Button onClick=handleSearch size=`Small>
+      <MaterialUi_IconButton
+        className=?iconClassName
+        type_=`Button
+        onClick=handleSearch
+        size=`Small>
         <ReactFeather.SearchIcon />
       </MaterialUi_IconButton>
     }

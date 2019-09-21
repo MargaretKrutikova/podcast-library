@@ -32,13 +32,15 @@ let make = (~episode: SearchTypes.episode, ~isSaved) => {
   let handleAnonymous = () => dispatch(OnUnauthorizedAccess);
 
   <Cards.SearchCard isSaved>
-    <MaterialUi_CardContent>
-      <Cards.Title> {str(episode.title)} </Cards.Title>
-      <MaterialUi_Typography gutterBottom=true variant=`Subtitle1>
-        {str(episode.podcastTitle ++ ", " ++ episode.pubDate)}
-      </MaterialUi_Typography>
-      <Cards.Description description={episode.description} />
-    </MaterialUi_CardContent>
+    <Cards.EpisodeCardContent
+      title={episode.title}
+      podcastTitle={episode.podcastTitle}
+      image={episode.image}
+      description={episode.description}
+      lengthSec={episode.lengthSec}
+      pubDate={episode.pubDate}
+      publisher={episode.publisher}
+    />
     <Cards.CardActions>
       <EpisodeItunesLink
         podcastItunesId={episode.podcastItunesId}

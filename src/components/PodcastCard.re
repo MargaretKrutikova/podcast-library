@@ -41,23 +41,26 @@ let make = (~podcast: SearchTypes.podcast, ~isSaved) => {
     dispatch(SetEpisodeQueryPodcast(podcastSearch));
   };
 
-  <SearchCard isSaved>
-    <MaterialUi_CardContent>
-      <Cards.PodcastFilterButton onDelete=setEpisodeQueryPodcast />
-      <Cards.Title> {str(podcast.title)} </Cards.Title>
-      <MaterialUi_Typography variant=`Subtitle1>
-        {str(podcast.publisher)}
-      </MaterialUi_Typography>
+  let info =
+    <>
+      <Cards.Publisher publisher={podcast.publisher} />
       <MaterialUi_Typography gutterBottom=true variant=`Subtitle2>
         {str(
-           "Total: "
-           ++ string_of_int(podcast.totalEpisodes)
-           ++ ", last published: "
-           ++ podcast.latestPubDate,
+           string_of_int(podcast.totalEpisodes)
+           ++ " episodes, "
+           ++ Utils.formatDate(podcast.latestPubDate),
          )}
       </MaterialUi_Typography>
-      <Cards.Description description={podcast.description} />
-    </MaterialUi_CardContent>
+    </>;
+
+  <SearchCard isSaved>
+    <Cards.PodcastCardContent
+      title={podcast.title}
+      image={podcast.image}
+      description={podcast.description}
+      onFilter=setEpisodeQueryPodcast
+      info
+    />
     <Cards.CardActions>
       <MaterialUi_Button
         color=`Secondary

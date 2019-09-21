@@ -21,6 +21,7 @@ type episode = {
   podcastId: string,
   genreIds: array(int),
   publisher: string,
+  image: string,
 };
 
 type searchResult('a) = {
