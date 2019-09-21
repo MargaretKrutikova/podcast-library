@@ -1,6 +1,5 @@
 external styleToString: ReactDOMRe.Style.t => string = "%identity";
 
-let inputBorderColor = "#1a5073";
 let theme =
   MaterialUi_Theme.create(
     MaterialUi_ThemeOptions.(
