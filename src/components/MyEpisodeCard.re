@@ -24,7 +24,6 @@ let make = (~episode: LibraryTypes.myEpisode, ~userId, ~podcastItunesId) => {
       description={episode.description}
       lengthSec={episode.lengthSec}
       pubDate={episode.pubDate}
-      publisher={episode.publisher}
       addedDate=?{episode.addedDate}
     />
     <Cards.CardActions>

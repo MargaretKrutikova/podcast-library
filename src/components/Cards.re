@@ -64,6 +64,7 @@ module Title = {
     </MaterialUi_Typography>;
   };
 };
+
 module Publisher = {
   [@react.component]
   let make = (~publisher, ~className="") => {
@@ -77,6 +78,22 @@ module Publisher = {
       gutterBottom=true
       color=`TextSecondary>
       {React.string("By " ++ publisher)}
+    </MaterialUi_Typography>;
+  };
+};
+module EpisodePodcastTitle = {
+  [@react.component]
+  let make = (~title, ~className="") => {
+    <MaterialUi_Typography
+      variant=`Subtitle1
+      className={Cn.make([
+        Css.(style([fontWeight(`num(500)), lineHeight(`abs(1.3))])),
+        Styles.breakWord,
+        className,
+      ])}
+      gutterBottom=true
+      color=`TextSecondary>
+      {React.string(title)}
     </MaterialUi_Typography>;
   };
 };
@@ -204,13 +221,22 @@ module EpisodeCardContent = {
         ~lengthSec,
         ~pubDate,
         ~podcastTitle,
-        ~publisher,
+        ~addedDate=?,
       ) => {
     let isDesktop = MediaHooks.useIsDesktop();
 
+    let addedDateElement =
+      addedDate->Belt.Option.mapWithDefault(React.null, date =>
+        <MaterialUi_Typography gutterBottom=true variant=`Subtitle2>
+          {str("Added: " ++ Utils.formatDate(date))}
+        </MaterialUi_Typography>
+      );
+
     <MaterialUi_CardContent>
       <Title> {str(title)} </Title>
-      {isDesktop ? <Publisher publisher /> : React.null}
+      {isDesktop
+         ? <> <Publisher publisher=podcastTitle /> addedDateElement </>
+         : React.null}
       <CardMediaContainer>
         <CardMedia image />
         <div
@@ -221,14 +247,15 @@ module EpisodeCardContent = {
               justifyContent(`center),
             ])
           )>
-          <PodcastTitle title=podcastTitle />
+          {!isDesktop ? <Publisher publisher=podcastTitle /> : React.null}
           <MaterialUi_Typography gutterBottom=true variant=`Subtitle2>
             {str(
                string_of_int(lengthSec / 60)
                ++ " mins, published "
-               ++ Utils.formatDate(pubDate),
+               ++ Utils.formatListennotesDate(pubDate),
              )}
           </MaterialUi_Typography>
+          {!isDesktop ? addedDateElement : React.null}
           {isDesktop ? <Description description /> : React.null}
         </div>
       </CardMediaContainer>
