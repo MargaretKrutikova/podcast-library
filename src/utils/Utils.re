@@ -45,11 +45,14 @@ let toApiGenres = (arr: array(int)) => Js.Array.joinWith(",", arr);
 
 [@bs.val] external scrollTop: float = "document.scrollingElement.scrollTop";
 
-let formatDate = dateStr =>
+let formatListennotesDate = dateStr =>
   dateStr
   |> Js.String.replaceByRe([%re "/-/g"], "/")
   |> Js.Date.fromString
   |> Js.Date.toLocaleDateString;
+
+let formatDate = dateStr =>
+  dateStr |> Js.Date.fromString |> Js.Date.toLocaleDateString;
 
 /** general */
 let fromBigInt = value =>

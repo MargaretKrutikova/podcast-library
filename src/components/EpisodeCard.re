@@ -39,7 +39,6 @@ let make = (~episode: SearchTypes.episode, ~isSaved) => {
       description={episode.description}
       lengthSec={episode.lengthSec}
       pubDate={episode.pubDate}
-      publisher={episode.publisher}
     />
     <Cards.CardActions>
       <EpisodeItunesLink
