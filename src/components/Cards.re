@@ -17,7 +17,7 @@ module Styles = {
       top(px(theme |> Utils.spacingPx(1) |> ( * )(-1))),
     ]);
   let breakWord =
-    style([overflow(hidden), unsafe("word-break", "break-word")]);
+    style([overflow(hidden), unsafe("wordBreak", "break-word")]);
 };
 
 module CardActions = {
