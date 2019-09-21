@@ -25,6 +25,7 @@ let make = (~episode: LibraryTypes.myEpisode, ~userId, ~podcastItunesId) => {
       lengthSec={episode.lengthSec}
       pubDate={episode.pubDate}
       publisher={episode.publisher}
+      addedDate=?{episode.addedDate}
     />
     <Cards.CardActions>
       {switch (episode.itunesId, podcastItunesId) {

@@ -48,7 +48,7 @@ let make = (~podcast: SearchTypes.podcast, ~isSaved) => {
         {str(
            string_of_int(podcast.totalEpisodes)
            ++ " episodes, "
-           ++ Utils.formatDate(podcast.latestPubDate),
+           ++ Utils.formatListennotesDate(podcast.latestPubDate),
          )}
       </MaterialUi_Typography>
     </>;

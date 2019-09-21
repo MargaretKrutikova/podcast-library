@@ -61,16 +61,17 @@ let make = (~userId) => {
        | Data(response) =>
          <LibraryGrid>
            {response##my_podcasts
-            ->Belt.Array.map(data =>
+            ->Belt.Array.map(LibraryTypes.toMyPodcast)
+            ->Belt.Array.map(podcast =>
                 <MyPodcastCard
-                  key={data##podcastId}
-                  id={data##podcastId}
-                  description={data##podcast##description}
-                  title={data##podcast##title}
-                  publisher={data##podcast##publisher}
-                  itunesId={data##podcast##itunesId}
-                  addedDate={data##addedDate}
-                  image={data##podcast##image}
+                  key={podcast.id}
+                  id={podcast.id}
+                  description={podcast.description}
+                  title={podcast.title}
+                  publisher={podcast.publisher}
+                  itunesId={podcast.itunesId}
+                  addedDate={podcast.addedDate}
+                  image={podcast.image}
                   userId
                 />
               )

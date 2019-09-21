@@ -12,6 +12,7 @@ type myEpisode = {
   image: string,
   podcastTitle: string,
   publisher: string,
+  addedDate: option(string),
 };
 
 let toMyEpisode = data => {
@@ -30,6 +31,7 @@ let toMyEpisode = data => {
     image: episode##podcast##image,
     podcastTitle: episode##podcast##title,
     publisher: episode##podcast##publisher,
+    addedDate: data##addedDate->Belt.Option.flatMap(Js.Json.decodeString),
   };
 };
 
@@ -51,26 +53,19 @@ type myPodcast = {
   description: string,
   itunesId: string,
   publisher: string,
-  numberOfSavedEpisodes: int,
-  lastEpisodeAddedDate: option(Js.Json.t),
-  podcastAddedDate: option(Js.Json.t),
+  image: string,
+  addedDate: option(string),
 };
 
-let toMyPodcast = query => {
-  id: query##id,
-  title: query##title,
-  description: query##description,
-  itunesId: query##itunesId,
-  publisher: query##publisher,
-  numberOfSavedEpisodes: Utils.fromBigInt(query##numberOfEpisodes),
-  lastEpisodeAddedDate: query##lastEpisodeAddedDate,
-  podcastAddedDate: query##podcastAddedDate,
-};
-
-type library = {myPodcasts: array(myPodcast)};
-
-let toMyLibrary = queryResponse => {
-  myPodcasts:
-    queryResponse##get_my_episodes_grouped_by_podcasts
-    ->Belt.Array.map(toMyPodcast),
+let toMyPodcast = data => {
+  let podcast = data##podcast;
+  {
+    id: data##podcastId,
+    title: podcast##title,
+    description: podcast##description,
+    itunesId: podcast##itunesId,
+    publisher: podcast##publisher,
+    image: podcast##image,
+    addedDate: data##addedDate |> Js.Json.decodeString,
+  };
 };

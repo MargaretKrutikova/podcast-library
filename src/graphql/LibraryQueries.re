@@ -5,6 +5,7 @@ module GetMyEpisodes = [%graphql
         episodeId
         status @bsDecoder(fn: "EpisodeStatus.decode")
         tags
+        addedDate
         episode {
           id
           podcastId
