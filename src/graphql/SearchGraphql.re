@@ -1,101 +1,88 @@
 open SearchQuery;
 open SearchTypes;
 
+let toSearchTypeVariant = (searchType: ContentType.t) =>
+  switch (searchType) {
+  | Episode => `EPISODE
+  | Podcast => `PODCAST
+  };
+
 let toSearchInput = (~query: SearchQuery.t, ~offset) => {
   "searchTerm": query.searchTerm,
   "language": query.language,
   "genreIds": query.genreIds,
   "offset": offset,
+  "podcastId": query.podcastId,
+  "searchType": toSearchTypeVariant(query.searchType),
+  "excludePodcastId": None,
 };
 
-module SearchPodcasts = [%graphql
+module Search = [%graphql
   {|
-  query($input: BaseSearchInput!) {
-    searchPodcasts (input: $input) @bsRecord  {
+  query($input: SearchInput!) {
+    search (input: $input) @bsRecord  {
       nextOffset
       total
       count
-      results @bsRecord {
-        listennotesId
-        description
-        title
-        publisher
-        podcastItunesId
-        latestPubDate
-        genreIds
-        totalEpisodes
-        image
+      results {
+        ... on Podcast @bsRecord {
+          id
+          description
+          title
+          publisher
+          podcastItunesId
+          latestPubDate
+          genreIds
+          totalEpisodes
+          image
+        }
+        ... on Episode @bsRecord {
+          id
+          podcastTitle
+          title
+          podcastItunesId
+          lengthSec
+          podcastId
+          description
+          pubDate
+          genreIds
+          publisher
+          image
+        }
       }
     }
   }
   |}
 ];
 
-let makeSearchPodcastsQuery = (query: SearchQuery.t, offset: int) =>
-  SearchPodcasts.make(~input=toSearchInput(~query, ~offset), ());
-
-module SearchEpisodes = [%graphql
-  {|
-  query($input: BaseSearchInput!, $episodeInput: EpisodeSearchInput!) {
-    searchEpisodes (input: $input, episodeInput: $episodeInput) @bsRecord  {
-      nextOffset
-      total
-      count
-      results @bsRecord {
-        listennotesId
-        podcastTitle
-        title
-        podcastItunesId
-        lengthSec
-        podcastListennotesId
-        description
-        pubDate
-        genreIds
-        publisher
-        image
-      }
-    }
-  }
-  |}
-];
-
-let makeSearchEpisodesQuery = (query: SearchQuery.t, offset: int) => {
-  SearchEpisodes.make(
-    ~input=toSearchInput(~query, ~offset),
-    ~episodeInput={"podcastId": query.podcastId, "excludePodcastId": None},
-    (),
-  );
+let makeSearchQuery = (query: SearchQuery.t, offset: int) => {
+  Search.make(~input=toSearchInput(~query, ~offset), ());
 };
 
 /** fetch more */
 let fetchMoreUpdateQuery =
     (
-      queryName,
       prevResult: Js.Json.t,
       options: ReasonApolloHooks.Query.updateQueryOptions,
     ) => {
-  let mergeResults: (string, Js.Json.t, option(Js.Json.t)) => Js.Json.t = [%bs.raw
+  let mergeResults: (Js.Json.t, option(Js.Json.t)) => Js.Json.t = [%bs.raw
     {|
-    function (queryName, prevResult, fetchMoreResult) {
+    function (prevResult, fetchMoreResult) {
       if (!fetchMoreResult) return prevResult;
 
-      const results = prevResult[queryName].results.concat(
-        fetchMoreResult[queryName].results
+      const results = prevResult.search.results.concat(
+        fetchMoreResult.search.results
       );
 
       return {
         ...fetchMoreResult,
-        [queryName]: { ...fetchMoreResult[queryName], results }
+        search: { ...fetchMoreResult.search, results }
       };
     }
    |}
   ];
   mergeResults(
-    queryName,
     prevResult,
     options->ReasonApolloHooks.Query.fetchMoreResultGet,
   );
 };
-
-let fetchMoreEpisodes = fetchMoreUpdateQuery("searchEpisodes");
-let fetchMorePodcasts = fetchMoreUpdateQuery("searchPodcasts");

@@ -7,11 +7,7 @@ module EpisodeLoggedInButton = {
       UseSaveEpisode.useSaveEpisode(~userId, ~episode);
 
     let (onRemove, removeResult) =
-      UseRemoveEpisode.useRemoveEpisode(
-        ~userId,
-        ~episodeId=episode.listennotesId,
-        (),
-      );
+      UseRemoveEpisode.useRemoveEpisode(~userId, ~episodeId=episode.id, ());
 
     isSaved
       ? <ActionButton

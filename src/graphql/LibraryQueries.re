@@ -1,13 +1,13 @@
 module GetMyEpisodes = [%graphql
   {|
     query($userId: String!, $podcastId: String!) {
-      my_episodes(where: {episode: {podcast: {listennotesId: {_eq: $podcastId}}}, _and: {userId: {_eq: $userId}}}) {
+      my_episodes(where: {episode: {podcast: {id: {_eq: $podcastId}}}, _and: {userId: {_eq: $userId}}}) {
         episodeId
         status @bsDecoder(fn: "EpisodeStatus.decode")
         tags
         episode {
-          listennotesId
-          podcastListennotesId
+          id
+          podcastId
           itunesId
           title
           description
@@ -21,7 +21,7 @@ module GetMyEpisodes = [%graphql
           }
         }
       }
-      podcasts(limit: 1, where: {listennotesId: {_eq: $podcastId}}) {
+      podcasts(limit: 1, where: {id: {_eq: $podcastId}}) {
           title
           description
           itunesId
@@ -40,8 +40,8 @@ module GetAllEpisodes = [%graphql
         tags
         addedDate
         episode {
-          listennotesId
-          podcastListennotesId
+          id
+          podcastId
           itunesId
           title
           description
@@ -85,7 +85,7 @@ module GetMyLibrary = [%graphql
         numberOfEpisodes
         lastEpisodeAddedDate
         podcastAddedDate
-        listennotesId
+        id
         description
         itunesId
         publisher

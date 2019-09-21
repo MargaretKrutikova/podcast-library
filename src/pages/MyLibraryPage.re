@@ -43,7 +43,7 @@ let make = (~userId) => {
            {response##my_episodes
             ->Belt.Array.map(data =>
                 <MyEpisodeCard
-                  key={data##episode##listennotesId}
+                  key={data##episode##id}
                   episode={LibraryTypes.toMyEpisode(data)}
                   podcastItunesId={Some(data##episode##podcast##itunesId)}
                   userId

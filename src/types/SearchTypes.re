@@ -1,5 +1,5 @@
 type podcast = {
-  listennotesId: string,
+  id: string,
   description: string,
   title: string,
   publisher: string,
@@ -11,14 +11,14 @@ type podcast = {
 };
 
 type episode = {
-  listennotesId: string,
+  id: string,
   title: string,
   description: string,
   podcastTitle: string,
   pubDate: string,
   lengthSec: int,
   podcastItunesId: int,
-  podcastListennotesId: string,
+  podcastId: string,
   genreIds: array(int),
   publisher: string,
   image: string,
