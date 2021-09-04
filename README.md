@@ -34,3 +34,34 @@ This will replace the development artifact `build/Index.js` for an optimized ver
 If you make use of routing (via `ReasonReact.Router` or similar logic) ensure that server-side routing handles your routes or that 404's are directed back to `index.html` (which is how the dev server is set up).
 
 **To enable dead code elimination**, change `bsconfig.json`'s `package-specs` `module` from `"commonjs"` to `"es6"`. Then re-run the above 2 commands. This will allow Webpack to remove unused code.
+
+## Pg_dump
+
+POST request to `/v1alpha1/pg_dump`:
+
+1. For schema:
+
+```
+POST /v1alpha1/pg_dump HTTP/1.1
+Content-Type: application/json
+X-Hasura-Role: admin
+
+{
+  "opts": ["-O", "-x", "--schema-only", "--schema", "public"],
+  "clean_output": true,
+  "source": "<database-source-name>"
+}
+```
+
+2. For data:
+
+```
+POST /v1alpha1/pg_dump HTTP/1.1
+Content-Type: application/json
+X-Hasura-Role: admin
+{
+  "opts": ["-O", "-x", "--data-only", "--schema", "public"],
+  "clean_output": true,
+  "source": "<database-source-name>"
+}
+```
