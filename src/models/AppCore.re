@@ -4,5 +4,5 @@ include ReasonReactElmish.Elmish.Make({
 
   let update = AppModel.update;
   let storeEnhancer = None;
-  let initialState = AppModel.initialState;
+  let initialModel = AppModel.initialState;
 });

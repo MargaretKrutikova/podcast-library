@@ -1,6 +1,6 @@
 let str = ReasonReact.string;
 
-let getShowIdentityModal = (model: AppCore.model) => model.showIdentityModal;
+let getShowIdentityModal = (model: AppModel.model) => model.showIdentityModal;
 
 [@react.component]
 let make = () => {

@@ -1,4 +1,4 @@
-let getNotifications = (model: AppCore.model) => model.notifications.items;
+let getNotifications = (model: AppModel.model) => model.notifications.items;
 
 [@react.component]
 let make = () => {

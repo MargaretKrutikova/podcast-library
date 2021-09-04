@@ -1,10 +1,10 @@
-let getSearchTerm = (model: AppCore.model) => model.search.searchTerm;
+let getSearchTerm = (model: AppModel.model) => model.search.searchTerm;
 
-let getSearchType = (model: AppCore.model) => model.search.searchType;
+let getSearchType = (model: AppModel.model) => model.search.searchType;
 
-let getSearchPodcast = (model: AppCore.model) => model.searchPodcast;
+let getSearchPodcast = (model: AppModel.model) => model.searchPodcast;
 
-let getSearchModel = (model: AppCore.model) => model.search;
+let getSearchModel = (model: AppModel.model) => model.search;
 
-let hasSearchTerm = (model: AppCore.model) =>
+let hasSearchTerm = (model: AppModel.model) =>
   getSearchTerm(model)->Js.String.length > 0;
