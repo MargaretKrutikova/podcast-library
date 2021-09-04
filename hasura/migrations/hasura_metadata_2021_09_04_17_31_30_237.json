@@ -1,0 +1,139 @@
+{
+  "resource_version": 8,
+  "metadata": {
+    "version": 3,
+    "sources": [
+      {
+        "name": "default",
+        "kind": "postgres",
+        "tables": [
+          {
+            "table": {
+              "schema": "public",
+              "name": "episodes"
+            },
+            "object_relationships": [
+              {
+                "name": "podcast",
+                "using": {
+                  "foreign_key_constraint_on": "podcastId"
+                }
+              }
+            ],
+            "array_relationships": [
+              {
+                "name": "myEpisodes",
+                "using": {
+                  "foreign_key_constraint_on": {
+                    "column": "episodeId",
+                    "table": {
+                      "schema": "public",
+                      "name": "my_episodes"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "table": {
+              "schema": "public",
+              "name": "my_episodes"
+            },
+            "object_relationships": [
+              {
+                "name": "episode",
+                "using": {
+                  "foreign_key_constraint_on": "episodeId"
+                }
+              }
+            ]
+          },
+          {
+            "table": {
+              "schema": "public",
+              "name": "my_podcasts"
+            },
+            "object_relationships": [
+              {
+                "name": "podcast",
+                "using": {
+                  "foreign_key_constraint_on": "podcastId"
+                }
+              }
+            ]
+          },
+          {
+            "table": {
+              "schema": "public",
+              "name": "podcasts"
+            },
+            "array_relationships": [
+              {
+                "name": "episodes",
+                "using": {
+                  "foreign_key_constraint_on": {
+                    "column": "podcastId",
+                    "table": {
+                      "schema": "public",
+                      "name": "episodes"
+                    }
+                  }
+                }
+              },
+              {
+                "name": "my_podcasts",
+                "using": {
+                  "foreign_key_constraint_on": {
+                    "column": "podcastId",
+                    "table": {
+                      "schema": "public",
+                      "name": "my_podcasts"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "table": {
+              "schema": "public",
+              "name": "podcasts_from_my_episodes"
+            }
+          }
+        ],
+        "functions": [
+          {
+            "function": {
+              "schema": "public",
+              "name": "get_my_episodes_grouped_by_podcasts"
+            }
+          }
+        ],
+        "configuration": {
+          "connection_info": {
+            "use_prepared_statements": true,
+            "database_url": "postgres://gpsqqqvgwqvkcf:507c60ad3d95c679561e569d14ae5658eef6ba512bcb7723c1b4c257a97b0289@ec2-34-249-247-7.eu-west-1.compute.amazonaws.com:5432/dbmk9n79vfqukt",
+            "isolation_level": "read-committed",
+            "pool_settings": {
+              "connection_lifetime": 600,
+              "retries": 1,
+              "idle_timeout": 180,
+              "max_connections": 15
+            }
+          }
+        }
+      }
+    ],
+    "remote_schemas": [
+      {
+        "name": "listen_notes_api",
+        "definition": {
+          "url": "https://podcast-episode-api.margaretkru.now.sh/graphql",
+          "timeout_seconds": 60
+        },
+        "comment": ""
+      }
+    ]
+  }
+}
