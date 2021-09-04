@@ -60,7 +60,7 @@ POST /v1alpha1/pg_dump HTTP/1.1
 Content-Type: application/json
 X-Hasura-Role: admin
 {
-  "opts": ["-O", "-x", "--data-only", "--schema", "public"],
+  "opts": ["-O", "-x", "--column-inserts", "--data-only", "--schema", "public"],
   "clean_output": true,
   "source": "<database-source-name>"
 }
